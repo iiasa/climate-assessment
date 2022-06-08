@@ -1,0 +1,21 @@
+# old databases
+data/20211011_ar6emissions
+data/20211014_ar6_emissions_ngfs
+
+
+20211003*
+notebooks
+store
+rcmip-ssps
+Dockerfile
+run.sh
+venv/
+jobs
+output-regression-test
+output
+output-testset
+output*
+.git
+*.tar.gz
+
+sr15-testrun*
