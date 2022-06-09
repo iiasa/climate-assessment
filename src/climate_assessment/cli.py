@@ -419,6 +419,150 @@ def workflow(
     LOGGER = logging.getLogger("workflow")
     _setup_logging(LOGGER)
 
+    run_workflow(
+        input_emissions_file,
+        outdir,
+        model,
+        model_version,
+        probabilistic_file,
+        num_cfgs,
+        inputcheck=inputcheck,
+        magicc_extra_config=magicc_extra_config,
+        fair_extra_config=fair_extra_config,
+        historical_warming=historical_warming,
+        historical_warming_reference_period=historical_warming_reference_period,
+        historical_warming_evaluation_period=historical_warming_evaluation_period,
+        test_run=test_run,
+        scenario_batch_size=scenario_batch_size,
+        infilling_database=infilling_database,
+        save_raw_climate_output=save_raw_climate_output,
+        postprocess=postprocess,
+        categorisation=categorisation,
+        reporting_completeness_categorisation=reporting_completeness_categorisation,
+        harmonize=harmonize,
+        prefix=prefix,
+        harmonization_instance=harmonization_instance,
+        co2_and_non_co2_warming=co2_and_non_co2_warming,
+        gwp=gwp,
+    )
+
+
+# TODO: move to a new home (probably)
+def run_workflow(
+    input_emissions_file,
+    outdir,
+    model,
+    model_version,
+    probabilistic_file,
+    num_cfgs,
+    inputcheck=True,
+    magicc_extra_config=None,
+    fair_extra_config=None,
+    historical_warming=0.85,
+    historical_warming_reference_period="1850-1900",
+    historical_warming_evaluation_period="1995-2014",
+    test_run=False,
+    scenario_batch_size=10,
+    infilling_database=os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            "infilling",
+            "cmip6-ssps-workflow-emissions.csv",
+        )
+    ),
+    save_raw_climate_output=False,
+    postprocess=True,
+    categorisation=True,
+    reporting_completeness_categorisation=False,
+    harmonize=True,
+    prefix="AR6 climate diagnostics",
+    harmonization_instance="ar6",
+    co2_and_non_co2_warming=False,
+    gwp=True,
+):
+    """
+    Run the workflow
+
+    Parameters
+    ----------
+    input_emissions_file : str
+        Path to input emissions file. This must be read off disk because we use
+        the filename to help name output files. PRs welcome to split off an interface
+        which runs in memory.
+
+    outdir : str
+        Where to save the output
+
+    model : str
+        Climate model to run
+
+    model_version : str
+        Version of the climate model to run
+
+    probabilistic_file : str
+        File containing the probabilistic configuration of the climate model
+
+    num_cfgs : int
+        Number of climate model configurations to run
+
+    inputcheck : bool
+        Check input before running the workflow?
+
+    magicc_extra_config : str
+        File containing additional MAGICC config (only required if running MAGICC)
+
+    fair_extra_config : str
+        File containing additional FaIR config (only required if running FaIR)
+
+    historical_warming : float
+        Historical warming estimate
+
+    historical_warming_reference_period : str
+        Reference period when calculating historical warming
+
+    historical_warming_evaluation_period : str
+        Period over which historical warming is evaluated
+
+    test_run : bool
+        Are we doing a test run (if yes, we don't check that historical
+        warming from the climate models comes out consistently)?
+
+    scenario_batch_size : int
+        How many scenarios to run at once (smaller number means less memory
+        is needed)?
+
+    infilling_database : str
+        Path to file to use for infilling
+
+    save_raw_climate_output : bool
+        Should raw climate output be saved (warning, requires lots of disk space
+        and time)?
+
+    postprocess : bool
+        Should postprocessing steps be run?
+
+    categorisation : bool
+        Should categorisation be applied to scenarios?
+
+    reporting_completeness_categorisation : bool
+        Should emissions reporting completeness be added to output?
+
+    harmonize : bool
+        Should scenarios be harmonised?
+
+    prefix : str
+        String to use as a prefix for output variables
+
+    harmonization_instance : ["ar6", "sr15"]
+        Which configuration should be used for harmonisation?
+
+    co2_and_non_co2_warming : bool
+        Calculate CO2 and non-CO2 warming too (requires 3 times as many
+        climate model runs, available for MAGICC only)
+
+    gwp : bool
+        Calculate GWP equivalents too
+    """
     key_string = _get_key_string_and_log_outdir(input_emissions_file, outdir, LOGGER)
 
     check_hist_warming_period(historical_warming_reference_period)
