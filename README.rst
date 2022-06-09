@@ -1,5 +1,10 @@
 WG3 Climate assessment
 ======================
+
+[![DOI](https://zenodo.org/badge/501176611.svg)](https://zenodo.org/badge/latestdoi/501176611)
+
+****
+
 `ar6climate` provides the possibility to reproduce the climate variable data for the working group III (WGIII or WG3) contribution to the IPCC Sixth Assessment (AR6) report, using climate emulators that were used in the working group I (WGI or WG1) contribution to AR6.
 It also allows for assessing new emissions pathways in a way that is fully consistent with AR6.
 
