@@ -94,13 +94,14 @@ out the :doc:`dev`.
 Acknowledgements
 ================
 
-[TODO decide license] This package is licensed under the Apache License, Version 2.0 (the "License"); you may not use the files in this repository except in compliance with the License. You may obtain a copy of the License in [`LICENSE`](LICENSE) or at <http://www.apache.org/licenses/LICENSE-2.0>.
+This package is licensed under an MIT License.
+You may obtain a copy of the License at https://github.com/iiasa/climate-assessment/blob/main/LICENSE.
 
 In addition and per good scientific practice, you **must** cite the following publication when you use this package in scientific work.
 
-  | Jarmo S. Kikstra, Zebedee Nicholls, et al.
-  | "The IPCC Sixth Assessment Report WGIII “climate assessment of mitigation pathways".
-  | *GMD*
+  | Jarmo S. Kikstra, Zebedee R. J. Nicholls, Christopher J. Smith, Jared Lewis, Robin D. Lamboll, Edward Byers, Marit Sanstad, Malte Meinshausen, Matthew J. Gidden, Joeri Rogelj, Elmar Kriegler, Glen P. Peters, Jan S. Fuglestvedt, Ragnhild B. Skeie, Bjørn H. Samset, Laura Wienpahl, Detlef P. van Vuuren, Kaj-Ivar van der Wijst, Alaa Al Khourdajie, Piers M. Forster, Andy Reisinger, Roberto Schaeffer, and Keywan Riahi
+  | "The IPCC Sixth Assessment Report WGIII climate assessment of mitigation pathways: from emissions to global temperatures".
+  | *Geosci. Model Dev.*
 
 
 For more detail, see :doc:`NOTICE`.

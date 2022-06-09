@@ -12,7 +12,7 @@ The aim of this request is to ensure good scientific practice and collaborative 
 ==============================
 
 Use the most recent version of ``climate-assessment`` from the Github repository.
-Specify clearly which version (e.g. release tag, such as ``v0.2.0``, or commit hash, such as ``26cc08f``) you have used, and whether you have made any modifications to the code.
+Specify clearly which version (e.g. release tag, such as ``v0.1.0``, or commit hash, such as ``26cc08f``) you have used, and whether you have made any modifications to the code.
 
 Read and understand the file ``LICENSE``; in particular, clause 7 (“Disclaimer of Warranty”), which states:
 
@@ -25,9 +25,9 @@ Read and understand the file ``LICENSE``; in particular, clause 7 (“Disclaimer
 
 Cite, at minimum, the following manuscript (exact citation TBD.):
 
-  | Jarmo S. Kikstra et al. (2022)
-  | "The IPCC Sixth Assessment Report WGIII climate assessment of mitigation pathways: from emissions to global temperatures"
-  | *GMD*
+  | Jarmo S. Kikstra, Zebedee R. J. Nicholls, Christopher J. Smith, Jared Lewis, Robin D. Lamboll, Edward Byers, Marit Sanstad, Malte Meinshausen, Matthew J. Gidden, Joeri Rogelj, Elmar Kriegler, Glen P. Peters, Jan S. Fuglestvedt, Ragnhild B. Skeie, Bjørn H. Samset, Laura Wienpahl, Detlef P. van Vuuren, Kaj-Ivar van der Wijst, Alaa Al Khourdajie, Piers M. Forster, Andy Reisinger, Roberto Schaeffer, and Keywan Riahi
+  | "The IPCC Sixth Assessment Report WGIII climate assessment of mitigation pathways: from emissions to global temperatures".
+  | *Geosci. Model Dev.*
 
 If you are using the AR6 scenario data and the AR6 infiller database, you should in addition cite those respective sources.
 
@@ -38,6 +38,6 @@ Lastly, you may cite the tools that enabled the development of this climate asse
 All these citations are also provided in full in the manuscript mentioned above, if further guidance is required on how to cite specific tools and data.
 
 - **Cite the code via Zenodo**.
-  The `DOI <URL_TO_DOI>`_ represents *all* versions of the :mod:`ar6-climate-assessment` code, and will always resolve to the latest version.
+  The `DOI 10.5281/zenodo.6624520 <https://doi.org/10.5281/zenodo.6624519>`_ represents *all* versions of the :mod:`climate-assessment` code, and will always resolve to the latest version.
   Zenodo also provides citation export in BibTeX and other formats.
-- Include a link, e.g. in a footnote, to the online documentation at https://iiasa-energy-program-climate-assessment.readthedocs-hosted.com/en/latest/.
+- Include a link, e.g. in a footnote, to the online documentation at https://climate-assessment.readthedocs.io.
