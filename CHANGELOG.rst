@@ -20,7 +20,7 @@ master
 Added
 ~~~~~
 
-- (`#2 <https://github.com/iiasa/climate-assessment/pull/2>`_) Added example run notebooks and tests thereof
+- (`#6 <https://github.com/iiasa/climate-assessment/pull/6>`_) Added example run notebooks and tests thereof
 - (`#1 <https://github.com/iiasa/climate-assessment/pull/1>`_) Added :func:`climate_assessment.cli.run_workflow`
 
 v0.1.0 - 2022-06-08
