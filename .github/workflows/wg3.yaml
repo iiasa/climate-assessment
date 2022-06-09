@@ -72,13 +72,13 @@ jobs:
         env:
           MAGICC_RUN_DIR: bin/magicc/magicc-v7.5.3/run/
         run: |
-          wget -P bin/magicc/ ${{ secrets.MAGICC_LINK_FROM_MAGICC_DOT_ORG }}
-          mkdir bin/magicc/magicc-v7.5.3
+          mkdir -p bin/magicc/magicc-v7.5.3
+          wget -O "bin/magicc/magicc-v7.5.3.tar.gz" "${{ secrets.MAGICC_LINK_FROM_MAGICC_DOT_ORG }}"
           tar -xf bin/magicc/magicc-v7.5.3.tar.gz -C bin/magicc/magicc-v7.5.3
           cp -r bin/magicc/magicc-v7.5.3/run/defaults/* bin/magicc/magicc-v7.5.3/run/
           MAGICC_RUN_DIR=bin/magicc/magicc-v7.5.3/run/ python scripts/generate-magicc-sr15-input-files.py
           mkdir -p data/magicc-drawnsets
-          wget -O "data/magicc-drawnsets/magicc-ar6-0fd0f62-f023edb-drawnset.tar.gz" ${{ secrets.MAGICC_PROB_DISTRIBUTION_LINK_FROM_MAGICC_DOT_ORG }}
+          wget -O "data/magicc-drawnsets/magicc-ar6-0fd0f62-f023edb-drawnset.tar.gz" "${{ secrets.MAGICC_PROB_DISTRIBUTION_LINK_FROM_MAGICC_DOT_ORG }}"
           tar -xf "data/magicc-drawnsets/magicc-ar6-0fd0f62-f023edb-drawnset.tar.gz" -C data/magicc-drawnsets
 
       - name: Test with pytest
