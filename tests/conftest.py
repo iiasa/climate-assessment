@@ -431,7 +431,7 @@ def infiller_database_filepath():
     )
     INFILLER_HASH = "30fae0530d76cbcb144f134e9ed0051f"
     INFILLER_DATABASE_FILEPATH = os.path.join(TEST_DATA_DIR, INFILLER_DATABASE_NAME)
-    
+
     file_already_available = (
         os.path.isfile(filepath)
         and hashlib.md5(open(filepath, "rb").read()).hexdigest() == hash_exp
