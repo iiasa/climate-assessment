@@ -3,15 +3,14 @@ WG3 Climate assessment
 `ar6climate` provides the possibility to reproduce the climate variable data for the working group III (WGIII or WG3) contribution to the IPCC Sixth Assessment (AR6) report, using climate emulators that were used in the working group I (WGI or WG1) contribution to AR6.
 It also allows for assessing new emissions pathways in a way that is fully consistent with AR6.
 
-For the documentation of this package, please go to: [TODO move to public read the docs e.g. climate-assessment.readthedocs.io] https://iiasa-energy-program-climate-assessment.readthedocs-hosted.com/en/latest/.
+For the documentation of this package, please go to: https://climate-assessment.readthedocs.io/.
 
 .. sec-begin-license
 
 License
 -------
 
-The WG3 climate assessment workflow license is currently under discussion.
-Please do not distribute or use until then.
+The WG3 climate assessment workflow license is distributed under the MIT license.
 
 .. sec-end-license
 
