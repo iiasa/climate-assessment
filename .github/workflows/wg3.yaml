@@ -1,7 +1,9 @@
 name: Exact reproduction of WG3 database
 on:
  # Uncomment these two lines for debugging, but leave them commented on 'main'
- pull_request:
+ # pull_request:
+ #   branches: [ main ]
+ push:
    branches: [ main ]
  schedule:
  # 05:00 UTC = 06:00 CET = 07:00 CEST
