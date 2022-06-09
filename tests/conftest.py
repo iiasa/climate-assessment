@@ -434,7 +434,8 @@ def infiller_database_filepath():
 
     file_already_available = (
         os.path.isfile(INFILLER_DATABASE_FILEPATH)
-        and hashlib.md5(open(INFILLER_DATABASE_FILEPATH, "rb").read()).hexdigest() == INFILLER_HASH
+        and hashlib.md5(open(INFILLER_DATABASE_FILEPATH, "rb").read()).hexdigest()
+        == INFILLER_HASH
     )
     if file_already_available:
         return INFILLER_DATABASE_FILEPATH
