@@ -24,13 +24,16 @@ jobs:
       - name: Install dev dependencies
         run: |
           pip install --upgrade pip wheel
-          pip install -e .[tests]
+          pip install -e .[tests,notebooks]
 
       - name: Test with pytest        
         env:
           SCENARIO_EXPLORER_USER: ${{ secrets.SCENARIO_EXPLORER_USER }}
           SCENARIO_EXPLORER_PASSWORD: ${{ secrets.SCENARIO_EXPLORER_PASSWORD }}
-        run: pytest tests/nightly/test_wg3_reproduction_ciceroscm.py -m wg3 -r a -vv
+        run: |
+          python .github/workflows/get-infiller-database.py
+          pytest notebooks/run-example-ciceroscm.ipynb -r a --nbval-lax --no-cov
+          pytest tests/nightly/test_wg3_reproduction_ciceroscm.py -m wg3 -r a -vv
 
   fair:
       runs-on: ubuntu-latest
@@ -46,13 +49,16 @@ jobs:
       - name: Install dev dependencies
         run: |
           pip install --upgrade pip wheel
-          pip install -e .[tests]
+          pip install -e .[tests,notebooks]
 
       - name: Test with pytest        
         env:
           SCENARIO_EXPLORER_USER: ${{ secrets.SCENARIO_EXPLORER_USER }}
           SCENARIO_EXPLORER_PASSWORD: ${{ secrets.SCENARIO_EXPLORER_PASSWORD }}
-        run: pytest tests/nightly/test_wg3_reproduction_fair.py -m wg3 -r a -vv
+        run: |
+          python .github/workflows/get-infiller-database.py
+          pytest notebooks/run-example-fair.ipynb -r a --nbval-lax --no-cov
+          pytest tests/nightly/test_wg3_reproduction_fair.py -m wg3 -r a -vv
 
   magicc:
     runs-on: ubuntu-latest
@@ -68,7 +74,7 @@ jobs:
       - name: Install dev dependencies
         run: |
           pip install --upgrade pip wheel
-          pip install -e .[tests]
+          pip install -e .[tests,notebooks]
 
       - name: Download MAGICC
         env:
@@ -86,9 +92,14 @@ jobs:
       - name: Test with pytest
         env:
           MAGICC_EXECUTABLE_7: /home/runner/work/climate-assessment/climate-assessment/bin/magicc/magicc-v7.5.3/bin/magicc
+          MAGICC_LINK_FROM_MAGICC_DOT_ORG: ${{ secrets.MAGICC_LINK_FROM_MAGICC_DOT_ORG }}
+          MAGICC_PROB_DISTRIBUTION_LINK_FROM_MAGICC_DOT_ORG: ${{ secrets.MAGICC_PROB_DISTRIBUTION_LINK_FROM_MAGICC_DOT_ORG }}
           MAGICC_WORKER_NUMBER: 4
           MAGICC_WORKER_ROOT_DIR: /tmp
           MAGICC_PROBABILISTIC_FILE: data/magicc-drawnsets/0fd0f62-derived-metrics-id-f023edb-drawnset.json
           SCENARIO_EXPLORER_USER: ${{ secrets.SCENARIO_EXPLORER_USER }}
           SCENARIO_EXPLORER_PASSWORD: ${{ secrets.SCENARIO_EXPLORER_PASSWORD }}
-        run: pytest tests/nightly/test_wg3_reproduction_magicc.py -m wg3 -r a -vv
+        run: |
+          python .github/workflows/get-infiller-database.py
+          pytest notebooks/run-example-magicc.ipynb -r a --nbval-lax --no-cov
+          pytest tests/nightly/test_wg3_reproduction_magicc.py -m wg3 -r a -vv
