@@ -5,7 +5,7 @@ message: >-
   metadata from this file.
 type: software
 authors:
-  - given-names: Jarmo
+  - given-names: Jarmo S.
     family-names: Kikstra
     email: kikstra@iiasa.ac.at
     affiliation: IIASA
