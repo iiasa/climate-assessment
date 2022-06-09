@@ -83,7 +83,7 @@ jobs:
 
       - name: Test with pytest
         env:
-          MAGICC_EXECUTABLE_7: /home/runner/work/climate-assessment-dev/climate-assessment-dev/bin/magicc/magicc-v7.5.3/bin/magicc
+          MAGICC_EXECUTABLE_7: /home/runner/work/climate-assessment/climate-assessment/bin/magicc/magicc-v7.5.3/bin/magicc
           MAGICC_WORKER_NUMBER: 4
           MAGICC_WORKER_ROOT_DIR: /tmp
           MAGICC_PROBABILISTIC_FILE: data/magicc-drawnsets/0fd0f62-derived-metrics-id-f023edb-drawnset.json
