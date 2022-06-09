@@ -13,17 +13,11 @@ import requests
 import scmdata
 
 TEST_DATA_DIR = os.path.join(os.path.dirname(__file__), "test-data")
-DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
 
 
 @pytest.fixture(scope="session")
 def test_data_dir():
     return TEST_DATA_DIR
-
-
-@pytest.fixture(scope="session")
-def data_dir():
-    return DATA_DIR
 
 
 STARTING_POINT_CSV_FILE = os.path.join(TEST_DATA_DIR, "starting-point-test-data.csv")
@@ -53,16 +47,29 @@ def ar6_emissions(test_data_dir):
 
 @pytest.fixture(scope="module")
 def sr15_emissions():
-    return pyam.IamDataFrame(
-        os.path.join(DATA_DIR, "sr15-411/sr15_scenarios.csv")
-    ).filter(model="AIM_2_0", scenario="ADVANCE_2020_1.5C-2100")
+    out = pyam.IamDataFrame(os.path.join(TEST_DATA_DIR, "sr15.csv"))
+
+    return out
 
 
 @pytest.fixture(scope="module")
 def rcmip_emissions():
-    fname = os.path.join(DATA_DIR, "rcmip-emissions-annual-means-v5-1-0_ssp245.csv")
+    rcmip_emms_filepath = os.path.join(
+        TEST_DATA_DIR, "rcmip-emissions-annual-means-v5-1-0.csv"
+    )
+    hash_exp = "4044106f55ca65b094670e7577eaf9b3"
+    rcmip_emms_url = "https://rcmip-protocols-au.s3-ap-southeast-2.amazonaws.com/v5.1.0/rcmip-emissions-annual-means-v5-1-0.csv"
 
-    run = scmdata.ScmRun(fname)
+    if not file_available_or_downloaded(
+        rcmip_emms_filepath,
+        hash_exp,
+        rcmip_emms_url,
+    ):
+        raise ValueError("Missing RCMIP emms")
+
+    run = scmdata.ScmRun(rcmip_emms_filepath, lowercase_cols=True).filter(
+        scenario="ssp245", region="World"
+    )
     run["variable"] = (
         run["variable"]
         .apply(lambda x: x.replace("MAGICC AFOLU", "AFOLU"))
