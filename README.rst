@@ -1,7 +1,8 @@
 WG3 Climate assessment
 ======================
 
-[![DOI](https://zenodo.org/badge/501176611.svg)](https://zenodo.org/badge/latestdoi/501176611)
+.. image:: https://zenodo.org/badge/501176611.svg
+   :target: https://zenodo.org/badge/latestdoi/501176611
 
 ****
 
