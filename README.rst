@@ -1,5 +1,9 @@
 `climate-assessment` - Assessing the climate outcomes of future emissions scenarios
 ===================================================================================
+.. image:: https://zenodo.org/badge/501176611.svg
+   :target: https://zenodo.org/badge/latestdoi/501176611
+
+****
 
 *Please note that ``climate-assessment`` is still in early developmental stages, thus all interfaces are subject to change.*
 
