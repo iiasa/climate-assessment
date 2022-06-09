@@ -1041,8 +1041,6 @@ def sanity_check_comparison_kyoto_gases(
     kyoto_fit_infilled = _helper(out_kyoto_infilled)
     # Raise error if Kyoto gases of infilled emissions data
     # are smaller then the Kyoto gases of harmonized emissions
-    # TODO: discuss, this is not that smart if CO2 AFOLU was infilled and went
-    # negative
     if (kyoto_fit_infilled.values < kyoto_fit_harmonized.values).any():
         kyoto_wrong = kyoto_fit_infilled.loc[
             kyoto_fit_infilled.values < kyoto_fit_harmonized.values
