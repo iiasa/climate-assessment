@@ -433,8 +433,8 @@ def infiller_database_filepath():
     INFILLER_DATABASE_FILEPATH = os.path.join(TEST_DATA_DIR, INFILLER_DATABASE_NAME)
 
     file_already_available = (
-        os.path.isfile(filepath)
-        and hashlib.md5(open(filepath, "rb").read()).hexdigest() == hash_exp
+        os.path.isfile(INFILLER_DATABASE_FILEPATH)
+        and hashlib.md5(open(INFILLER_DATABASE_FILEPATH, "rb").read()).hexdigest() == INFILLER_HASH
     )
     if file_already_available:
         return INFILLER_DATABASE_FILEPATH
