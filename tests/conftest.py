@@ -13,11 +13,17 @@ import requests
 import scmdata
 
 TEST_DATA_DIR = os.path.join(os.path.dirname(__file__), "test-data")
+DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
 
 
 @pytest.fixture(scope="session")
 def test_data_dir():
     return TEST_DATA_DIR
+
+
+@pytest.fixture(scope="session")
+def data_dir():
+    return DATA_DIR
 
 
 STARTING_POINT_CSV_FILE = os.path.join(TEST_DATA_DIR, "starting-point-test-data.csv")
