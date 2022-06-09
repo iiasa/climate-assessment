@@ -409,16 +409,6 @@ def file_available_or_downloaded(filepath, hash_exp, url):
         Is the file available (or has it been downloaded hence is now
         available)?
     """
-
-    def local_file_exists_and_matches_hash():
-        return (
-            os.path.isfile(filepath)
-            and hashlib.md5(open(filepath, "rb").read()).hexdigest() == hash_exp
-        )
-
-    if local_file_exists_and_matches_hash():
-        return True
-
     try:
         pooch.retrieve(
             url=url,
@@ -431,11 +421,6 @@ def file_available_or_downloaded(filepath, hash_exp, url):
         print(str(exc))
         return False
 
-    if not local_file_exists_and_matches_hash():
-        # probably should be error rather than print...
-        print("Weird, download seemed to work but file doesn't exist or match hash")
-        return False
-
     return True
 
 
@@ -445,22 +430,40 @@ def infiller_database_filepath():
         "1652361598937-ar6_emissions_vetted_infillerdatabase_10.5281-zenodo.6390768.csv"
     )
     INFILLER_HASH = "30fae0530d76cbcb144f134e9ed0051f"
-    INFILLER_DATABASE_DOWNLOAD_URL = get_infiller_download_link(INFILLER_DATABASE_NAME)
     INFILLER_DATABASE_FILEPATH = os.path.join(TEST_DATA_DIR, INFILLER_DATABASE_NAME)
+
+    file_already_available = (
+        os.path.isfile(INFILLER_DATABASE_FILEPATH)
+        and hashlib.md5(open(INFILLER_DATABASE_FILEPATH, "rb").read()).hexdigest()
+        == INFILLER_HASH
+    )
+    if file_already_available:
+        return INFILLER_DATABASE_FILEPATH
+
+    skip_msg = (
+        "The ar6 infiller database was not found. Therefore this test "
+        "will be skipped. If you want to run the test you can download the required file "
+        "from https://data.ece.iiasa.ac.at/ar6/#/downloads under 'Infiller database for "
+        "silicone: IPCC AR6 WGIII version (DOI: 10.5281/zenodo.6390768)'. "
+        f"Place it into: {TEST_DATA_DIR} **without** changing its name and the tests "
+        "should run again."
+    )
+
+    try:
+        INFILLER_DATABASE_DOWNLOAD_URL = get_infiller_download_link(
+            INFILLER_DATABASE_NAME
+        )
+    except RuntimeError as exc:
+        pytest.skip(
+            f"{skip_msg}. Retrieving infiller database download url failed with error message: {exc}"
+        )
 
     if not file_available_or_downloaded(
         INFILLER_DATABASE_FILEPATH,
         INFILLER_HASH,
         INFILLER_DATABASE_DOWNLOAD_URL,
     ):
-        pytest.skip(
-            "The ar6 infiller database was not found. Therefore this test "
-            "will be skipped. If you want to run the test you can download the required file "
-            "from https://data.ece.iiasa.ac.at/ar6/#/downloads under 'Infiller database for "
-            "silicone: IPCC AR6 WGIII version (DOI: 10.5281/zenodo.6390768)'. "
-            f"Place it into: {TEST_DATA_DIR} **without** changing its name and the tests "
-            "should run again."
-        )
+        pytest.skip(skip_msg)
 
     return INFILLER_DATABASE_FILEPATH
 
