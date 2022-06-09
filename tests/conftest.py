@@ -388,29 +388,6 @@ def get_infiller_download_link(filename):
     ).json()["directLink"]
 
 
-def file_available_and_matches_hash(filepath, hash_exp):
-    """
-    Check if file exists and matches expected hash
-
-    Parameters
-    ----------
-    filepath : str
-        Path to file
-
-    hash_exp : str
-        Expected md5 hash
-
-    Returns
-    -------
-    bool
-        Is the file available?
-    """
-    return (
-        os.path.isfile(filepath)
-        and hashlib.md5(open(filepath, "rb").read()).hexdigest() == hash_exp
-    )
-
-
 def file_available_or_downloaded(filepath, hash_exp, url):
     """
     Check if file exists (and matches expected hash) or can be downloaded
@@ -444,11 +421,6 @@ def file_available_or_downloaded(filepath, hash_exp, url):
         print(str(exc))
         return False
 
-    if not file_available_and_matches_hash(filepath, hash_exp):
-        # probably should be error rather than print...
-        print("Weird, download seemed to work but file doesn't exist or match hash")
-        return False
-
     return True
 
 
@@ -459,8 +431,12 @@ def infiller_database_filepath():
     )
     INFILLER_HASH = "30fae0530d76cbcb144f134e9ed0051f"
     INFILLER_DATABASE_FILEPATH = os.path.join(TEST_DATA_DIR, INFILLER_DATABASE_NAME)
-
-    if file_available_and_matches_hash(INFILLER_DATABASE_FILEPATH, INFILLER_HASH):
+    
+    file_already_available = (
+        os.path.isfile(filepath)
+        and hashlib.md5(open(filepath, "rb").read()).hexdigest() == hash_exp
+    )
+    if file_already_available:
         return INFILLER_DATABASE_FILEPATH
 
     skip_msg = (
