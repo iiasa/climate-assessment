@@ -25,6 +25,7 @@ jobs:
     - name: Formatting and linters
       run: |
         black --check src scripts tests setup.py --exclude doc/conf.py
+        black-nb --check notebooks
         isort --check-only --quiet src scripts tests setup.py doc/conf.py
         flake8 src scripts tests setup.py doc/conf.py
 
