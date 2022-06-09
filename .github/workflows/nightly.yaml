@@ -1,13 +1,11 @@
-name: Test complete workflow
+name: Nightly workflow tests
 on:
-  workflow_dispatch:
-#   Uncomment these two lines for debugging, but leave them commented on 'main'
-#  pull_request:
-#    branches: [ master ]
-# ToDo uncomment once published
-#  schedule:
-#  # 05:00 UTC = 06:00 CET = 07:00 CEST
-#  - cron: "0 5 * * *"
+ # Uncomment these two lines for debugging, but leave them commented on 'main'
+ pull_request:
+   branches: [ main ]
+ schedule:
+ # 05:00 UTC = 06:00 CET = 07:00 CEST
+ - cron: "0 5 * * *"
 
 jobs:
   nightly:
