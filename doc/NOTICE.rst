@@ -25,11 +25,14 @@ Read and understand the file ``LICENSE``; in particular, clause 7 (“Disclaimer
 
 Cite, at minimum, the following manuscript (exact citation TBD.):
 
-  | Jarmo S. Kikstra, Zebedee R. J. Nicholls, Christopher J. Smith, Jared Lewis, Robin D. Lamboll, Edward Byers, Marit Sanstad, Malte Meinshausen, Matthew J. Gidden, Joeri Rogelj, Elmar Kriegler, Glen P. Peters, Jan S. Fuglestvedt, Ragnhild B. Skeie, Bjørn H. Samset, Laura Wienpahl, Detlef P. van Vuuren, Kaj-Ivar van der Wijst, Alaa Al Khourdajie, Piers M. Forster, Andy Reisinger, Roberto Schaeffer, and Keywan Riahi
+  | Jarmo S. Kikstra, Zebedee R. J. Nicholls, Christopher J. Smith, Jared Lewis, Robin D. Lamboll, Edward Byers, Marit Sandstad, Malte Meinshausen, Matthew J. Gidden, Joeri Rogelj, Elmar Kriegler, Glen P. Peters, Jan S. Fuglestvedt, Ragnhild B. Skeie, Bjørn H. Samset, Laura Wienpahl, Detlef P. van Vuuren, Kaj-Ivar van der Wijst, Alaa Al Khourdajie, Piers M. Forster, Andy Reisinger, Roberto Schaeffer, and Keywan Riahi
   | "The IPCC Sixth Assessment Report WGIII climate assessment of mitigation pathways: from emissions to global temperatures".
   | *Geosci. Model Dev.*
+  | (in review)
 
-If you are using the AR6 scenario data and the AR6 infiller database, you should in addition cite those respective sources.
+Additionally, you may cite the source code using the Zenodo reference (DOI: https://doi.org/10.5281/zenodo.6624519).
+
+If you are using the AR6 scenario data (DOI: https://doi.org/10.5281/zenodo.6390767) and the AR6 infiller database (DOI: https://doi.org/10.5281/zenodo.6390767), you should in addition cite those respective sources.
 
 In addition, to provide credit to the climate emulator modelers, please cite literature describing the climate emulator(s) that you use.
 
