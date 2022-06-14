@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = "Climate assessment of long-term emissions pathways: IPCC AR6 WGIII version"
-copyright = "2022, April"
-author = "Jarmo S. Kikstra, Zebedee R.J. Nicholls, Jared Lewis, Christopher J. Smith, Robin D. Lamboll, Edward Byers, Marit Sandstad, Laura Wienpahl"
+copyright = "2022, June"
+author = "Jarmo S. Kikstra, Zebedee R.J. Nicholls, Jared Lewis, Christopher J. Smith, Robin D. Lamboll, Edward Byers, Marit Sandstad, Laura Wienpahl, Philip Hackstock"
 
 
 # -- General configuration ---------------------------------------------------
