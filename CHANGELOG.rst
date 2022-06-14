@@ -22,6 +22,12 @@ Added
 
 - (`#1 <https://github.com/iiasa/climate-assessment/pull/1>`_) Added :func:`climate_assessment.cli.run_workflow`
 
+Changed
+~~~~~~~
+
+- (`#5 <https://github.com/iiasa/climate-assessment/pull/5>`_) Minor update of documentation for license and references
+
+
 v0.1.0 - 2022-06-08
 -------------------
 
