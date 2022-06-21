@@ -27,13 +27,13 @@ jobs:
           pip install -e .[tests,notebooks]
 
       - name: Get infiller database
-        env: &env-get-infiller-database
+        env:
           SCENARIO_EXPLORER_USER: ${{ secrets.SCENARIO_EXPLORER_USER }}
           SCENARIO_EXPLORER_PASSWORD: ${{ secrets.SCENARIO_EXPLORER_PASSWORD }}
           INFILLER_DATABASE_NAME: "1652361598937-ar6_emissions_vetted_infillerdatabase_10.5281-zenodo.6390768.csv"
           INFILLER_DATABASE_DIR: "tests/test-data"
           INFILLER_HASH: "30fae0530d76cbcb144f134e9ed0051f"
-        run: &run-get-infiller-database |
+        run: |
           python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_FILEPATH")), os.environ.get("INFILLER_HASH"), infiller_link)'
 
       - name: Test with pytest
@@ -59,9 +59,13 @@ jobs:
 
       - name: Get infiller database
         env:
-          <<: *env-get-infiller-database
+          SCENARIO_EXPLORER_USER: ${{ secrets.SCENARIO_EXPLORER_USER }}
+          SCENARIO_EXPLORER_PASSWORD: ${{ secrets.SCENARIO_EXPLORER_PASSWORD }}
+          INFILLER_DATABASE_NAME: "1652361598937-ar6_emissions_vetted_infillerdatabase_10.5281-zenodo.6390768.csv"
+          INFILLER_DATABASE_DIR: "tests/test-data"
+          INFILLER_HASH: "30fae0530d76cbcb144f134e9ed0051f"
         run:
-          <<: *run-get-infiller-database
+          python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_FILEPATH")), os.environ.get("INFILLER_HASH"), infiller_link)'
 
       - name: Test with pytest
         run: |
@@ -86,9 +90,13 @@ jobs:
 
       - name: Get infiller database
         env:
-          <<: *env-get-infiller-database
+          SCENARIO_EXPLORER_USER: ${{ secrets.SCENARIO_EXPLORER_USER }}
+          SCENARIO_EXPLORER_PASSWORD: ${{ secrets.SCENARIO_EXPLORER_PASSWORD }}
+          INFILLER_DATABASE_NAME: "1652361598937-ar6_emissions_vetted_infillerdatabase_10.5281-zenodo.6390768.csv"
+          INFILLER_DATABASE_DIR: "tests/test-data"
+          INFILLER_HASH: "30fae0530d76cbcb144f134e9ed0051f"
         run:
-          <<: *run-get-infiller-database
+          python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_FILEPATH")), os.environ.get("INFILLER_HASH"), infiller_link)'
 
       - name: Download MAGICC
         env:
