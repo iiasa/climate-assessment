@@ -12,6 +12,12 @@ import pytest
 import requests
 import scmdata
 
+from climate_assessment.testing import (
+    _get_infiller_download_link,
+    _file_available_or_downloaded
+)
+
+
 TEST_DATA_DIR = os.path.join(os.path.dirname(__file__), "test-data")
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
 
@@ -66,7 +72,7 @@ def rcmip_emissions():
     hash_exp = "4044106f55ca65b094670e7577eaf9b3"
     rcmip_emms_url = "https://rcmip-protocols-au.s3-ap-southeast-2.amazonaws.com/v5.1.0/rcmip-emissions-annual-means-v5-1-0.csv"
 
-    if not file_available_or_downloaded(
+    if not _file_available_or_downloaded(
         rcmip_emms_filepath,
         hash_exp,
         rcmip_emms_url,
@@ -363,67 +369,6 @@ def check_consistency_with_database():
     return check_func
 
 
-def get_infiller_download_link(filename):
-    pyam.iiasa.set_config(
-        os.environ.get("SCENARIO_EXPLORER_USER"),
-        os.environ.get("SCENARIO_EXPLORER_PASSWORD"),
-        "iiasa_creds.yaml",
-    )
-    try:
-        conn = pyam.iiasa.Connection(
-            creds="iiasa_creds.yaml",
-            auth_url="https://db1.ene.iiasa.ac.at/EneAuth/config/v1",
-        )
-    finally:
-        # remove the yaml cred file
-        os.remove("iiasa_creds.yaml")
-
-    infiller_url = (
-        "https://db1.ene.iiasa.ac.at/ar6-public-api/rest/v2.1/files/"
-        f"{filename}?redirect=false"
-    )
-    return requests.get(
-        infiller_url,
-        headers={"Authorization": f"Bearer {conn._token}"},
-    ).json()["directLink"]
-
-
-def file_available_or_downloaded(filepath, hash_exp, url):
-    """
-    Check if file exists (and matches expected hash) or can be downloaded
-
-    Parameters
-    ----------
-    filepath : str
-        Path to file
-
-    hash_exp : str
-        Expected md5 hash
-
-    url : str
-        URL from which to download the file if it doesn't exist
-
-    Returns
-    -------
-    bool
-        Is the file available (or has it been downloaded hence is now
-        available)?
-    """
-    try:
-        pooch.retrieve(
-            url=url,
-            known_hash=f"md5:{hash_exp}",
-            path=os.path.dirname(filepath),
-            fname=os.path.basename(filepath),
-        )
-    except Exception as exc:
-        # probably better ways to do this, can iterate as we use
-        print(str(exc))
-        return False
-
-    return True
-
-
 @pytest.fixture(scope="session")
 def infiller_database_filepath():
     INFILLER_DATABASE_NAME = (
@@ -450,7 +395,7 @@ def infiller_database_filepath():
     )
 
     try:
-        INFILLER_DATABASE_DOWNLOAD_URL = get_infiller_download_link(
+        INFILLER_DATABASE_DOWNLOAD_URL = _get_infiller_download_link(
             INFILLER_DATABASE_NAME
         )
     except RuntimeError as exc:
@@ -458,7 +403,7 @@ def infiller_database_filepath():
             f"{skip_msg}. Retrieving infiller database download url failed with error message: {exc}"
         )
 
-    if not file_available_or_downloaded(
+    if not _file_available_or_downloaded(
         INFILLER_DATABASE_FILEPATH,
         INFILLER_HASH,
         INFILLER_DATABASE_DOWNLOAD_URL,
@@ -475,7 +420,7 @@ def fair_slim_configs_filepath():
     FAIR_SLIM_CONFIGS_DOWNLOAD_URL = "https://zenodo.org/record/6601980/files/fair-1.6.2-wg3-params-slim.json?download=1"
     FAIR_SLIM_CONFIGS_FILEPATH = os.path.join(TEST_DATA_DIR, FAIR_SLIM_CONFIGS_FILENAME)
 
-    if not file_available_or_downloaded(
+    if not _file_available_or_downloaded(
         FAIR_SLIM_CONFIGS_FILEPATH,
         FAIR_SLIM_CONFIGS_HASH,
         FAIR_SLIM_CONFIGS_DOWNLOAD_URL,
@@ -494,7 +439,7 @@ def fair_common_configs_filepath():
         TEST_DATA_DIR, FAIR_COMMON_CONFIGS_FILENAME
     )
 
-    if not file_available_or_downloaded(
+    if not _file_available_or_downloaded(
         FAIR_COMMON_CONFIGS_FILEPATH,
         FAIR_COMMON_CONFIGS_HASH,
         FAIR_COMMON_CONFIGS_DOWNLOAD_URL,

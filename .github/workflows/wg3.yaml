@@ -1,8 +1,8 @@
 name: Exact reproduction of WG3 database
 on:
  # Uncomment these two lines for debugging, but leave them commented on 'main'
- # pull_request:
- #   branches: [ main ]
+ pull_request:
+   branches: [ main ]
  push:
    branches: [ main ]
  schedule:
@@ -26,12 +26,18 @@ jobs:
           pip install --upgrade pip wheel
           pip install -e .[tests,notebooks]
 
-      - name: Test with pytest        
-        env:
+      - name: Get infiller database
+        env: &env-get-infiller-database
           SCENARIO_EXPLORER_USER: ${{ secrets.SCENARIO_EXPLORER_USER }}
           SCENARIO_EXPLORER_PASSWORD: ${{ secrets.SCENARIO_EXPLORER_PASSWORD }}
+          INFILLER_DATABASE_NAME: "1652361598937-ar6_emissions_vetted_infillerdatabase_10.5281-zenodo.6390768.csv"
+          INFILLER_DATABASE_DIR: "tests/test-data"
+          INFILLER_HASH: "30fae0530d76cbcb144f134e9ed0051f"
+        run: &run-get-infiller-database |
+          python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_FILEPATH")), os.environ.get("INFILLER_HASH"), infiller_link)'
+
+      - name: Test with pytest
         run: |
-          python .github/workflows/get-infiller-database.py
           pytest notebooks/run-example-ciceroscm.ipynb -r a --nbval-lax --no-cov
           pytest tests/nightly/test_wg3_reproduction_ciceroscm.py -m wg3 -r a -vv
 
@@ -51,12 +57,14 @@ jobs:
           pip install --upgrade pip wheel
           pip install -e .[tests,notebooks]
 
-      - name: Test with pytest        
+      - name: Get infiller database
         env:
-          SCENARIO_EXPLORER_USER: ${{ secrets.SCENARIO_EXPLORER_USER }}
-          SCENARIO_EXPLORER_PASSWORD: ${{ secrets.SCENARIO_EXPLORER_PASSWORD }}
+          <<: *env-get-infiller-database
+        run:
+          <<: *run-get-infiller-database
+
+      - name: Test with pytest
         run: |
-          python .github/workflows/get-infiller-database.py
           pytest notebooks/run-example-fair.ipynb -r a --nbval-lax --no-cov
           pytest tests/nightly/test_wg3_reproduction_fair.py -m wg3 -r a -vv
 
@@ -76,6 +84,12 @@ jobs:
           pip install --upgrade pip wheel
           pip install -e .[tests,notebooks]
 
+      - name: Get infiller database
+        env:
+          <<: *env-get-infiller-database
+        run:
+          <<: *run-get-infiller-database
+
       - name: Download MAGICC
         env:
           MAGICC_RUN_DIR: bin/magicc/magicc-v7.5.3/run/
@@ -83,7 +97,6 @@ jobs:
           mkdir -p bin/magicc/magicc-v7.5.3
           wget -O "bin/magicc/magicc-v7.5.3.tar.gz" "${{ secrets.MAGICC_LINK_FROM_MAGICC_DOT_ORG }}"
           tar -xf bin/magicc/magicc-v7.5.3.tar.gz -C bin/magicc/magicc-v7.5.3
-          cp -r bin/magicc/magicc-v7.5.3/run/defaults/* bin/magicc/magicc-v7.5.3/run/
           MAGICC_RUN_DIR=bin/magicc/magicc-v7.5.3/run/ python scripts/generate-magicc-sr15-input-files.py
           mkdir -p data/magicc-drawnsets
           wget -O "data/magicc-drawnsets/magicc-ar6-0fd0f62-f023edb-drawnset.tar.gz" "${{ secrets.MAGICC_PROB_DISTRIBUTION_LINK_FROM_MAGICC_DOT_ORG }}"
@@ -97,9 +110,6 @@ jobs:
           MAGICC_WORKER_NUMBER: 4
           MAGICC_WORKER_ROOT_DIR: /tmp
           MAGICC_PROBABILISTIC_FILE: data/magicc-drawnsets/0fd0f62-derived-metrics-id-f023edb-drawnset.json
-          SCENARIO_EXPLORER_USER: ${{ secrets.SCENARIO_EXPLORER_USER }}
-          SCENARIO_EXPLORER_PASSWORD: ${{ secrets.SCENARIO_EXPLORER_PASSWORD }}
         run: |
-          python .github/workflows/get-infiller-database.py
           pytest notebooks/run-example-magicc.ipynb -r a --nbval-lax --no-cov
           pytest tests/nightly/test_wg3_reproduction_magicc.py -m wg3 -r a -vv
