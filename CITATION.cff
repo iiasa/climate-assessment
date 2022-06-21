@@ -1,8 +1,7 @@
 cff-version: 1.2.0
 title: "Climate assessment of long-term emissions pathways: IPCC AR6 WGIII version"
 message: >-
-  If you use this software, please cite it using the
-  metadata from this file.
+  If you use this software, please cite it using the metadata from this file.
 type: software
 authors:
   - given-names: Jarmo S.
@@ -32,3 +31,12 @@ authors:
   - family-names: Hackstock
     given-names: Philip
     orcid: 'https://orcid.org/0000-0002-1482-1366'
+repository-code: 'https://github.com/iiasa/climate-assessment'
+license: MIT
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.6624519
+    description: The concept DOI of the work.
+  - type: doi
+    value: 10.5281/zenodo.6624520
+    description: The versioned DOI for version 0.1.0 of the work.
