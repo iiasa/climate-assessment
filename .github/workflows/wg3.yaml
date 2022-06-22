@@ -37,6 +37,11 @@ jobs:
           python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_NAME")), os.environ.get("INFILLER_HASH"), infiller_link)'
 
       - name: Test with pytest
+        # scenario explorer stuff needed here too so we don't skip the run with
+        # pytest
+        env:
+          SCENARIO_EXPLORER_USER: ${{ secrets.SCENARIO_EXPLORER_USER }}
+          SCENARIO_EXPLORER_PASSWORD: ${{ secrets.SCENARIO_EXPLORER_PASSWORD }}
         run: |
           pytest notebooks/run-example-ciceroscm.ipynb -r a --nbval-lax --no-cov
           pytest tests/nightly/test_wg3_reproduction_ciceroscm.py -m wg3 -r a -vv
@@ -68,6 +73,11 @@ jobs:
           python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_NAME")), os.environ.get("INFILLER_HASH"), infiller_link)'
 
       - name: Test with pytest
+        # scenario explorer stuff needed here too so we don't skip the run with
+        # pytest
+        env:
+          SCENARIO_EXPLORER_USER: ${{ secrets.SCENARIO_EXPLORER_USER }}
+          SCENARIO_EXPLORER_PASSWORD: ${{ secrets.SCENARIO_EXPLORER_PASSWORD }}
         run: |
           pytest notebooks/run-example-fair.ipynb -r a --nbval-lax --no-cov
           pytest tests/nightly/test_wg3_reproduction_fair.py -m wg3 -r a -vv
@@ -110,7 +120,11 @@ jobs:
           tar -xf "data/magicc-drawnsets/magicc-ar6-0fd0f62-f023edb-drawnset.tar.gz" -C data/magicc-drawnsets
 
       - name: Test with pytest
+        # scenario explorer stuff needed here too so we don't skip the run with
+        # pytest
         env:
+          SCENARIO_EXPLORER_USER: ${{ secrets.SCENARIO_EXPLORER_USER }}
+          SCENARIO_EXPLORER_PASSWORD: ${{ secrets.SCENARIO_EXPLORER_PASSWORD }}
           MAGICC_EXECUTABLE_7: /home/runner/work/climate-assessment/climate-assessment/bin/magicc/magicc-v7.5.3/bin/magicc
           MAGICC_LINK_FROM_MAGICC_DOT_ORG: ${{ secrets.MAGICC_LINK_FROM_MAGICC_DOT_ORG }}
           MAGICC_PROB_DISTRIBUTION_LINK_FROM_MAGICC_DOT_ORG: ${{ secrets.MAGICC_PROB_DISTRIBUTION_LINK_FROM_MAGICC_DOT_ORG }}
