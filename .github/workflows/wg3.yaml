@@ -105,7 +105,6 @@ jobs:
           mkdir -p bin/magicc/magicc-v7.5.3
           wget -O "bin/magicc/magicc-v7.5.3.tar.gz" "${{ secrets.MAGICC_LINK_FROM_MAGICC_DOT_ORG }}"
           tar -xf bin/magicc/magicc-v7.5.3.tar.gz -C bin/magicc/magicc-v7.5.3
-          MAGICC_RUN_DIR=bin/magicc/magicc-v7.5.3/run/ python scripts/generate-magicc-sr15-input-files.py
           mkdir -p data/magicc-drawnsets
           wget -O "data/magicc-drawnsets/magicc-ar6-0fd0f62-f023edb-drawnset.tar.gz" "${{ secrets.MAGICC_PROB_DISTRIBUTION_LINK_FROM_MAGICC_DOT_ORG }}"
           tar -xf "data/magicc-drawnsets/magicc-ar6-0fd0f62-f023edb-drawnset.tar.gz" -C data/magicc-drawnsets
