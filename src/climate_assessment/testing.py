@@ -1,10 +1,10 @@
 
 import os.path
-import requests
 import traceback
 
 import pooch
 import pyam
+import requests
 
 
 def _format_traceback_and_stdout_from_click_result(result):

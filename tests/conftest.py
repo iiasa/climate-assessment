@@ -13,10 +13,9 @@ import requests
 import scmdata
 
 from climate_assessment.testing import (
+    _file_available_or_downloaded,
     _get_infiller_download_link,
-    _file_available_or_downloaded
 )
-
 
 TEST_DATA_DIR = os.path.join(os.path.dirname(__file__), "test-data")
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
