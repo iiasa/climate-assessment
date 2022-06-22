@@ -34,7 +34,7 @@ jobs:
           INFILLER_DATABASE_DIR: "tests/test-data"
           INFILLER_HASH: "30fae0530d76cbcb144f134e9ed0051f"
         run: |
-          python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_FILEPATH")), os.environ.get("INFILLER_HASH"), infiller_link)'
+          python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_NAME")), os.environ.get("INFILLER_HASH"), infiller_link)'
 
       - name: Test with pytest
         run: |
@@ -65,7 +65,7 @@ jobs:
           INFILLER_DATABASE_DIR: "tests/test-data"
           INFILLER_HASH: "30fae0530d76cbcb144f134e9ed0051f"
         run:
-          python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_FILEPATH")), os.environ.get("INFILLER_HASH"), infiller_link)'
+          python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_NAME")), os.environ.get("INFILLER_HASH"), infiller_link)'
 
       - name: Test with pytest
         run: |
@@ -96,7 +96,7 @@ jobs:
           INFILLER_DATABASE_DIR: "tests/test-data"
           INFILLER_HASH: "30fae0530d76cbcb144f134e9ed0051f"
         run:
-          python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_FILEPATH")), os.environ.get("INFILLER_HASH"), infiller_link)'
+          python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_NAME")), os.environ.get("INFILLER_HASH"), infiller_link)'
 
       - name: Download MAGICC
         env:
