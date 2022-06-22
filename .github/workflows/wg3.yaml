@@ -1,8 +1,8 @@
 name: Exact reproduction of WG3 database
 on:
  # # Uncomment these two lines for debugging, but leave them commented on 'main'
- pull_request:
-   branches: [ main ]
+ # pull_request:
+ #   branches: [ main ]
  push:
    branches: [ main ]
  schedule:
