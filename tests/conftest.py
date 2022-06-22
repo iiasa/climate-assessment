@@ -6,10 +6,8 @@ from pprint import pprint
 
 import pandas as pd
 import pandas.testing as pdt
-import pooch
 import pyam
 import pytest
-import requests
 import scmdata
 
 from climate_assessment.testing import (
