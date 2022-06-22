@@ -3,6 +3,7 @@
 VENV_DIR ?= ./venv
 DATA_DIR ?= ./data
 SCRIPTS_DIR ?= ./scripts
+NOTEBOOKS_DIR ?= ./notebooks
 
 FILES_TO_FORMAT_PYTHON=scripts src tests setup.py doc/conf.py
 
@@ -39,6 +40,15 @@ checks: $(VENV_DIR)  ## run all the checks
 		echo "\n\n=== isort ==="; $(VENV_DIR)/bin/isort --check-only --quiet $(FILES_TO_FORMAT_PYTHON) || echo "--- isort failed ---" >&2; \
 		echo "\n\n=== flake8 ==="; $(VENV_DIR)/bin/flake8 $(FILES_TO_FORMAT_PYTHON) || echo "--- flake8 failed ---" >&2; \
 		echo
+
+.PHONY: format-notebooks
+format-notebooks: $(VENV_DIR)  ## format the notebooks
+	@status=$$(git status --porcelain $(NOTEBOOKS_DIR)); \
+	if test ${FORCE} || test "x$${status}" = x; then \
+		$(VENV_DIR)/bin/black-nb $(NOTEBOOKS_DIR); \
+	else \
+		echo Not trying any formatting. Working directory is dirty ... >&2; \
+	fi;
 
 .PHONY: format
 format:  ## re-format files
