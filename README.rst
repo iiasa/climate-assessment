@@ -42,7 +42,7 @@ Formatting code
 
 Before committing or merging code, the following lines should be run to ensure that the formatting is consistent with what is expected by the Continuous Integration setup (for users with ``make`` installed, ``make checks`` will run these for you):
 
-.. highlight:: bash
+.. code:: bash
 
     black src scripts tests setup.py
     isort src scripts tests setup.py
