@@ -1,1 +1,3 @@
-include src/climate_assessment/data/*.csv
+prune .github
+prune .benchmarks
+prune tests
