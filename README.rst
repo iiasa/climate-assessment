@@ -13,17 +13,17 @@ It also allows for assessing new emissions pathways in a way that is fully consi
 Installation
 ------------
 
-Using :mod:`pip`
+Using ``pip``
 ~~~~~~~~~~~~~~~~
 
 `pip`_ is Python's default package management system.
 
 .. attention:: Due to the better dependency resolution installing with ``pip>=22`` is recommended.
 
-If you install Anaconda, then :mod:`pip` is also usable.
-:mod:`pip` can also be used when Python is installed directly, *without* using Anaconda.
+If you install Anaconda, then ``pip`` is also usable.
+``pip`` can also be used when Python is installed directly, *without* using Anaconda.
 
-1. Ensure :mod:`pip` is installed—with Anaconda, or according to the pip documentation.
+1. Ensure ``pip`` is installed—with Anaconda, or according to the pip documentation.
 
 2. Open a command prompt and run::
 
@@ -32,7 +32,7 @@ If you install Anaconda, then :mod:`pip` is also usable.
 From source
 ~~~~~~~~~~~
 
-(Optional) If you intend to contribute changes to :mod:`climate-assessment`, installing
+(Optional) If you intend to contribute changes to ``climate-assessment``, installing
 directly from `source <https://github.com/iiasa/climate-assessment>`_ is the way to go.
 
 Detailed instructions on how to do this can be found in the documentation under https://climate-assessment.readthedocs.io/en/latest/install.html.
