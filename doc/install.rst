@@ -10,6 +10,9 @@ Installation
 This package is tested using python 3.9, and has also been used with python 3.7, though continuous integration tests are not run for 3.7.
 
 
+.. attention:: Due to the better dependency resolution installing with ``pip>=22`` is recommended.
+
+
 Using :mod:`pip`
 ================
 

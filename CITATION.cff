@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+title: "Climate assessment of long-term emissions pathways: IPCC AR6 WGIII version"
+message: >-
+  If you use this software, please cite it using the metadata from this file.
+type: software
+authors:
+  - given-names: Jarmo S.
+    family-names: Kikstra
+    email: kikstra@iiasa.ac.at
+    affiliation: IIASA
+    orcid: 'https://orcid.org/0000-0001-9405-1228'
+  - given-names: Zebedee R.J.
+    family-names: Nicholls
+    orcid: 'https://orcid.org/0000-0002-4767-2723'
+  - given-names: Jared
+    family-names: Lewis
+    orcid: 'https://orcid.org/0000-0002-8155-8924'
+  - given-names: Christopher J.
+    family-names: Smith
+    orcid: 'https://orcid.org/0000-0003-0599-4633'
+  - family-names: Lamboll
+    given-names: Robin D.
+  - family-names: Byers
+    given-names: Edward
+    orcid: 'https://orcid.org/0000-0003-0349-5742'
+  - family-names: Sandstad
+    given-names: Marit
+  - given-names: Laura
+    family-names: Wienpahl
+    orcid: 'https://orcid.org/0000-0003-2049-8531'
+  - family-names: Hackstock
+    given-names: Philip
+    orcid: 'https://orcid.org/0000-0002-1482-1366'
+repository-code: 'https://github.com/iiasa/climate-assessment'
+license: MIT
+identifiers:
+  - description: The concept DOI of the work.
+    type: doi
+    value: 10.5281/zenodo.6624519    
+  - description: The versioned DOI for version 0.1.0 of the work.
+    type: doi
+    value: 10.5281/zenodo.6624520

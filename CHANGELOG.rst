@@ -19,10 +19,12 @@ master
 
 Added
 ~~~~~
-- (`#12 <https://github.com/iiasa/climate-assessment/pull/12>`_) Added workflow for
-  ensuring that the docs can be built
-- (`#1 <https://github.com/iiasa/climate-assessment/pull/1>`_) Added
-  :func:`climate_assessment.cli.run_workflow`
+
+- (`#12 <https://github.com/iiasa/climate-assessment/pull/12>`_) Added workflow for ensuring that the docs can be built
+- (`#15 <https://github.com/iiasa/climate-assessment/pull/15>`_) Fix packaging issues and add installation instructions
+- (`#6 <https://github.com/iiasa/climate-assessment/pull/6>`_) Added example run notebooks and tests thereof
+- (`#1 <https://github.com/iiasa/climate-assessment/pull/1>`_) Added :func:`climate_assessment.cli.run_workflow`
+
 
 
 v0.1.0 - 2022-06-08

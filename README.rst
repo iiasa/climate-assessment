@@ -10,6 +10,32 @@
 The package ``climate-assessment`` provides the possibility to reproduce the climate variable data for the working group III (WGIII or WG3) contribution to the IPCC Sixth Assessment (AR6) report, using climate emulators that were used in the working group I (WGI or WG1) contribution to AR6.
 It also allows for assessing new emissions pathways in a way that is fully consistent with AR6.
 
+Installation
+------------
+
+Using ``pip``
+~~~~~~~~~~~~~~~~
+
+`pip`_ is Python's default package management system.
+
+.. attention:: Due to the better dependency resolution installing with ``pip>=22`` is recommended.
+
+If you install Anaconda, then ``pip`` is also usable.
+``pip`` can also be used when Python is installed directly, *without* using Anaconda.
+
+1. Ensure ``pip`` is installed—with Anaconda, or according to the pip documentation.
+
+2. Open a command prompt and run::
+
+    $ pip install climate-assessment
+
+From source
+~~~~~~~~~~~
+
+(Optional) If you intend to contribute changes to ``climate-assessment``, installing
+directly from `source <https://github.com/iiasa/climate-assessment>`_ is the way to go.
+
+Detailed instructions on how to do this can be found in the documentation under https://climate-assessment.readthedocs.io/en/latest/install.html.
 
 Documentation
 -------------
@@ -42,8 +68,10 @@ Formatting code
 
 Before committing or merging code, the following lines should be run to ensure that the formatting is consistent with what is expected by the Continuous Integration setup (for users with ``make`` installed, ``make checks`` will run these for you):
 
-.. highlight:: bash
+.. code:: bash
 
     black src scripts tests setup.py
     isort src scripts tests setup.py
     flake8 src scripts tests setup.py
+
+.. _pip: https://pip.pypa.io/en/stable/user_guide/

@@ -1043,8 +1043,7 @@ def sanity_check_comparison_kyoto_gases(
     # are smaller then the Kyoto gases of harmonized emissions
     if (kyoto_fit_infilled.values < kyoto_fit_harmonized.values).any():
         kyoto_wrong = kyoto_fit_infilled.loc[
-            lambda kyoto_fit_infilled: kyoto_fit_infilled.values
-            < kyoto_fit_harmonized.values
+            kyoto_fit_infilled.values < kyoto_fit_harmonized.values
         ]
         raise ValueError(
             f"The Kyoto gases of infilled emissions data of {[ind for ind in kyoto_wrong.index]} "
