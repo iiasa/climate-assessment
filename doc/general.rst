@@ -46,7 +46,8 @@ also analyzed in the Reduced Complexity Model Intercomparison Project (RCMIP) Ph
 Expected Input (Step 1)
 =======================
 
-The expected input is in the following format, as either an Excel or CSV file, covering 2015, and then at minimum decadal (up to yearly detail is accepted) timesteps from 2020 to 2100.
+The expected input is in the following format, as either an Excel (.xlsx) or CSV (.csv) file, covering 2015, and then at minimum decadal (up to yearly detail is accepted) timesteps from 2020 to 2100.
+Currently, no meta data from the input data is used or preserved in the workflow.
 At minimum, one needs to report `Emissions|CO2|Energy and Industrial Processes`.
 Emissions baskets or species not in the table below are not considered for the eventual climate assessment, but are automatically infilled.
 In this version, negative values are only allowed as input for CO2.
