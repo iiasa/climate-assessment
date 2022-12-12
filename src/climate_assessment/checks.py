@@ -564,9 +564,12 @@ def check_negatives(
 
         # set small non-negative non-CO2 values to zero
         df_co2 = df.filter(variable=f"{prefix}Emissions|CO2*").timeseries()
-        df_nonco2 = df.filter(variable=f"{prefix}Emissions|CO2*", keep=False).timeseries()
+        df_nonco2 = df.filter(
+            variable=f"{prefix}Emissions|CO2*", keep=False
+        ).timeseries()
         df_nonco2 = df_nonco2.where(
-            (df_nonco2 > 0) | (df_nonco2 < negativethreshold) | df_nonco2.isnull(), other=0
+            (df_nonco2 > 0) | (df_nonco2 < negativethreshold) | df_nonco2.isnull(),
+            other=0,
         )
         df = pyam.IamDataFrame(pd.concat([df_co2, df_nonco2]))
 
@@ -603,7 +606,9 @@ def check_negatives(
         ).timeseries()
 
         # remove any timeseries which still have negative non-CO2 values
-        negative_nonco2 = (df_nonco2 < 0).any(axis=1).groupby(["model", "scenario"]).sum()
+        negative_nonco2 = (
+            (df_nonco2 < 0).any(axis=1).groupby(["model", "scenario"]).sum()
+        )
         negative_nonco2.name = "negative_nonco2_count"
         # make the negative non CO2 count line up with meta and fill anything which
         # isn't there (i.e. provides CO2 only) with 0
