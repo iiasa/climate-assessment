@@ -1075,6 +1075,8 @@ def sanity_check_hierarchy(
     Processes emissions)"""
 
     if co2_inf_db.filter(variable="Emissions|CO2", keep=False).empty:
+        # if there is only "Emissions|CO2", then this check does not make sense,
+        # because there is no "*|Harmonized|*" version of out_afolu and out_fossil
         return
 
     def _concat_df(iam_df, prefix):
