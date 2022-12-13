@@ -1074,7 +1074,7 @@ def sanity_check_hierarchy(
     check that Emissions|CO2 is the sum of AFOLU and Energy and Industrial
     Processes emissions)"""
 
-    if co2_inf_db.filter(variable="Emissions|CO2",keep=False).empty:
+    if co2_inf_db.filter(variable="Emissions|CO2", keep=False).empty:
         return
 
     def _concat_df(iam_df, prefix):
