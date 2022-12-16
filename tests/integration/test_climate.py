@@ -20,11 +20,13 @@ def test_climate_assessment_percentiles(
     percentiles_1 = (17, 83)
     percentiles_2 = (25, 50, 75)
 
-    df = pyam.IamDataFrame(os.path.join(
-        test_data_dir,
-        "workflow-fair",
-        "ex2_harmonized_infilled.csv",
-    ))
+    df = pyam.IamDataFrame(
+        os.path.join(
+            test_data_dir,
+            "workflow-fair",
+            "ex2_harmonized_infilled.csv",
+        )
+    )
     df = df.filter(model=df.model[0])
 
     common_kwargs = dict(
@@ -69,4 +71,7 @@ def test_climate_assessment_percentiles(
             assert f"{pp_s} year of peak warming (FaIRv1.6.2)" in res.meta
 
         for p in percentiles:
-            assert f"AR6 climate diagnostics|Surface Temperature (GSAT)|FaIRv1.6.2|{p:.1f}th Percentile" in res.variable
+            assert (
+                f"AR6 climate diagnostics|Surface Temperature (GSAT)|FaIRv1.6.2|{p:.1f}th Percentile"
+                in res.variable
+            )
