@@ -43,9 +43,29 @@ def climate_assessment(
     fair_extra_config=None,
     co2_and_non_co2_warming=False,
     prefix="AR6 climate diagnostics",
+    temp_thresholds=(1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0),
+    peak_percentiles=(5, 10, 17, 25, 33, 50, 66, 67, 75, 83, 90, 95),
+    percentiles=(
+        5,
+        10,
+        1 / 6 * 100,
+        17,
+        25,
+        33,
+        50,
+        66,
+        67,
+        75,
+        83,
+        5 / 6 * 100,
+        90,
+        95,
+    ),
 ):
     """
     Run the climate assessment
+
+    TODO: re-write all of these docs
 
     Parameters
     ----------
@@ -203,6 +223,9 @@ def climate_assessment(
                 outdir=outdir,
                 test_run=test_run,
                 co2_and_non_co2_warming=co2_and_non_co2_warming,
+                temp_thresholds=temp_thresholds,
+                peak_percentiles=peak_percentiles,
+                percentiles=percentiles,
             )
 
             LOGGER.info(
@@ -286,6 +309,24 @@ def run_and_post_process(
     test_run,
     save_raw_output,
     co2_and_non_co2_warming,
+    temp_thresholds=(1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0),
+    peak_percentiles=(5, 10, 17, 25, 33, 50, 66, 67, 75, 83, 90, 95),
+    percentiles=(
+        5,
+        10,
+        1 / 6 * 100,
+        17,
+        25,
+        33,
+        50,
+        66,
+        67,
+        75,
+        83,
+        5 / 6 * 100,
+        90,
+        95,
+    ),
 ):
     """
     Run the climate models probabilistically
@@ -324,6 +365,16 @@ def run_and_post_process(
 
     co2_and_non_co2_warming : bool
         Include assessment of CO2 and non-CO2 warming?
+
+    temp_thresholds : tuple[float]
+        Temperature thresholds for which exceedance probabilities are
+        calculated
+
+    peak_percentiles : tuple[float]
+        Percentiles at which peak warming is calculated
+
+    percentiles : tuple[float]
+        Percentiles to report in the output for timeseries
 
     Returns
     -------
@@ -414,6 +465,9 @@ def run_and_post_process(
         historical_warming=historical_warming,
         historical_warming_reference_period=historical_warming_reference_period,
         historical_warming_evaluation_period=historical_warming_evaluation_period,
+        temp_thresholds=temp_thresholds,
+        peak_percentiles=peak_percentiles,
+        percentiles=percentiles,
     )
 
 
