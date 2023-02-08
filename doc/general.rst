@@ -3,12 +3,13 @@
 Description of the workflow
 ***************************
 On this page, you will find a short summary of the main function of this package.
-The workflow is described in detail in the following manuscript (exact citation TBD.):
+The workflow is described in detail in the following manuscript:
 
   | Jarmo S. Kikstra, Zebedee R. J. Nicholls, Christopher J. Smith, Jared Lewis, Robin D. Lamboll, Edward Byers, Marit Sandstad, Malte Meinshausen, Matthew J. Gidden, Joeri Rogelj, Elmar Kriegler, Glen P. Peters, Jan S. Fuglestvedt, Ragnhild B. Skeie, Bjørn H. Samset, Laura Wienpahl, Detlef P. van Vuuren, Kaj-Ivar van der Wijst, Alaa Al Khourdajie, Piers M. Forster, Andy Reisinger, Roberto Schaeffer, and Keywan Riahi
   | "The IPCC Sixth Assessment Report WGIII climate assessment of mitigation pathways: from emissions to global temperatures".
-  | *Geosci. Model Dev.*
-  | (in review)
+  | *Geosci. Model Dev., 15, 9075–9109*
+  | https://doi.org/10.5194/gmd-15-9075-2022
+  | 2022
 
 Integrated assessment models (IAMs) produce emissions pathways as part of larger pathway output coming from the modelling of scenarios.
 These emissions pathways imply a certain temperature development.

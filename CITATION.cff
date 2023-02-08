@@ -37,6 +37,6 @@ identifiers:
   - description: The concept DOI of the work.
     type: doi
     value: 10.5281/zenodo.6624519    
-  - description: The versioned DOI for version 0.1.0 of the work.
+  - description: The versioned DOI for version 0.1.1 of the work.
     type: doi
-    value: 10.5281/zenodo.6624520
+    value: 10.5281/zenodo.6782457
