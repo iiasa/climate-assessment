@@ -249,7 +249,6 @@ def run_infilling(
         to_infill = to_infill.interpolate(output_timesteps, inplace=False)
 
         if lead == ["Emissions|CO2"]:
-
             _, missing_energy = split_df(
                 to_infill, variable=f"{harmonized_prefix}|{co2_energy}"
             )

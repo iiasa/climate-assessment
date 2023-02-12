@@ -13,7 +13,6 @@ LOGGER = logging.getLogger(__name__)
 
 
 def init_logging(logger):
-
     # TODO: remove hard-coded level
     logger.setLevel(logging.INFO)
 
