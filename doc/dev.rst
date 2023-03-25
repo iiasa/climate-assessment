@@ -29,4 +29,4 @@ Tips and tricks
 Looking at changes in output
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`git diff --word-diff-regex="[^\",]+"` will show you differences in csv files on the output level (quote and delimter) (see `https://resonantecho.net/software/git/2018/03/29/git-word-diff.html#:~:text=It%20does%20this%20by%20having,word%2Ddiff%2Dregex%3D <https://resonantecho.net/software/git/2018/03/29/git-word-diff.html#:~:text=It%20does%20this%20by%20having,word%2Ddiff%2Dregex%3D>`_.) for more details)
+`git diff --word-diff-regex="[^\",]+"` will show you differences in csv files on the output level (quote and delimiter) (see `https://resonantecho.net/software/git/2018/03/29/git-word-diff.html#:~:text=It%20does%20this%20by%20having,word%2Ddiff%2Dregex%3D <https://resonantecho.net/software/git/2018/03/29/git-word-diff.html#:~:text=It%20does%20this%20by%20having,word%2Ddiff%2Dregex%3D>`_.) for more details)
