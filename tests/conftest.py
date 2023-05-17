@@ -321,7 +321,6 @@ def check_workflow_output():
             exp = pyam.IamDataFrame(file_expected)
 
             if "alloutput" in suffix:
-
                 res = check_alloutput_meta_cols(res, model_version_str)
                 exp = check_alloutput_meta_cols(exp, model_version_str)
 
