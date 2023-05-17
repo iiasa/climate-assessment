@@ -22,7 +22,7 @@ def _get_infiller_download_link(filename):
     try:
         conn = pyam.iiasa.Connection(
             creds="iiasa_creds.yaml",
-            auth_url="https://db1.ene.iiasa.ac.at/EneAuth/config/v1",
+            auth_url="https://api.manager.ece.iiasa.ac.at/legacy",
         )
     finally:
         # remove the yaml cred file
