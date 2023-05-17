@@ -32,7 +32,7 @@ def _get_infiller_download_link(filename):
 
     return requests.get(
         infiller_url,
-        headers={"Authorization": f"Bearer {conn._token}"},
+        headers={"Authorization": f"Bearer {conn.auth.access_token}"},
     ).json()["directLink"]
 
 
