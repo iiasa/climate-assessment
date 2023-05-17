@@ -20,10 +20,7 @@ def _get_infiller_download_link(filename):
         "iiasa_creds.yaml",
     )
     try:
-        conn = pyam.iiasa.Connection(
-            creds="iiasa_creds.yaml",
-            auth_url="https://api.manager.ece.iiasa.ac.at/legacy",
-        )
+        conn = pyam.iiasa.Connection(creds="iiasa_creds.yaml")
     finally:
         # remove the yaml cred file
         os.remove("iiasa_creds.yaml")
