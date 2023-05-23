@@ -187,7 +187,7 @@ def climate_assessment(
         if np.equal((j + 1) % scenario_batch_size, 0) or np.equal(
             (j + 1), total_mod_scens
         ):
-            scenarios_to_run = pyam.concat(batch_dfs)
+            scenarios_to_run = pyam.IamDataFrame(pd.concat(batch_dfs))
 
             ##################################
             # run climate models
@@ -254,7 +254,7 @@ def climate_assessment(
     )
 
     LOGGER.info("Joining batches using pyam (slow as requires converting to long data)")
-    full_output = pyam.concat(full_output).data
+    full_output = pyam.IamDataFrame(pd.concat(full_output)).data
     # add prefix
     full_output["variable"] = prefix + "|" + full_output["variable"].astype(str)
     full_output = pyam.IamDataFrame(full_output)

@@ -20,10 +20,7 @@ def _get_infiller_download_link(filename):
         "iiasa_creds.yaml",
     )
     try:
-        conn = pyam.iiasa.Connection(
-            creds="iiasa_creds.yaml",
-            auth_url="https://db1.ene.iiasa.ac.at/EneAuth/config/v1",
-        )
+        conn = pyam.iiasa.Connection(creds="iiasa_creds.yaml")
     finally:
         # remove the yaml cred file
         os.remove("iiasa_creds.yaml")
@@ -35,7 +32,7 @@ def _get_infiller_download_link(filename):
 
     return requests.get(
         infiller_url,
-        headers={"Authorization": f"Bearer {conn._token}"},
+        headers={"Authorization": f"Bearer {conn.auth.access_token}"},
     ).json()["directLink"]
 
 
