@@ -369,7 +369,7 @@ def check_reported_co2(df, filename, output_csv=False, outdir="output"):
         elif has_co2_total and has_co2_afolu:
             df_scen = _check_difference(df_scen, co2_total, co2_afolu, scen, model)
 
-        if co2_energy not in df_scen.variable:
+        if co2_energy not in df_scen._data.index.get_level_values("variable").unique():
             # Check for Emissions|CO2 having the required years
             has_required_co2 = "Emissions|CO2" in df_scen.variable
 
