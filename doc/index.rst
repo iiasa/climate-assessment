@@ -103,17 +103,17 @@ Acknowledgements
 
 Per good scientific practice, you **must** cite the following publication when you use this package in scientific work.
 
-  | Jarmo S. Kikstra, Zebedee R. J. Nicholls, Christopher J. Smith, Jared Lewis, Robin D. Lamboll, Edward Byers, Marit Sanstad, Malte Meinshausen, Matthew J. Gidden, Joeri Rogelj, Elmar Kriegler, Glen P. Peters, Jan S. Fuglestvedt, Ragnhild B. Skeie, Bjørn H. Samset, Laura Wienpahl, Detlef P. van Vuuren, Kaj-Ivar van der Wijst, Alaa Al Khourdajie, Piers M. Forster, Andy Reisinger, Roberto Schaeffer, and Keywan Riahi
+  | Jarmo S. Kikstra, Zebedee R. J. Nicholls, Christopher J. Smith, Jared Lewis, Robin D. Lamboll, Edward Byers, Marit Sandstad, Malte Meinshausen, Matthew J. Gidden, Joeri Rogelj, Elmar Kriegler, Glen P. Peters, Jan S. Fuglestvedt, Ragnhild B. Skeie, Bjørn H. Samset, Laura Wienpahl, Detlef P. van Vuuren, Kaj-Ivar van der Wijst, Alaa Al Khourdajie, Piers M. Forster, Andy Reisinger, Roberto Schaeffer, and Keywan Riahi
   | "The IPCC Sixth Assessment Report WGIII climate assessment of mitigation pathways: from emissions to global temperatures".
-  | *Geosci. Model Dev.*
-  | (in review)
-
+  | *Geosci. Model Dev., 15, 9075–9109*
+  | https://doi.org/10.5194/gmd-15-9075-2022
+  | 2022
 
 You may additionally also cite the package itself:
 
   | Kikstra, J. S., Nicholls, Z. R. J., Lewis, J., Smith, C. J., Lamboll, R. D., Byers, E., Sandstad, M., Wienpahl, L., and Hackstock, P.:
-  | Climate assessment of long-term emissions pathways: IPCC AR6 WGIII version: Release v0.1.0,
-  | Zenodo, https://doi.org/10.5281/zenodo.6624520, 2022.
+  | Climate assessment of long-term emissions pathways: IPCC AR6 WGIII version,
+  | Zenodo, 10.5281/zenodo.6624519, 2022.
 
 
 For more detail, see :doc:`NOTICE`.
