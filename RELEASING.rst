@@ -7,7 +7,7 @@ Releasing
 2. Tag the release candidate version, i.e. with a ``rcN`` suffix, and push::
 
     $ git tag v0.1.5rc1
-    $ git push --tags origin main
+    $ git push upstream v0.1.5rc1
 
 3. Check:
 
