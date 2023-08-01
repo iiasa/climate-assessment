@@ -14,13 +14,14 @@ Releasing
    - at https://github.com/iiasa/climate-assessment/actions/workflows/publish.yaml that the workflow completes: the package builds successfully and is published to TestPyPI.
    - at https://test.pypi.org/project/climate-assessment/ that:
 
-      - The package can be downloaded, installed and run.
-      - The README is rendered correctly.
+     - The package can be downloaded, installed and run.
+     - The README is rendered correctly.
 
    Address any warnings or errors that appear.
    If needed, make a new commit and go back to step (2), incrementing the rc number.
 
 4. On GitHub:
+
    - Create a new release with a new tag, e.g. v0.1.5.
    - Publish the release.
 
