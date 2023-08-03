@@ -344,8 +344,8 @@ def check_reported_co2(df, filename, output_csv=False, outdir="output"):
     df_withco2 = []
     df_noco2 = []
     # TODO: find better way than doing loop
-    for (model, scen), df_scen in df.timeseries().groupby(["model", "scenario"]):
-        df_scen = pyam.IamDataFrame(df_scen)
+    for model, scenario in df.index:
+        df_scen = df.filter(model=model, scenario=scenario)
 
         co2_total = "Emissions|CO2"
         has_co2_total = co2_total in df_scen.variable
@@ -362,12 +362,12 @@ def check_reported_co2(df, filename, output_csv=False, outdir="output"):
                 "avoid any potential inconsistencies being introduced "
                 "during harmonization"
             )
-            LOGGER.info(message, co2_total, co2_energy, co2_afolu, scen, model)
+            LOGGER.info(message, co2_total, co2_energy, co2_afolu, scenario, model)
             df_scen = df_scen.filter(variable=co2_total, keep=False)
         elif has_co2_total and has_co2_energy:
-            df_scen = _check_difference(df_scen, co2_total, co2_energy, scen, model)
+            df_scen = _check_difference(df_scen, co2_total, co2_energy, scenario, model)
         elif has_co2_total and has_co2_afolu:
-            df_scen = _check_difference(df_scen, co2_total, co2_afolu, scen, model)
+            df_scen = _check_difference(df_scen, co2_total, co2_afolu, scenario, model)
 
         if co2_energy not in df_scen._data.index.get_level_values("variable").unique():
             # Check for Emissions|CO2 having the required years
@@ -398,7 +398,7 @@ def check_reported_co2(df, filename, output_csv=False, outdir="output"):
                     "\n==================================\n"
                     + "No Emissions|CO2 or Emissions|CO2|Energy and Industrial Processes found in "
                     + "scenario "
-                    + scen
+                    + scenario
                     + " produced by "
                     + model
                     + "!\n"
