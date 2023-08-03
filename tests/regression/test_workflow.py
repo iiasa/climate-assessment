@@ -75,9 +75,9 @@ def test_workflow_fair(
         inputcheck=True,
         model="fair",
         model_version=fair_version,
-        probabilistic_file=fair_common_configs_filepath,
+        probabilistic_file=fair_slim_configs_filepath,
         num_cfgs=6,
-        fair_extra_config=fair_slim_configs_filepath,
+        fair_extra_config=fair_common_configs_filepath,
         scenario_batch_size=40,
         infilling_database=os.path.join(
                 test_data_dir,
