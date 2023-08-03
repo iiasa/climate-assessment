@@ -255,7 +255,7 @@ def run_infilling(
             if not missing_energy.empty:
                 # infill CO2 energy for scenarios that have CO2 total but no energy
 
-                if co2_afolu in missing_energy.variable:
+                if co2_afolu in missing_energy._data.index.get_level_values("variable").unique():
                     # We have somehow ended up with CO2 total and AFOLU but
                     # not energy, even though we should have calculated energy
                     # from total and AFOLU above

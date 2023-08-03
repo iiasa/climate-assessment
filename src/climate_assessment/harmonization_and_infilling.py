@@ -75,7 +75,7 @@ def harmonization_and_infilling(
             variable=HARMONIZATION_VARIABLES,
         )
         harmonized = harmonized.rename(
-            {"variable": {v: f"{prefix}|Harmonized|{v}" for v in harmonized.variable}}
+            {"variable": {v: f"{prefix}|Harmonized|{v}" for v in harmonized._data.index.get_level_values("variable").unique()}}
         )
 
     if harmonized.empty:
