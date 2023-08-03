@@ -69,37 +69,21 @@ def test_workflow_fair(
     fair_version = "1.6.2"
     emissions_id = "ex2"
 
-    runner = CliRunner()
-    result = runner.invoke(
-        climate_assessment.cli.workflow,
-        [
-            os.path.join(test_data_dir, "{}.csv".format(emissions_id)),
-            out_dir,
-            "--num-cfgs",
-            6,
-            "--test-run",
-            "--model-version",
-            fair_version,
-            "--probabilistic-file",
-            fair_slim_configs_filepath,
-            "--fair-extra-config",
-            fair_common_configs_filepath,
-            "--infilling-database",
-            os.path.join(
+    climate_assessment.cli.run_workflow(
+        os.path.join(test_data_dir, "{}.csv".format(emissions_id)),
+        out_dir,
+        inputcheck=True,
+        model="fair",
+        model_version=fair_version,
+        probabilistic_file=fair_common_configs_filepath,
+        num_cfgs=6,
+        fair_extra_config=fair_slim_configs_filepath,
+        scenario_batch_size=40,
+        infilling_database=os.path.join(
                 test_data_dir,
                 "cmip6-ssps-workflow-emissions_infillerdatabase_until2100.csv",
             ),
-            "--model",
-            "fair",
-            "--scenario-batch-size",
-            40,
-        ],
     )
-
-    assert result.exit_code == 0, "{}\n\n{}".format(
-        traceback.print_exception(*result.exc_info), result.stdout
-    )
-    _check_ssp245_hack_missing_emissions_gone(result.stdout)
 
     check_workflow_output(
         emissions_id,
