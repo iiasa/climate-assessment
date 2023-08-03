@@ -168,7 +168,13 @@ Emulator-specific functions
 
 References
 ----------
-Please refer to the following for more detailed use: Nicholls, Z. R. J., Meinshausen, M., Lewis, J., Smith, C. J., Forster, P. M., Fuglestvedt, J. S., Rogelj, J., Kikstra, J. S., Riahi, K., and Byers, E.: Changes in IPCC scenario assessment emulators between SR1.5 and AR6 unravelled (*forthcoming*).
+Please refer to the following for more detailed use:
+
+  | Nicholls, Z. R. J., Meinshausen, M., Lewis, J., Smith, C. J., Forster, P. M., Fuglestvedt, J. S., Rogelj, J., Kikstra, J. S., Riahi, K., and Byers, E.
+  | "Changes in IPCC Scenario Assessment Emulators Between SR1.5 and AR6 Unraveled".
+  | *Geophysical Research Letters*
+  | https://doi.org/10.1029/2022GL099788
+  | 2022
 
 * More information, multiple references, and an interactive online tool: `magicc.org <https://magicc.org/>`_
 
