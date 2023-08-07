@@ -245,7 +245,15 @@ harmonize_option = click.option(
     type=bool,
     show_default=True,
 )
-
+save_csv_combined_output_option = click.option(
+    "--save-csv-combined-output",
+    help="Write CSV output with combined climate output and emissions",
+    is_flag=True,
+    required=False,
+    default=False,
+    type=bool,
+    show_default=True,
+)
 
 def _setup_logging(logger):
     """
@@ -880,6 +888,7 @@ def infill(
 @gwp_def_false_option
 @nonco2_warming_option
 @save_raw_climate_output_option
+@save_csv_combined_output_option
 def clim_cli(
     harmonizedinfilledemissions,
     outdir,
@@ -898,6 +907,8 @@ def clim_cli(
     gwp,
     co2_and_non_co2_warming,
     save_raw_climate_output,
+    save_csv_combined_output
+
 ):
     """
     Run the climate emulator step of the IPCC AR6 climate asessment workflow.
@@ -967,6 +978,10 @@ def clim_cli(
 
     LOGGER.info("write out raw output")
     results.to_excel(os.path.join(outdir, str(key_string + "_" + "rawoutput.xlsx")))
+    
+    if save_csv_combined_output:
+        LOGGER.info("write out raw output in csv")
+        results.to_csv(os.path.join(outdir, str(key_string + "_" + "rawoutput.csv")))
 
     LOGGER.info("COMPLETE")
 
