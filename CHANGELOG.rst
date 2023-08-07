@@ -19,6 +19,7 @@ master
 
 Added
 ~~~~~
+- (`#40 https://github.com/iiasa/climate-assessment/pull/43`_) Added CSV option to :func:`climate_assessment.cli.clim_cli`
 - (`#40 https://github.com/iiasa/climate-assessment/pull/40`_) Update awscli to >= 1.29.4
 - (`#36 https://github.com/iiasa/climate-assessment/pull/36`_) Update pyam-iamc to >=1.9.0
 - (`#31 https://github.com/iiasa/climate-assessment/pull/31`_) Update pyam-iamc to >=1.7.0
