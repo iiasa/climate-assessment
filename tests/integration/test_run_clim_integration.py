@@ -202,6 +202,7 @@ def test_historical_eval_period_out_of_order(
         "less than or equal to the second), we received 2014-1995"
     )
 
+
 def test_output_written(
     tmpdir, test_data_dir, fair_slim_configs_filepath, fair_common_configs_filepath
 ):
@@ -235,12 +236,16 @@ def test_output_written(
             4,
             "--historical-warming",
             0.8,
-            "--save-csv-combined-output"
+            "--save-csv-combined-output",
         ],
     )
+
+    assert result.exit_code == 0, _format_traceback_and_stdout_from_click_result(result)
 
     out_csv_fname = os.path.join(out_dir, "ex2_harmonized_infilled_rawoutput.csv")
     out_xls_fname = os.path.join(out_dir, "ex2_harmonized_infilled_rawoutput.xlsx")
 
-    assert os.path.isfile(out_xls_fname), f"XLS output not written:"
-    assert os.path.isfile(out_csv_fname), f"--save-csv-combined-output was set but CSV output not written:"
+    assert os.path.isfile(out_xls_fname), "XLS output not written:"
+    assert os.path.isfile(
+        out_csv_fname
+    ), "--save-csv-combined-output was set but CSV output not written:"
