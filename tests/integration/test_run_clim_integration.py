@@ -245,7 +245,7 @@ def test_combined_csv_output(
     out_csv_fname = os.path.join(out_dir, "ex2_harmonized_infilled_rawoutput.csv")
     out_xls_fname = os.path.join(out_dir, "ex2_harmonized_infilled_rawoutput.xlsx")
 
-    assert os.path.isfile(out_xls_fname), "XLS output not written:"
+    assert os.path.isfile(out_xls_fname), "XLS output not written"
     assert os.path.isfile(
         out_csv_fname
     ), "--save-csv-combined-output was set but CSV output not written:"
