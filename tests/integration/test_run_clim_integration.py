@@ -203,7 +203,7 @@ def test_historical_eval_period_out_of_order(
     )
 
 
-def test_output_written(
+def test_combined_csv_output(
     tmpdir, test_data_dir, fair_slim_configs_filepath, fair_common_configs_filepath
 ):
     out_dir = str(tmpdir)
