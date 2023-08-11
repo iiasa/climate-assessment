@@ -248,4 +248,4 @@ def test_combined_csv_output(
     assert os.path.isfile(out_xls_fname), "XLS output not written"
     assert os.path.isfile(
         out_csv_fname
-    ), "--save-csv-combined-output was set but CSV output not written:"
+    ), "--save-csv-combined-output was set but CSV output not written"
