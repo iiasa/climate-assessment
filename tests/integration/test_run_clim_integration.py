@@ -201,3 +201,51 @@ def test_historical_eval_period_out_of_order(
         "`period` must be a string of the form 'YYYY-YYYY' (with the first year being "
         "less than or equal to the second), we received 2014-1995"
     )
+
+
+def test_combined_csv_output(
+    tmpdir, test_data_dir, fair_slim_configs_filepath, fair_common_configs_filepath
+):
+    out_dir = str(tmpdir)
+    inp_file = os.path.join(
+        test_data_dir,
+        "workflow-fair",
+        "ex2_harmonized_infilled.csv",
+    )
+
+    fair_version = "1.6.2"
+
+    runner = CliRunner()
+    result = runner.invoke(
+        climate_assessment.cli.clim_cli,
+        [
+            inp_file,
+            out_dir,
+            "--num-cfgs",
+            1,
+            "--test-run",
+            "--model",
+            "fair",
+            "--model-version",
+            fair_version,
+            "--probabilistic-file",
+            fair_slim_configs_filepath,
+            "--fair-extra-config",
+            fair_common_configs_filepath,
+            "--scenario-batch-size",
+            4,
+            "--historical-warming",
+            0.8,
+            "--save-csv-combined-output",
+        ],
+    )
+
+    assert result.exit_code == 0, _format_traceback_and_stdout_from_click_result(result)
+
+    out_csv_fname = os.path.join(out_dir, "ex2_harmonized_infilled_rawoutput.csv")
+    out_xls_fname = os.path.join(out_dir, "ex2_harmonized_infilled_rawoutput.xlsx")
+
+    assert os.path.isfile(out_xls_fname), "XLS output not written"
+    assert os.path.isfile(
+        out_csv_fname
+    ), "--save-csv-combined-output was set but CSV output not written"
