@@ -53,10 +53,10 @@ def do_postprocess(
             f"{prefix}|Infilled|",
         ]
 
-        if any(["Harmonized" in v for v in output.variable]):
+        if any(["Harmonized" in v for v in output._data.index.get_level_values("variable").unique()]):
             prefixes.append(f"{prefix}|Harmonized|")
 
-        if any([v.startswith("Emissions") for v in output.variable]):
+        if any([v.startswith("Emissions") for v in output._data.index.get_level_values("variable").unique()]):
             prefixes.append("")
 
         output = add_gwp100_kyoto_wrapper(

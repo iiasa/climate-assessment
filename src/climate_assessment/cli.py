@@ -629,7 +629,7 @@ def run_workflow(
     LOGGER.info("Concatenating infilled df, climate df and input df")
     results = pyam.concat([df_infilled, df_climate])
     output = pyam.concat(
-        [input_df.filter(variable=results.variable, keep=False), results]
+        [input_df.filter(variable=results._data.index.get_level_values("variable").unique(), keep=False), results]
     )
 
     LOGGER.info("write out raw output")

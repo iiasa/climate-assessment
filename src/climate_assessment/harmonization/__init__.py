@@ -149,7 +149,7 @@ def run_harmonization(df, instance, prefix):
 
     LOGGER.debug("Emissions to harmonize %s", HARMONIZATION_VARIABLES)
 
-    not_harmonize = set(df.variable) - set(HARMONIZATION_VARIABLES)
+    not_harmonize = set(df._data.index.get_level_values("variable").unique()) - set(HARMONIZATION_VARIABLES)
     LOGGER.info("Not harmonizing %s", not_harmonize)
 
     df = df.filter(variable=HARMONIZATION_VARIABLES)

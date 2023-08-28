@@ -175,7 +175,7 @@ def count_variables_very_high(
             df.require_variable(v, year=y, exclude_on_fail=True)
     # filter out the marked scenarios
     df.filter(exclude=False, inplace=True)
-    numvars = len(df.filter(variable=str(prefix + "Emissions|*"), level=0).variable)
+    numvars = len(df.filter(variable=str(prefix + "Emissions|*"), level=0)._data.index.get_level_values("variable").unique())
     if numvars >= num:
         return True
     else:
@@ -348,11 +348,11 @@ def check_reported_co2(df, filename, output_csv=False, outdir="output"):
         df_scen = df.filter(model=model, scenario=scenario)
 
         co2_total = "Emissions|CO2"
-        has_co2_total = co2_total in df_scen.variable
+        has_co2_total = co2_total in df_scen._data.index.get_level_values("variable").unique()
         co2_energy = "Emissions|CO2|Energy and Industrial Processes"
-        has_co2_energy = co2_energy in df_scen.variable
+        has_co2_energy = co2_energy in df_scen._data.index.get_level_values("variable").unique()
         co2_afolu = "Emissions|CO2|AFOLU"
-        has_co2_afolu = co2_afolu in df_scen.variable
+        has_co2_afolu = co2_afolu in df_scen._data.index.get_level_values("variable").unique()
 
         if has_co2_total and has_co2_energy and has_co2_afolu:
             message = (
@@ -371,7 +371,7 @@ def check_reported_co2(df, filename, output_csv=False, outdir="output"):
 
         if co2_energy not in df_scen._data.index.get_level_values("variable").unique():
             # Check for Emissions|CO2 having the required years
-            has_required_co2 = "Emissions|CO2" in df_scen.variable
+            has_required_co2 = "Emissions|CO2" in df_scen._data.index.get_level_values("variable").unique()
 
             if has_required_co2:
                 # further check that all the required years are there
