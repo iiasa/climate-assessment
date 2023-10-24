@@ -520,7 +520,8 @@ def post_process(
         return out
 
     meta_table = (
-        meta_table.groupby("climate_model")
+        meta_table
+        .groupby("climate_model", group_keys=False)
         .apply(mangle_meta_table_climate_model)
         .reset_index("climate_model", drop=True)
     )

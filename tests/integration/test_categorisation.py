@@ -152,21 +152,21 @@ def _convert_test_input_to_input_for_add_categorization(test_input):
         copy["variable"] = [
             f"{prefix}|Surface Temperature (GSAT)|{climate_model}{model_version}|{p:.1f}th Percentile"
         ]
-        df = df.append(copy)
+        df = pd.concat([df, copy])
 
     for p in [66]:
         copy = df.loc[df["variable"].str.contains("50.0"), :].copy()
         copy["variable"] = [
             f"{prefix}|Surface Temperature (GSAT)|{climate_model}{model_version}|{p:.1f}th Percentile"
         ]
-        df = df.append(copy)
+        df = pd.concat([df, copy])
 
     for p in [75, 83, 90, 95]:
         copy = df.loc[df["variable"].str.contains("67.0"), :].copy()
         copy["variable"] = [
             f"{prefix}|Surface Temperature (GSAT)|{climate_model}{model_version}|{p:.1f}th Percentile"
         ]
-        df = df.append(copy)
+        df = pd.concat([df, copy])
 
     df["unit"] = "K"
     df["scenario"] = name

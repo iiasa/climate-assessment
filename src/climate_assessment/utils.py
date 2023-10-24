@@ -227,7 +227,7 @@ def add_gwp100_kyoto(
     total_co2_var = f"{prefix}Emissions|CO2"
 
     tmp = df.copy()
-    tmp.require_variable(total_co2_var, exclude_on_fail=True)
+    tmp.require_data(variable=total_co2_var, exclude_on_fail=True)
     calc_df = tmp.filter(exclude=False)
 
     # aggregate CO2 before moving on
