@@ -172,7 +172,7 @@ def count_variables_very_high(
     # mark the scenarios that are not sufficiently infilled for climate assessment:
     for v in vars:
         for y in required_years:
-            df.require_variable(v, year=y, exclude_on_fail=True)
+            df.require_data(variable=v, year=y, exclude_on_fail=True)
     # filter out the marked scenarios
     df.filter(exclude=False, inplace=True)
     numvars = len(df.filter(variable=str(prefix + "Emissions|*"), level=0).variable)
@@ -714,14 +714,21 @@ def require_allyears(
 
     # check for baseyear
     if output_csv:
-        dft_out = dft_out.append(dft[(dft[base_yr].isna()) & (dft[low_yr].isna())])
+        dft_out = pd.concat([
+            dft_out,
+            dft[(dft[base_yr].isna()) & (dft[low_yr].isna())],
+        ])
+
     dft = dft[~((dft[base_yr].isna()) & (dft[low_yr].isna()))]
 
     # check for model years
     # TODO: find better way than doing loop
     for yr in required_years:
         if output_csv:
-            dft_out = dft_out.append(dft[(dft[yr].isna())])
+            dft_out = pd.concat([
+                dft_out,
+                dft[(dft[yr].isna())],
+            ])
         dft = dft[~(dft[yr].isna())]
 
     # write out if wanted
@@ -751,7 +758,7 @@ def require_allyears_and_drop_scenarios(
             # mark the scenarios that are not sufficiently infilled for climate assessment:
             for v in vars:
                 for y in required_years:
-                    df_scen.require_variable(v, year=y, exclude_on_fail=True)
+                    df_scen.require_data(variable=v, year=y, exclude_on_fail=True)
             df_scen_out = df_scen.filter(exclude=True, inplace=False)
             df_scen.filter(exclude=False, inplace=True)
             if not df_scen.empty:
@@ -785,7 +792,7 @@ def reclassify_waste_and_other_co2_ar6(df):
     """
     # filter out the scenarios that do not need changes
     df_nochange = df.copy()
-    df_nochange.require_variable(
+    df_nochange.require_data(
         variable=["Emissions|CO2|Other", "Emissions|CO2|Waste"], exclude_on_fail=True
     )
     df_nochange.filter(exclude=True, inplace=True)
@@ -793,7 +800,7 @@ def reclassify_waste_and_other_co2_ar6(df):
 
     # select the scenarios that do need changes
     df_change = df.copy()
-    df_change.require_variable(
+    df_change.require_data(
         variable=["Emissions|CO2|Other", "Emissions|CO2|Waste"], exclude_on_fail=True
     )
     df_change.filter(exclude=False, inplace=True)
@@ -816,7 +823,6 @@ def reclassify_waste_and_other_co2_ar6(df):
         "Emissions|CO2|Energy and Industrial Processes|Incomplete",
     ]
     df_change_notaffected_pd = df_change_pd[~df_change_pd.variable.isin(varsum)]
-    df_change_notaffected_pd = df_change_notaffected_pd.drop("exclude", axis=1)
     df_change_notaffected_pyam = pyam.IamDataFrame(df_change_notaffected_pd)
     df_change_pd = df_change_pd[df_change_pd.variable.isin(varsum)]
     df_change_pd = df_change_pd.groupby(
@@ -826,7 +832,6 @@ def reclassify_waste_and_other_co2_ar6(df):
     df_change_pd["variable"] = "Emissions|CO2|Energy and Industrial Processes"
     df_change_pd["unit"] = "Mt CO2/yr"
     df_change_pd["region"] = "World"
-    df_change_pd.drop("exclude", axis=1, inplace=True)
     df_change_pyam = pyam.IamDataFrame(df_change_pd)
     df_change = pyam.concat([df_change_pyam, df_change_notaffected_pyam])
 

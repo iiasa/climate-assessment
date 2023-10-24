@@ -1,6 +1,7 @@
 import logging
 import os.path
 
+import pandas as pd
 import pandas.testing as pdt
 import pyam
 import scmdata
@@ -425,7 +426,10 @@ def _add_to_infilled(infilled, infilled_variables):
             LOGGER.debug("No timeseries infilled")
             return infilled
 
-        infilled = pyam.IamDataFrame(infilled.append(infilled_variables.loc[keep_idx]))
+        infilled = pyam.IamDataFrame(pd.concat([
+            infilled,
+            infilled_variables.loc[keep_idx]
+        ]))
 
     else:
         infilled = infilled_variables
