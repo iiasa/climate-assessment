@@ -714,10 +714,12 @@ def require_allyears(
 
     # check for baseyear
     if output_csv:
-        dft_out = pd.concat([
-            dft_out,
-            dft[(dft[base_yr].isna()) & (dft[low_yr].isna())],
-        ])
+        dft_out = pd.concat(
+            [
+                dft_out,
+                dft[(dft[base_yr].isna()) & (dft[low_yr].isna())],
+            ]
+        )
 
     dft = dft[~((dft[base_yr].isna()) & (dft[low_yr].isna()))]
 
@@ -725,10 +727,12 @@ def require_allyears(
     # TODO: find better way than doing loop
     for yr in required_years:
         if output_csv:
-            dft_out = pd.concat([
-                dft_out,
-                dft[(dft[yr].isna())],
-            ])
+            dft_out = pd.concat(
+                [
+                    dft_out,
+                    dft[(dft[yr].isna())],
+                ]
+            )
         dft = dft[~(dft[yr].isna())]
 
     # write out if wanted
