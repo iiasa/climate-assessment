@@ -315,6 +315,7 @@ def run_harmonization(df, instance, prefix):
         )
 
     LOGGER.info("Hacking around some regression in aneris - pyam stack")
+
     def drop_broken_stuff(indf):
         out = indf.copy()
         idx_length = len(out.index.names)

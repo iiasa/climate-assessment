@@ -426,10 +426,9 @@ def _add_to_infilled(infilled, infilled_variables):
             LOGGER.debug("No timeseries infilled")
             return infilled
 
-        infilled = pyam.IamDataFrame(pd.concat([
-            infilled,
-            infilled_variables.loc[keep_idx]
-        ]))
+        infilled = pyam.IamDataFrame(
+            pd.concat([infilled, infilled_variables.loc[keep_idx]])
+        )
 
     else:
         infilled = infilled_variables
