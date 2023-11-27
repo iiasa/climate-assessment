@@ -17,6 +17,7 @@ from climate_assessment.checks import (
 )
 
 def test_add_completeness_category():
+    """Check that `add_completeness_category` does not remove any scenarios"""
     input_idf = pyam.IamDataFrame(os.path.join(os.path.dirname(__file__), "..", "test-data", "ex2.csv"))
 
     df_with_completeness_meta_column = add_completeness_category(df=input_idf)

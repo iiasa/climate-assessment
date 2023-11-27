@@ -163,65 +163,17 @@ def add_categorization(
     return df
 
 
-def count_variables_very_high(
-    df, vars, num=9, prefix="AR6 climate diagnostics|Harmonized|"
-):
-    """Auxiliary function for :func:`climate_assessment.checks.add_completeness_category`.
-    Performs check of variables + number of variables"""
-    required_years = [2015, 2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100]
-    # mark the scenarios that are not sufficiently infilled for climate assessment:
-    for v in vars:
-        for y in required_years:
-            df.require_data(variable=v, year=y, exclude_on_fail=True)
-    # filter out the marked scenarios
-    df.filter(exclude=False, inplace=True)
-    numvars = len(df.filter(variable=str(prefix + "Emissions|*"), level=0).variable)
-    if numvars >= num:
-        return True
-    else:
-        return False
 
 
 def add_completeness_category(
     df,
-    filename,
-    delete_no_confidence=False,
+    filename=None,
     output_csv=False,
     outdir="output",
     prefix="AR6 climate diagnostics|Harmonized|",
 ):
     """Add a meta column that specified the reporting completeness based
     on qualitative categories."""
-    # create empty dataframe for multiple models
-    dfnew = pd.DataFrame(
-        columns=[
-            "Model",
-            "Scenario",
-            "Region",
-            "Variable",
-            "Unit",
-            "2015",
-            "2020",
-            "2025",
-            "2030",
-            "2035",
-            "2040",
-            "2045",
-            "2050",
-            "2055",
-            "2060",
-            "2065",
-            "2070",
-            "2075",
-            "2080",
-            "2085",
-            "2090",
-            "2095",
-            "2100",
-        ]
-    )
-    dfnew = pyam.IamDataFrame(dfnew)
-    df_noconfidence = dfnew
 
     # "low confidence"
     low_vars = [
@@ -248,51 +200,78 @@ def add_completeness_category(
         str(prefix + "Emissions|CO2|AFOLU"),
         str(prefix + "Emissions|CH4"),
         str(prefix + "Emissions|N2O"),
+        str(prefix + "Emissions|Sulfur"),
     ]
 
-    # TODO: find better way than doing loop
-    for model, scen in df.index:
-        if not df.filter(scenario=scen, model=model).empty:
-            confidence = True
-            if count_variables_very_high(
-                df.filter(scenario=scen, model=model), very_hi_vars, 9, prefix
-            ):
-                df_scen = df.filter(scenario=scen, model=model)
-                df_scen.set_meta(meta="very high", name="reporting-completeness")
+    df_in = df.copy()
 
-            elif require_var_allyears(df.filter(scenario=scen, model=model), hi_vars):
-                df_scen = df.filter(scenario=scen, model=model)
-                df_scen.set_meta(meta="high", name="reporting-completeness")
+    required_years = [2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100]
+    required_years_very_hi = [2015, 2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100]
 
-            elif require_var_allyears(df.filter(scenario=scen, model=model), med_vars):
-                df_scen = df.filter(scenario=scen, model=model)
-                df_scen.set_meta(meta="medium", name="reporting-completeness")
-
-            elif require_var_allyears(df.filter(scenario=scen, model=model), low_vars):
-                df_scen = df.filter(scenario=scen, model=model)
-                df_scen.set_meta(meta="low", name="reporting-completeness")
-
+    # mark the scenarios without sufficient timeseries data for climate assessment
+    # very high confidence scenarios:
+    df_in.require_data(variable=very_hi_vars, year=required_years_very_hi, exclude_on_fail=True)
+    df_very_hi = df_in.filter(exclude=False, inplace=False)
+    df_very_hi.set_meta(meta="very high", name="reporting-completeness")
+    df_remaining = df_in.filter(exclude=True, inplace=False)
+    if not df_remaining.empty:
+        df_remaining.reset_exclude()
+        # high confidence scenarios:
+        df_remaining.require_data(variable=hi_vars, year=required_years, exclude_on_fail=True)
+        df_high = df_remaining.filter(exclude=False, inplace=False)
+        df_high.set_meta(meta="high", name="reporting-completeness")
+        df_remaining = df_remaining.filter(exclude=True, inplace=False)
+        if not df_remaining.empty:
+            df_remaining.reset_exclude()
+            # medium confidence scenarios: 
+            df_remaining.require_data(variable=med_vars, year=required_years, exclude_on_fail=True)
+            df_med = df_remaining.filter(exclude=False, inplace=False)
+            df_med.set_meta(meta="medium", name="reporting-completeness")
+            df_remaining = df_remaining.filter(exclude=True, inplace=False)
+            if not df_remaining.empty:
+                df_remaining.reset_exclude()
+                # low confidence scenarios:
+                df_remaining.require_data(variable=low_vars, year=required_years, exclude_on_fail=True)
+                df_low = df_remaining.filter(exclude=False, inplace=False)
+                df_low.set_meta(meta="low", name="reporting-completeness")
+                df_remaining = df_remaining.filter(exclude=True, inplace=False)
+                if not df_remaining.empty:
+                    df_remaining.reset_exclude()
+                    # no confidence scenarios:
+                    df_remaining.set_meta(meta="no-confidence", name="reporting-completeness")
+                    if output_csv:
+                        LOGGER.info(
+                            "Writing out scenarios with no confidence due to reporting completeness issues"
+                        )
+                        _write_file(
+                            outdir,
+                            df_remaining,
+                            "{}_excluded_scenarios_noconfidence.csv".format(filename),
+                        )
+                    # combine all the dataframes
+                    df_confidence_column = pyam.concat([df_very_hi,
+                                                        df_high, 
+                                                        df_med, 
+                                                        df_low, 
+                                                        df_remaining])
+                else:
+                    df_confidence_column = pyam.concat([df_very_hi,
+                                                        df_high, 
+                                                        df_med, 
+                                                        df_low])
             else:
-                # this captures for instance the scenarios that report only E&IP but not AFOLU
-                df_scen = df.filter(scenario=scen, model=model)
-                df_scen.set_meta(meta="no-confidence", name="reporting-completeness")
-                df_noconfidence = pyam.concat([df_noconfidence, df_scen])
-                if delete_no_confidence:
-                    confidence = False
+                df_confidence_column = pyam.concat([df_very_hi,
+                                                    df_high, 
+                                                    df_med])
+        else:
+            df_confidence_column = pyam.concat([df_very_hi,
+                                                df_high])
+    else:
+        df_confidence_column = df_very_hi
 
-            if confidence:
-                dfnew = pyam.concat([dfnew, df_scen])
-    if output_csv:
-        LOGGER.info(
-            "Writing out scenarios with no confidence due to reporting completeness issues"
-        )
-        _write_file(
-            outdir,
-            df_noconfidence,
-            "{}_excluded_scenarios_noconfidence.csv".format(filename),
-        )
+    
 
-    return dfnew
+    return df_confidence_column
 
 
 def co2_energyandindustrialprocesses(df):
