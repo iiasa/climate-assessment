@@ -78,35 +78,6 @@ def columns_to_basic(df):
     return df
 
 
-# check if some variables are reported for the required years
-def require_var_allyears(df, vars):
-    """
-    Filter out the scenarios that, for a set of variables, do not report all required years.
-    This is currently hard-coded to be decadal from 2020 to 2100.
-
-    Parameters
-    ----------
-    df : :class:`pyam.IamDataFrame`
-        The input data to be checked and filtered.
-
-    Return
-    ------
-    :class:`pyam.IamDataFrame`
-        The output data with only scenarios that have full-century information for all necessary variables.
-    """
-    required_years = [2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100]
-    # mark the scenarios that are not sufficiently infilled for climate assessment:
-    # TODO: remove this loop as it will be unnecessarily slow
-    for v in vars:
-        for y in required_years:
-            df.require_variable(v, year=y, exclude_on_fail=True)
-    # filter out the marked scenarios
-    df.filter(exclude=False, inplace=True)
-    if not df.empty:
-        return True
-    else:
-        return False
-
 
 def _remove_equiv_and_hyphens_from_unit(inscmrun):
     # equiv and hyphens in units don't place nice with pint

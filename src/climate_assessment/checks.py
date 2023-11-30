@@ -10,7 +10,7 @@ from .climate import (
     DEFAULT_FAIR_VERSION,
     DEFAULT_MAGICC_VERSION,
 )
-from .utils import _diff_variables, require_var_allyears
+from .utils import _diff_variables
 
 # output file location
 OUT_FOLDER_NAME = "output"
