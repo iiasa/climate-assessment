@@ -723,38 +723,6 @@ def require_allyears(
     return pyam.IamDataFrame(dft)
 
 
-def require_allyears_and_drop_scenarios(
-    df,
-    filename="test",
-    output_csv=False,
-    outdir="output",
-    required_years=[2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100],
-):
-    """Filters out full scenarios if some year is not reported (using pyam)"""
-    df.reset_exclude()
-    dfnew = df.copy().filter(exclude=True)
-    dfout = df.copy().filter(exclude=True)
-    for mod, scen in df.index:
-        df_scen = df.filter(model=mod, scenario=scen)
-        if not df_scen.empty:
-            vars = df_scen.variables()
-            # mark the scenarios that are not sufficiently infilled for climate assessment:
-            for v in vars:
-                for y in required_years:
-                    df_scen.require_data(variable=v, year=y, exclude_on_fail=True)
-            df_scen_out = df_scen.filter(exclude=True, inplace=False)
-            df_scen.filter(exclude=False, inplace=True)
-            if not df_scen.empty:
-                dfnew = pyam.concat([dfnew, df_scen])
-            else:
-                dfout = pyam.concat([dfout, df_scen_out])
-    if output_csv:
-        _write_file(
-            outdir, dfout, "{}_excluded_scenarios_notallyears.csv".format(filename)
-        )
-    return dfnew
-
-
 def reclassify_waste_and_other_co2_ar6(df):
     """
     Reclassify waste and other CO2 into the energy and industrial processes category
@@ -773,22 +741,24 @@ def reclassify_waste_and_other_co2_ar6(df):
     :class:`pyam.IamDataFrame`
         Reclassified set of emissions.
     """
-    # filter out the scenarios that do not need changes
-    df_nochange = df.copy()
-    df_nochange.require_data(
-        variable=["Emissions|CO2|Other", "Emissions|CO2|Waste"], exclude_on_fail=True
-    )
-    df_nochange.filter(exclude=True, inplace=True)
+    # 1. filter all scenarios that have either emissions variable by df.filter(variable=["Emissions|CO2|Other", "Emissions|CO2|Waste"])
+    #     + get list of indices
+    # 2. do df.filter(index=indices, exclude=False) and df.filter(index=indices, exclude=True)
+
+    # list scenarios that do need changes (as they report variables that we reclassify under "Energy and Industrial Processes")
+    df_change_scenarios = df.filter(variable=["Emissions|CO2|Other", "Emissions|CO2|Waste"]).index
+    # dataframe with scenarios that DO need changes
+    df_change = df.filter(index=df_change_scenarios, keep=True)
+    df_change.reset_exclude()
+    # dataframe with scenarios that DO NOT need changes
+    df_nochange = df.filter(index=df_change_scenarios, keep=False)
     df_nochange.reset_exclude()
 
-    # select the scenarios that do need changes
-    df_change = df.copy()
-    df_change.require_data(
-        variable=["Emissions|CO2|Other", "Emissions|CO2|Waste"], exclude_on_fail=True
-    )
-    df_change.filter(exclude=False, inplace=True)
+    # if no change is necessary, just return the dataframe 
+    # - possible test: df == df_nochange
     if df_change.empty:
-        return df_nochange
+        # return df_nochange 
+        print(df_nochange)
 
     # rename old CO2|Energy and Industrial Processes, to be replaced
     df_change.rename(
@@ -800,25 +770,31 @@ def reclassify_waste_and_other_co2_ar6(df):
 
     # use pandas to create new CO2|Energy and Industrial Processes by adding CO2|Other and CO2|Waste
     df_change_pd = df_change.as_pandas()
+    # which variables to sum
     varsum = [
         "Emissions|CO2|Waste",
         "Emissions|CO2|Other",
         "Emissions|CO2|Energy and Industrial Processes|Incomplete",
     ]
+    # not affected variables of the same scenario:
     df_change_notaffected_pd = df_change_pd[~df_change_pd.variable.isin(varsum)]
+    df_change_notaffected_pd = df_change_notaffected_pd.drop(columns=["exclude"]) # drop exclude column in this timeseries
     df_change_notaffected_pyam = pyam.IamDataFrame(df_change_notaffected_pd)
+
+    # group and sum the variables that are affected
     df_change_pd = df_change_pd[df_change_pd.variable.isin(varsum)]
+    df_change_pd = df_change_pd.drop(columns=["exclude"]) # drop exclude column in this timeseries
     df_change_pd = df_change_pd.groupby(
-        by=["model", "scenario", "year"], as_index=False
+        by=["model", "scenario", "region", "unit", "year"], as_index=False
     )
-    df_change_pd = df_change_pd.sum()
+    df_change_pd = df_change_pd.sum(numeric_only=True)
     df_change_pd["variable"] = "Emissions|CO2|Energy and Industrial Processes"
-    df_change_pd["unit"] = "Mt CO2/yr"
-    df_change_pd["region"] = "World"
+
+    # recombine variables of the scenarios that were changed (and change back to pyam IamDataFrame)
     df_change_pyam = pyam.IamDataFrame(df_change_pd)
     df_change = pyam.concat([df_change_pyam, df_change_notaffected_pyam])
 
-    # recombine dataframes
+    # recombine scenarios with and without changes dataframes
     df_new = pyam.concat([df_change, df_nochange])
 
     return df_new
