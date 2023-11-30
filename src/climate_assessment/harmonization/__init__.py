@@ -314,6 +314,18 @@ def run_harmonization(df, instance, prefix):
             for _, msdf in scenarios.groupby(["model", "scenario"])
         )
 
+    LOGGER.info("Hacking around some regression in aneris - pyam stack")
+
+    def drop_broken_stuff(indf):
+        out = indf.copy()
+        idx_length = len(out.index.names)
+        drop_levels = list(range(idx_length // 2, idx_length))
+        out.index = out.index.droplevel(drop_levels)
+
+        return out
+
+    scenarios_harmonized = [drop_broken_stuff(s) for s in scenarios_harmonized]
+
     LOGGER.info("Combining results")
     scenarios_harmonized = pd.concat(scenarios_harmonized).reset_index()
 

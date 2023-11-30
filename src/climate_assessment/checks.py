@@ -790,16 +790,22 @@ def reclassify_waste_and_other_co2_ar6(df):
     ]
     # not affected variables of the same scenario:
     df_change_notaffected_pd = df_change_pd[~df_change_pd.variable.isin(varsum)]
-    df_change_notaffected_pd = df_change_notaffected_pd.drop(
-        columns=["exclude"]
-    )  # drop exclude column in this timeseries
+    try:
+        df_change_notaffected_pd = df_change_notaffected_pd.drop(
+            columns=["exclude"]
+        )  # drop exclude column in this timeseries
+    except KeyError:
+        pass
     df_change_notaffected_pyam = pyam.IamDataFrame(df_change_notaffected_pd)
 
     # group and sum the variables that are affected
     df_change_pd = df_change_pd[df_change_pd.variable.isin(varsum)]
-    df_change_pd = df_change_pd.drop(
-        columns=["exclude"]
-    )  # drop exclude column in this timeseries
+    try:
+        df_change_pd = df_change_pd.drop(
+            columns=["exclude"]
+        )  # drop exclude column in this timeseries
+    except KeyError:
+        pass
     df_change_pd = df_change_pd.groupby(
         by=["model", "scenario", "region", "unit", "year"], as_index=False
     )
