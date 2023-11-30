@@ -314,7 +314,6 @@ def run_harmonization(df, instance, prefix):
             for _, msdf in scenarios.groupby(["model", "scenario"])
         )
 
-
     LOGGER.info("Combining results")
     scenarios_harmonized = pd.concat(scenarios_harmonized).reset_index()
 

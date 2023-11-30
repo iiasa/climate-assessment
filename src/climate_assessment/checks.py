@@ -163,8 +163,6 @@ def add_categorization(
     return df
 
 
-
-
 def add_completeness_category(
     df,
     filename=None,
@@ -206,39 +204,60 @@ def add_completeness_category(
     df_in = df.copy()
 
     required_years = [2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100]
-    required_years_very_hi = [2015, 2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100]
+    required_years_very_hi = [
+        2015,
+        2020,
+        2030,
+        2040,
+        2050,
+        2060,
+        2070,
+        2080,
+        2090,
+        2100,
+    ]
 
     # mark the scenarios without sufficient timeseries data for climate assessment
     # very high confidence scenarios:
-    df_in.require_data(variable=very_hi_vars, year=required_years_very_hi, exclude_on_fail=True)
+    df_in.require_data(
+        variable=very_hi_vars, year=required_years_very_hi, exclude_on_fail=True
+    )
     df_very_hi = df_in.filter(exclude=False, inplace=False)
     df_very_hi.set_meta(meta="very high", name="reporting-completeness")
     df_remaining = df_in.filter(exclude=True, inplace=False)
     if not df_remaining.empty:
         df_remaining.reset_exclude()
         # high confidence scenarios:
-        df_remaining.require_data(variable=hi_vars, year=required_years, exclude_on_fail=True)
+        df_remaining.require_data(
+            variable=hi_vars, year=required_years, exclude_on_fail=True
+        )
         df_high = df_remaining.filter(exclude=False, inplace=False)
         df_high.set_meta(meta="high", name="reporting-completeness")
         df_remaining = df_remaining.filter(exclude=True, inplace=False)
         if not df_remaining.empty:
             df_remaining.reset_exclude()
-            # medium confidence scenarios: 
-            df_remaining.require_data(variable=med_vars, year=required_years, exclude_on_fail=True)
+            # medium confidence scenarios:
+            df_remaining.require_data(
+                variable=med_vars, year=required_years, exclude_on_fail=True
+            )
             df_med = df_remaining.filter(exclude=False, inplace=False)
             df_med.set_meta(meta="medium", name="reporting-completeness")
             df_remaining = df_remaining.filter(exclude=True, inplace=False)
             if not df_remaining.empty:
                 df_remaining.reset_exclude()
                 # low confidence scenarios:
-                df_remaining.require_data(variable=low_vars, year=required_years, exclude_on_fail=True)
+                df_remaining.require_data(
+                    variable=low_vars, year=required_years, exclude_on_fail=True
+                )
                 df_low = df_remaining.filter(exclude=False, inplace=False)
                 df_low.set_meta(meta="low", name="reporting-completeness")
                 df_remaining = df_remaining.filter(exclude=True, inplace=False)
                 if not df_remaining.empty:
                     df_remaining.reset_exclude()
                     # no confidence scenarios:
-                    df_remaining.set_meta(meta="no-confidence", name="reporting-completeness")
+                    df_remaining.set_meta(
+                        meta="no-confidence", name="reporting-completeness"
+                    )
                     if output_csv:
                         LOGGER.info(
                             "Writing out scenarios with no confidence due to reporting completeness issues"
@@ -249,27 +268,19 @@ def add_completeness_category(
                             "{}_excluded_scenarios_noconfidence.csv".format(filename),
                         )
                     # combine all the dataframes
-                    df_confidence_column = pyam.concat([df_very_hi,
-                                                        df_high, 
-                                                        df_med, 
-                                                        df_low, 
-                                                        df_remaining])
+                    df_confidence_column = pyam.concat(
+                        [df_very_hi, df_high, df_med, df_low, df_remaining]
+                    )
                 else:
-                    df_confidence_column = pyam.concat([df_very_hi,
-                                                        df_high, 
-                                                        df_med, 
-                                                        df_low])
+                    df_confidence_column = pyam.concat(
+                        [df_very_hi, df_high, df_med, df_low]
+                    )
             else:
-                df_confidence_column = pyam.concat([df_very_hi,
-                                                    df_high, 
-                                                    df_med])
+                df_confidence_column = pyam.concat([df_very_hi, df_high, df_med])
         else:
-            df_confidence_column = pyam.concat([df_very_hi,
-                                                df_high])
+            df_confidence_column = pyam.concat([df_very_hi, df_high])
     else:
         df_confidence_column = df_very_hi
-
-    
 
     return df_confidence_column
 
@@ -746,7 +757,9 @@ def reclassify_waste_and_other_co2_ar6(df):
     # 2. do df.filter(index=indices, exclude=False) and df.filter(index=indices, exclude=True)
 
     # list scenarios that do need changes (as they report variables that we reclassify under "Energy and Industrial Processes")
-    df_change_scenarios = df.filter(variable=["Emissions|CO2|Other", "Emissions|CO2|Waste"]).index
+    df_change_scenarios = df.filter(
+        variable=["Emissions|CO2|Other", "Emissions|CO2|Waste"]
+    ).index
     # dataframe with scenarios that DO need changes
     df_change = df.filter(index=df_change_scenarios, keep=True)
     df_change.reset_exclude()
@@ -754,10 +767,10 @@ def reclassify_waste_and_other_co2_ar6(df):
     df_nochange = df.filter(index=df_change_scenarios, keep=False)
     df_nochange.reset_exclude()
 
-    # if no change is necessary, just return the dataframe 
+    # if no change is necessary, just return the dataframe
     # - possible test: df == df_nochange
     if df_change.empty:
-        # return df_nochange 
+        # return df_nochange
         print(df_nochange)
 
     # rename old CO2|Energy and Industrial Processes, to be replaced
@@ -778,12 +791,16 @@ def reclassify_waste_and_other_co2_ar6(df):
     ]
     # not affected variables of the same scenario:
     df_change_notaffected_pd = df_change_pd[~df_change_pd.variable.isin(varsum)]
-    df_change_notaffected_pd = df_change_notaffected_pd.drop(columns=["exclude"]) # drop exclude column in this timeseries
+    df_change_notaffected_pd = df_change_notaffected_pd.drop(
+        columns=["exclude"]
+    )  # drop exclude column in this timeseries
     df_change_notaffected_pyam = pyam.IamDataFrame(df_change_notaffected_pd)
 
     # group and sum the variables that are affected
     df_change_pd = df_change_pd[df_change_pd.variable.isin(varsum)]
-    df_change_pd = df_change_pd.drop(columns=["exclude"]) # drop exclude column in this timeseries
+    df_change_pd = df_change_pd.drop(
+        columns=["exclude"]
+    )  # drop exclude column in this timeseries
     df_change_pd = df_change_pd.groupby(
         by=["model", "scenario", "region", "unit", "year"], as_index=False
     )
