@@ -770,8 +770,7 @@ def reclassify_waste_and_other_co2_ar6(df):
     # if no change is necessary, just return the dataframe
     # - possible test: df == df_nochange
     if df_change.empty:
-        # return df_nochange
-        print(df_nochange)
+        return df_nochange
 
     # rename old CO2|Energy and Industrial Processes, to be replaced
     df_change.rename(
