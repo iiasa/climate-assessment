@@ -19,7 +19,7 @@ master
 
 Added
 ~~~~~
-- (`#46 https://github.com/iiasa/climate-assessment/pull/46`_) Update scmdata to >=0.15.0
+- (`#50 https://github.com/iiasa/climate-assessment/pull/50`_) Update scmdata and other dependencies and rewrite a few functions
 - (`#43 https://github.com/iiasa/climate-assessment/pull/43`_) Add combined CSV output option to :func:`climate_assessment.cli.clim_cli`
 - (`#40 https://github.com/iiasa/climate-assessment/pull/40`_) Update awscli to >= 1.29.4
 - (`#36 https://github.com/iiasa/climate-assessment/pull/36`_) Update pyam-iamc to >=1.9.0

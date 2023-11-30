@@ -53,6 +53,8 @@ At minimum, one needs to report `Emissions|CO2|Energy and Industrial Processes`.
 Emissions baskets or species not in the table below are not considered for the eventual climate assessment, but are automatically infilled.
 In this version, negative values are only allowed as input for CO2.
 
+NOTE: while the table below only shows "Emissions|CO2|AFOLU" and "Emissions|CO2|Energy and Industrial Processes", we are aware of some models also reporting the emissions variables "Emissions|CO2|Other" and "Emissions|CO2|Waste" under certain project templates, including the AR6 template.
+The way we deal with this, is that we (inside the function :func:reclassify_waste_and_other_co2_ar6()), add the "Emissions|CO2|Other" and "Emissions|CO2|Waste" variables to the "Emissions|CO2|Energy and Industrial Processes", assuming that these do not overlap, and assuming that the variables are not categorisable under AFOLU emissions.
 
 +--------+-----------+---------+------------------------------------------------+-----------------+-------+----+----+-------+
 | Model  | Scenario  | Region  | Variable                                       | Unit            | 2015  | …  | …  | 2100  |
