@@ -228,7 +228,6 @@ def check_workflow_output():
                     "harmonization",
                 ]
                 cols_to_keep = [
-                    "exclude",
                     "Category",
                     "Category_name",
                     "Exceedance Probability 1.5C ({})".format(model_version_str),
