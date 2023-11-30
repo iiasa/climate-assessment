@@ -19,13 +19,18 @@ master
 
 Added
 ~~~~~
-- (`#40 https://github.com/iiasa/climate-assessment/pull/43`_) Add combined CSV output option to :func:`climate_assessment.cli.clim_cli`
+- (`#43 https://github.com/iiasa/climate-assessment/pull/43`_) Add combined CSV output option to :func:`climate_assessment.cli.clim_cli`
 - (`#40 https://github.com/iiasa/climate-assessment/pull/40`_) Update awscli to >= 1.29.4
 - (`#36 https://github.com/iiasa/climate-assessment/pull/36`_) Update pyam-iamc to >=1.9.0
 - (`#31 https://github.com/iiasa/climate-assessment/pull/31`_) Update pyam-iamc to >=1.7.0
 - (`#15 <https://github.com/iiasa/climate-assessment/pull/15>`_) Fix packaging issues and add installation instructions
 - (`#6 <https://github.com/iiasa/climate-assessment/pull/6>`_) Added example run notebooks and tests thereof
 - (`#1 <https://github.com/iiasa/climate-assessment/pull/1>`_) Added :func:`climate_assessment.cli.run_workflow`
+
+
+Fixed
+~~~~~
+- (`#49 https://github.com/iiasa/climate-assessment/pull/49`_) Fix if all emissions data starts in 2015, in :func:`add_year_historical_percentage_offset`
 
 
 v0.1.0 - 2022-06-08
