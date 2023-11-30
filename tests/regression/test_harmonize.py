@@ -47,6 +47,7 @@ def check_output(
 def test_workflow_harmonization(tmpdir, test_data_dir, update_expected_files):
     out_dir = str(tmpdir)
 
+    # standard test emissions scenarios file
     emissions_id = "ex2"
 
     runner = CliRunner()
@@ -110,6 +111,22 @@ def test_workflow_harmonization(tmpdir, test_data_dir, update_expected_files):
             compare,
             obj="Comparison with workflow output after checking for negatives",
         )
+    
+    # also test with test data that only has data starting in 2015
+    emissions_id_2015 = "ex2_starting2015"
+
+    runner_2015 = CliRunner()
+    result_2015 = runner_2015.invoke(
+        climate_assessment.cli.harmonize,
+        [
+            os.path.join(test_data_dir, "{}.csv".format(emissions_id_2015)),
+            out_dir,
+        ],
+    )
+
+    assert result_2015.exit_code == 0, "{}\n\n{}".format(
+        traceback.print_exception(*result_2015.exc_info), result_2015.stdout
+    )
 
 
 def test_workflow_harmonization_noinputchecks(
