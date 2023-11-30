@@ -111,7 +111,7 @@ def test_workflow_harmonization(tmpdir, test_data_dir, update_expected_files):
             compare,
             obj="Comparison with workflow output after checking for negatives",
         )
-    
+
     # also test with test data that only has data starting in 2015
     emissions_id_2015 = "ex2_starting2015"
 
