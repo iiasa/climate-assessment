@@ -117,7 +117,8 @@ def add_year_historical_percentage_offset(df, dfhist, yr=2015, low_yr=2010):
         dfno2015[yr] = fill_values[yr].reorder_levels(dfno2015.index.names)
         df = pd.concat([df2015, dfno2015])
     else:
-        raise KeyError(f"{low_yr} not in `dfno2015`")
+        if not dfno2015.empty:
+            raise KeyError(f"{low_yr} not in `dfno2015`")
 
     return df
 
