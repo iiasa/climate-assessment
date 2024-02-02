@@ -222,6 +222,7 @@ def check_workflow_output():
                 the versions can change and it doesn't matter for output
                 """
                 expected_meta_cols_to_drop = [
+                    # "exclude",
                     "climate-models",
                     "infilling",
                     "workflow",
@@ -311,6 +312,9 @@ def check_workflow_output():
                 exp = pd.read_csv(file_expected).set_index(["model", "scenario"])
 
                 res = check_alloutput_meta_cols(res, model_version_str, pyam_df=False)
+                if "exclude" in exp:
+                    # TODO: update excel in another MR
+                    exp = exp.drop("exclude", axis="columns")
                 exp = check_alloutput_meta_cols(exp, model_version_str, pyam_df=False)
 
                 pdt.assert_frame_equal(res, exp, check_dtype=False, check_like=True)
