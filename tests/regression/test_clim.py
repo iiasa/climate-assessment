@@ -23,6 +23,9 @@ def check_output(output_dir, expected_output_dir, update_expected_files, rtol=1e
             for sheet in ["data", "meta"]:
                 res = pd.read_excel(file_to_check, sheet_name=sheet)
                 exp = pd.read_excel(file_expected, sheet_name=sheet)
+                if "exclude" in exp:
+                    # TODO: update excel files in future MR
+                    exp = exp.drop("exclude", axis="columns")
 
                 pdt.assert_frame_equal(
                     res.T,

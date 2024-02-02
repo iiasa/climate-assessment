@@ -23,6 +23,9 @@ def check_output(output_dir, expected_output_dir, update_expected_files, rtol=1e
             res = pd.read_excel(file_to_check, sheet_name=sheet)
             exp = pd.read_excel(file_expected, sheet_name=sheet)
             exp = exp.rename(columns={col: str(col) for col in exp.columns})
+            if "exclude" in exp:
+                # TODO: update excel files in future MR
+                exp = exp.drop("exclude", axis="columns")
 
             if sheet == "meta":
                 drop_cols = [

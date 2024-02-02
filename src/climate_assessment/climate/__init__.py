@@ -389,7 +389,7 @@ def run_and_post_process(
     )
     fair_run_logger.addFilter(MissingVariableFilter(name="MissingVariableFilter"))
 
-    res = openscm_runner.run.run(
+    res = openscm_runner.run(
         climate_models_cfgs=climate_models_cfgs,
         out_config=climate_models_out_config,
         scenarios=scenarios,
