@@ -71,10 +71,10 @@ def add_categorization(
         p_name = "median" if p == 50 else "p{:.0f}".format(p)
         name = "{} warming in 2100 ({})".format(p_name, model_str)
         dfar6.set_meta(p_temperature[2100], name)
-        meta_docs[
-            name
-        ] = "{} warming above in 2100 above pre-industrial temperature as computed by {}".format(
-            p_name, model_str
+        meta_docs[name] = (
+            "{} warming above in 2100 above pre-industrial temperature as computed by {}".format(
+                p_name, model_str
+            )
         )
 
     # select columns used for categorization
