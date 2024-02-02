@@ -2,7 +2,7 @@ import logging
 import os.path
 
 import numpy as np
-import openscm_runner
+import openscm_runner.run
 import pandas as pd
 import pyam
 import tqdm.autonotebook as tqdman
@@ -389,7 +389,7 @@ def run_and_post_process(
     )
     fair_run_logger.addFilter(MissingVariableFilter(name="MissingVariableFilter"))
 
-    res = openscm_runner.run(
+    res = openscm_runner.run.run(
         climate_models_cfgs=climate_models_cfgs,
         out_config=climate_models_out_config,
         scenarios=scenarios,
