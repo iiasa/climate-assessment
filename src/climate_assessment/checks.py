@@ -71,10 +71,10 @@ def add_categorization(
         p_name = "median" if p == 50 else "p{:.0f}".format(p)
         name = "{} warming in 2100 ({})".format(p_name, model_str)
         dfar6.set_meta(p_temperature[2100], name)
-        meta_docs[name] = (
-            "{} warming above in 2100 above pre-industrial temperature as computed by {}".format(
-                p_name, model_str
-            )
+        meta_docs[
+            name
+        ] = "{} warming above in 2100 above pre-industrial temperature as computed by {}".format(
+            p_name, model_str
         )
 
     # select columns used for categorization
@@ -226,7 +226,7 @@ def add_completeness_category(
     df_very_hi.set_meta(meta="very high", name="reporting-completeness")
     df_remaining = df_in.filter(exclude=True, inplace=False)
     if not df_remaining.empty:
-        df_remaining.reset_exclude()
+        df_remaining.exclude = False
         # high confidence scenarios:
         df_remaining.require_data(
             variable=hi_vars, year=required_years, exclude_on_fail=True
@@ -235,7 +235,7 @@ def add_completeness_category(
         df_high.set_meta(meta="high", name="reporting-completeness")
         df_remaining = df_remaining.filter(exclude=True, inplace=False)
         if not df_remaining.empty:
-            df_remaining.reset_exclude()
+            df_remaining.exclude = False
             # medium confidence scenarios:
             df_remaining.require_data(
                 variable=med_vars, year=required_years, exclude_on_fail=True
@@ -244,7 +244,7 @@ def add_completeness_category(
             df_med.set_meta(meta="medium", name="reporting-completeness")
             df_remaining = df_remaining.filter(exclude=True, inplace=False)
             if not df_remaining.empty:
-                df_remaining.reset_exclude()
+                df_remaining.exclude = False
                 # low confidence scenarios:
                 df_remaining.require_data(
                     variable=low_vars, year=required_years, exclude_on_fail=True
@@ -253,7 +253,7 @@ def add_completeness_category(
                 df_low.set_meta(meta="low", name="reporting-completeness")
                 df_remaining = df_remaining.filter(exclude=True, inplace=False)
                 if not df_remaining.empty:
-                    df_remaining.reset_exclude()
+                    df_remaining.exclude = False
                     # no confidence scenarios:
                     df_remaining.set_meta(
                         meta="no-confidence", name="reporting-completeness"
@@ -467,7 +467,7 @@ def check_against_historical(df, filename, instance, output_csv=False, outdir="o
     ]
 
     # mark all scenarios with negative non-CO2 values
-    df.reset_exclude()
+    df.exclude = False
     for y in [2015]:
         for e in strict_emissionscheck:
             hist = dfhist.filter(
@@ -762,10 +762,10 @@ def reclassify_waste_and_other_co2_ar6(df):
     ).index
     # dataframe with scenarios that DO need changes
     df_change = df.filter(index=df_change_scenarios, keep=True)
-    df_change.reset_exclude()
+    df_change.exclude = False
     # dataframe with scenarios that DO NOT need changes
     df_nochange = df.filter(index=df_change_scenarios, keep=False)
-    df_nochange.reset_exclude()
+    df_nochange.exclude = False
 
     # if no change is necessary, just return the dataframe
     # - possible test: df == df_nochange
@@ -877,7 +877,7 @@ def perform_input_checks(
     df = pyam.IamDataFrame(pd.concat(dfnew))
 
     LOGGER.info("CHECK: reclassify Waste and Other CO2 under E&IP.")
-    df.reset_exclude()
+    df.exclude = False
     df = reclassify_waste_and_other_co2_ar6(df)
 
     LOGGER.info("CHECK: delete rows only reporting zero for the entire timeframe.")
@@ -960,7 +960,7 @@ def infiller_vetting(
         {f"{prefix}Emissions|VOC": {"up": 50000}},
     ]
 
-    df.reset_exclude()
+    df.exclude = False
     for criterion in em_criteria:
         df.validate(criteria=criterion, exclude_on_fail=True)
     # TODO: replace filter by something faster, working on the meta

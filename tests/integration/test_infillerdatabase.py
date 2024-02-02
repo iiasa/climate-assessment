@@ -49,7 +49,7 @@ def test_example_small_infillerdatabase(tmpdir, test_data_dir):
         {f"{prefix}Emissions|CO2|AFOLU": {"up": 1e6}},
         {f"{prefix}Emissions|CO2|AFOLU": {"lo": -1e5}},
     ]
-    df_infiller_database_checked.reset_exclude()
+    df_infiller_database_checked.exclude = False
 
     for criterion in co2_criteria:
         df_infiller_database_checked.validate(criteria=criterion, exclude_on_fail=True)
@@ -82,7 +82,7 @@ def test_example_small_infillerdatabase(tmpdir, test_data_dir):
         {f"{prefix}Emissions|Sulfur": {"up": 5e3}},
         {f"{prefix}Emissions|VOC": {"up": 5e4}},
     ]
-    df_infiller_database_checked.reset_exclude()
+    df_infiller_database_checked.exclude = False
     for criterion in other_upperboundaries:
         df_infiller_database_checked.validate(criteria=criterion, exclude_on_fail=True)
     # TODO: replace filter by something faster, working on the meta
