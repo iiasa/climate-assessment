@@ -2,7 +2,7 @@ import logging
 import os.path
 
 import numpy as np
-import openscm_runner
+import openscm_runner.run
 import pandas as pd
 import pyam
 import tqdm.autonotebook as tqdman

@@ -22,6 +22,7 @@ def clean_wg3_scenarios(inp):
 
     infilled_emms_filter = "*Infilled*"
     df_clean = inp.filter(variable=infilled_emms_filter).data.copy()
+
     if df_clean.empty:
         LOGGER.error("No '%s' data available", infilled_emms_filter)
 
@@ -39,7 +40,7 @@ def clean_wg3_scenarios(inp):
         "HFC245ca": "HFC245fa",  # still needed?
     }
     for old, new in replacements_variables.items():
-        df_clean["variable"] = df_clean["variable"].str.replace(old, new)
+        df_clean["variable"] = df_clean["variable"].str.replace(old, new, regex=True)
 
     replacements_units = {
         "HFC43-10": "HFC4310mee",

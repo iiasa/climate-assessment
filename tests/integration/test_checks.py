@@ -1,4 +1,5 @@
 import logging
+import os.path
 
 import numpy as np
 import pandas.testing as pdt
@@ -7,12 +8,24 @@ import pytest
 import scmdata
 
 from climate_assessment.checks import (
+    add_completeness_category,
     check_reported_co2,
     perform_input_checks,
     sanity_check_bounds_kyoto_emissions,
     sanity_check_comparison_kyoto_gases,
     sanity_check_hierarchy,
 )
+
+
+def test_add_completeness_category():
+    """Check that `add_completeness_category` does not remove any scenarios"""
+    input_idf = pyam.IamDataFrame(
+        os.path.join(os.path.dirname(__file__), "..", "test-data", "ex2.csv")
+    )
+
+    df_with_completeness_meta_column = add_completeness_category(df=input_idf)
+
+    assert len(input_idf) == len(df_with_completeness_meta_column)
 
 
 def test_perform_input_checks_negative_kyoto():

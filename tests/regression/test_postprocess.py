@@ -10,37 +10,40 @@ import climate_assessment.cli
 
 
 def check_output(output_dir, expected_output_dir, update_expected_files, rtol=1e-2):
-    files = ["ex2_harmonized_infilled_alloutput.xlsx"]
+    filename = "ex2_harmonized_infilled_alloutput.xlsx"
 
-    for filename in files:
-        file_to_check = os.path.join(output_dir, filename)
-        file_expected = os.path.join(expected_output_dir, filename)
+    file_to_check = os.path.join(output_dir, filename)
+    file_expected = os.path.join(expected_output_dir, filename)
 
-        if update_expected_files:
-            shutil.copyfile(file_to_check, file_expected)
+    if update_expected_files:
+        shutil.copyfile(file_to_check, file_expected)
 
-        else:
-            for sheet in ["data", "meta"]:
-                res = pd.read_excel(file_to_check, sheet_name=sheet)
-                exp = pd.read_excel(file_expected, sheet_name=sheet)
+    else:
+        for sheet in ["data", "meta"]:
+            res = pd.read_excel(file_to_check, sheet_name=sheet)
+            exp = pd.read_excel(file_expected, sheet_name=sheet)
+            exp = exp.rename(columns={col: str(col) for col in exp.columns})
+            if "exclude" in exp:
+                # TODO: update excel files in future MR
+                exp = exp.drop("exclude", axis="columns")
 
-                if sheet == "meta":
-                    drop_cols = [
-                        "harmonization",
-                        "infilling",
-                        "climate-models",
-                        "workflow",
-                    ]
-                    res = res.drop(drop_cols, axis="columns")
-                    exp = exp.drop(drop_cols, axis="columns")
+            if sheet == "meta":
+                drop_cols = [
+                    "harmonization",
+                    "infilling",
+                    "climate-models",
+                    "workflow",
+                ]
+                res = res.drop(drop_cols, axis="columns")
+                exp = exp.drop(drop_cols, axis="columns")
 
-                pdt.assert_frame_equal(
-                    res.T,
-                    exp.T,
-                    check_like=True,
-                    obj="{} {}".format(sheet, os.path.basename(file_to_check)),
-                    rtol=rtol,
-                )
+            pdt.assert_frame_equal(
+                res.T,
+                exp.T,
+                check_like=True,
+                obj="{} {}".format(sheet, os.path.basename(file_to_check)),
+                rtol=rtol,
+            )
 
 
 def test_postprocess(tmpdir, test_data_dir, update_expected_files):

@@ -5,8 +5,6 @@ Utility functions
 
 .. autofunction:: climate_assessment.utils.columns_to_basic
 
-.. autofunction:: climate_assessment.utils.require_var_allyears
-
 .. autofunction:: climate_assessment.utils.convert_units_to_co2_equiv
 
 .. autofunction:: climate_assessment.utils.convert_co2_equiv_to_kt_gas

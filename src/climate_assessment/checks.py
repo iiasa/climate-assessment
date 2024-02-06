@@ -10,7 +10,7 @@ from .climate import (
     DEFAULT_FAIR_VERSION,
     DEFAULT_MAGICC_VERSION,
 )
-from .utils import _diff_variables, require_var_allyears
+from .utils import _diff_variables
 
 # output file location
 OUT_FOLDER_NAME = "output"
@@ -71,10 +71,10 @@ def add_categorization(
         p_name = "median" if p == 50 else "p{:.0f}".format(p)
         name = "{} warming in 2100 ({})".format(p_name, model_str)
         dfar6.set_meta(p_temperature[2100], name)
-        meta_docs[
-            name
-        ] = "{} warming above in 2100 above pre-industrial temperature as computed by {}".format(
-            p_name, model_str
+        meta_docs[name] = (
+            "{} warming above in 2100 above pre-industrial temperature as computed by {}".format(
+                p_name, model_str
+            )
         )
 
     # select columns used for categorization
@@ -163,65 +163,15 @@ def add_categorization(
     return df
 
 
-def count_variables_very_high(
-    df, vars, num=9, prefix="AR6 climate diagnostics|Harmonized|"
-):
-    """Auxiliary function for :func:`climate_assessment.checks.add_completeness_category`.
-    Performs check of variables + number of variables"""
-    required_years = [2015, 2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100]
-    # mark the scenarios that are not sufficiently infilled for climate assessment:
-    for v in vars:
-        for y in required_years:
-            df.require_variable(v, year=y, exclude_on_fail=True)
-    # filter out the marked scenarios
-    df.filter(exclude=False, inplace=True)
-    numvars = len(df.filter(variable=str(prefix + "Emissions|*"), level=0).variable)
-    if numvars >= num:
-        return True
-    else:
-        return False
-
-
 def add_completeness_category(
     df,
-    filename,
-    delete_no_confidence=False,
+    filename=None,
     output_csv=False,
     outdir="output",
     prefix="AR6 climate diagnostics|Harmonized|",
 ):
     """Add a meta column that specified the reporting completeness based
     on qualitative categories."""
-    # create empty dataframe for multiple models
-    dfnew = pd.DataFrame(
-        columns=[
-            "Model",
-            "Scenario",
-            "Region",
-            "Variable",
-            "Unit",
-            "2015",
-            "2020",
-            "2025",
-            "2030",
-            "2035",
-            "2040",
-            "2045",
-            "2050",
-            "2055",
-            "2060",
-            "2065",
-            "2070",
-            "2075",
-            "2080",
-            "2085",
-            "2090",
-            "2095",
-            "2100",
-        ]
-    )
-    dfnew = pyam.IamDataFrame(dfnew)
-    df_noconfidence = dfnew
 
     # "low confidence"
     low_vars = [
@@ -248,51 +198,91 @@ def add_completeness_category(
         str(prefix + "Emissions|CO2|AFOLU"),
         str(prefix + "Emissions|CH4"),
         str(prefix + "Emissions|N2O"),
+        str(prefix + "Emissions|Sulfur"),
     ]
 
-    # TODO: find better way than doing loop
-    for model, scen in df.index:
-        if not df.filter(scenario=scen, model=model).empty:
-            confidence = True
-            if count_variables_very_high(
-                df.filter(scenario=scen, model=model), very_hi_vars, 9, prefix
-            ):
-                df_scen = df.filter(scenario=scen, model=model)
-                df_scen.set_meta(meta="very high", name="reporting-completeness")
+    df_in = df.copy()
 
-            elif require_var_allyears(df.filter(scenario=scen, model=model), hi_vars):
-                df_scen = df.filter(scenario=scen, model=model)
-                df_scen.set_meta(meta="high", name="reporting-completeness")
+    required_years = [2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100]
+    required_years_very_hi = [
+        2015,
+        2020,
+        2030,
+        2040,
+        2050,
+        2060,
+        2070,
+        2080,
+        2090,
+        2100,
+    ]
 
-            elif require_var_allyears(df.filter(scenario=scen, model=model), med_vars):
-                df_scen = df.filter(scenario=scen, model=model)
-                df_scen.set_meta(meta="medium", name="reporting-completeness")
-
-            elif require_var_allyears(df.filter(scenario=scen, model=model), low_vars):
-                df_scen = df.filter(scenario=scen, model=model)
-                df_scen.set_meta(meta="low", name="reporting-completeness")
-
+    # mark the scenarios without sufficient timeseries data for climate assessment
+    # very high confidence scenarios:
+    df_in.require_data(
+        variable=very_hi_vars, year=required_years_very_hi, exclude_on_fail=True
+    )
+    df_very_hi = df_in.filter(exclude=False, inplace=False)
+    df_very_hi.set_meta(meta="very high", name="reporting-completeness")
+    df_remaining = df_in.filter(exclude=True, inplace=False)
+    if not df_remaining.empty:
+        df_remaining.exclude = False
+        # high confidence scenarios:
+        df_remaining.require_data(
+            variable=hi_vars, year=required_years, exclude_on_fail=True
+        )
+        df_high = df_remaining.filter(exclude=False, inplace=False)
+        df_high.set_meta(meta="high", name="reporting-completeness")
+        df_remaining = df_remaining.filter(exclude=True, inplace=False)
+        if not df_remaining.empty:
+            df_remaining.exclude = False
+            # medium confidence scenarios:
+            df_remaining.require_data(
+                variable=med_vars, year=required_years, exclude_on_fail=True
+            )
+            df_med = df_remaining.filter(exclude=False, inplace=False)
+            df_med.set_meta(meta="medium", name="reporting-completeness")
+            df_remaining = df_remaining.filter(exclude=True, inplace=False)
+            if not df_remaining.empty:
+                df_remaining.exclude = False
+                # low confidence scenarios:
+                df_remaining.require_data(
+                    variable=low_vars, year=required_years, exclude_on_fail=True
+                )
+                df_low = df_remaining.filter(exclude=False, inplace=False)
+                df_low.set_meta(meta="low", name="reporting-completeness")
+                df_remaining = df_remaining.filter(exclude=True, inplace=False)
+                if not df_remaining.empty:
+                    df_remaining.exclude = False
+                    # no confidence scenarios:
+                    df_remaining.set_meta(
+                        meta="no-confidence", name="reporting-completeness"
+                    )
+                    if output_csv:
+                        LOGGER.info(
+                            "Writing out scenarios with no confidence due to reporting completeness issues"
+                        )
+                        _write_file(
+                            outdir,
+                            df_remaining,
+                            "{}_excluded_scenarios_noconfidence.csv".format(filename),
+                        )
+                    # combine all the dataframes
+                    df_confidence_column = pyam.concat(
+                        [df_very_hi, df_high, df_med, df_low, df_remaining]
+                    )
+                else:
+                    df_confidence_column = pyam.concat(
+                        [df_very_hi, df_high, df_med, df_low]
+                    )
             else:
-                # this captures for instance the scenarios that report only E&IP but not AFOLU
-                df_scen = df.filter(scenario=scen, model=model)
-                df_scen.set_meta(meta="no-confidence", name="reporting-completeness")
-                df_noconfidence = pyam.concat([df_noconfidence, df_scen])
-                if delete_no_confidence:
-                    confidence = False
+                df_confidence_column = pyam.concat([df_very_hi, df_high, df_med])
+        else:
+            df_confidence_column = pyam.concat([df_very_hi, df_high])
+    else:
+        df_confidence_column = df_very_hi
 
-            if confidence:
-                dfnew = pyam.concat([dfnew, df_scen])
-    if output_csv:
-        LOGGER.info(
-            "Writing out scenarios with no confidence due to reporting completeness issues"
-        )
-        _write_file(
-            outdir,
-            df_noconfidence,
-            "{}_excluded_scenarios_noconfidence.csv".format(filename),
-        )
-
-    return dfnew
+    return df_confidence_column
 
 
 def co2_energyandindustrialprocesses(df):
@@ -477,7 +467,7 @@ def check_against_historical(df, filename, instance, output_csv=False, outdir="o
     ]
 
     # mark all scenarios with negative non-CO2 values
-    df.reset_exclude()
+    df.exclude = False
     for y in [2015]:
         for e in strict_emissionscheck:
             hist = dfhist.filter(
@@ -714,14 +704,25 @@ def require_allyears(
 
     # check for baseyear
     if output_csv:
-        dft_out = dft_out.append(dft[(dft[base_yr].isna()) & (dft[low_yr].isna())])
+        dft_out = pd.concat(
+            [
+                dft_out,
+                dft[(dft[base_yr].isna()) & (dft[low_yr].isna())],
+            ]
+        )
+
     dft = dft[~((dft[base_yr].isna()) & (dft[low_yr].isna()))]
 
     # check for model years
     # TODO: find better way than doing loop
     for yr in required_years:
         if output_csv:
-            dft_out = dft_out.append(dft[(dft[yr].isna())])
+            dft_out = pd.concat(
+                [
+                    dft_out,
+                    dft[(dft[yr].isna())],
+                ]
+            )
         dft = dft[~(dft[yr].isna())]
 
     # write out if wanted
@@ -731,38 +732,6 @@ def require_allyears(
             outdir, dft_out, "{}_excluded_variables_notallyears.csv".format(filename)
         )
     return pyam.IamDataFrame(dft)
-
-
-def require_allyears_and_drop_scenarios(
-    df,
-    filename="test",
-    output_csv=False,
-    outdir="output",
-    required_years=[2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100],
-):
-    """Filters out full scenarios if some year is not reported (using pyam)"""
-    df.reset_exclude()
-    dfnew = df.copy().filter(exclude=True)
-    dfout = df.copy().filter(exclude=True)
-    for mod, scen in df.index:
-        df_scen = df.filter(model=mod, scenario=scen)
-        if not df_scen.empty:
-            vars = df_scen.variables()
-            # mark the scenarios that are not sufficiently infilled for climate assessment:
-            for v in vars:
-                for y in required_years:
-                    df_scen.require_variable(v, year=y, exclude_on_fail=True)
-            df_scen_out = df_scen.filter(exclude=True, inplace=False)
-            df_scen.filter(exclude=False, inplace=True)
-            if not df_scen.empty:
-                dfnew = pyam.concat([dfnew, df_scen])
-            else:
-                dfout = pyam.concat([dfout, df_scen_out])
-    if output_csv:
-        _write_file(
-            outdir, dfout, "{}_excluded_scenarios_notallyears.csv".format(filename)
-        )
-    return dfnew
 
 
 def reclassify_waste_and_other_co2_ar6(df):
@@ -783,20 +752,23 @@ def reclassify_waste_and_other_co2_ar6(df):
     :class:`pyam.IamDataFrame`
         Reclassified set of emissions.
     """
-    # filter out the scenarios that do not need changes
-    df_nochange = df.copy()
-    df_nochange.require_variable(
-        variable=["Emissions|CO2|Other", "Emissions|CO2|Waste"], exclude_on_fail=True
-    )
-    df_nochange.filter(exclude=True, inplace=True)
-    df_nochange.reset_exclude()
+    # 1. filter all scenarios that have either emissions variable by df.filter(variable=["Emissions|CO2|Other", "Emissions|CO2|Waste"])
+    #     + get list of indices
+    # 2. do df.filter(index=indices, exclude=False) and df.filter(index=indices, exclude=True)
 
-    # select the scenarios that do need changes
-    df_change = df.copy()
-    df_change.require_variable(
-        variable=["Emissions|CO2|Other", "Emissions|CO2|Waste"], exclude_on_fail=True
-    )
-    df_change.filter(exclude=False, inplace=True)
+    # list scenarios that do need changes (as they report variables that we reclassify under "Energy and Industrial Processes")
+    df_change_scenarios = df.filter(
+        variable=["Emissions|CO2|Other", "Emissions|CO2|Waste"]
+    ).index
+    # dataframe with scenarios that DO need changes
+    df_change = df.filter(index=df_change_scenarios, keep=True)
+    df_change.exclude = False
+    # dataframe with scenarios that DO NOT need changes
+    df_nochange = df.filter(index=df_change_scenarios, keep=False)
+    df_nochange.exclude = False
+
+    # if no change is necessary, just return the dataframe
+    # - possible test: df == df_nochange
     if df_change.empty:
         return df_nochange
 
@@ -810,27 +782,41 @@ def reclassify_waste_and_other_co2_ar6(df):
 
     # use pandas to create new CO2|Energy and Industrial Processes by adding CO2|Other and CO2|Waste
     df_change_pd = df_change.as_pandas()
+    # which variables to sum
     varsum = [
         "Emissions|CO2|Waste",
         "Emissions|CO2|Other",
         "Emissions|CO2|Energy and Industrial Processes|Incomplete",
     ]
+    # not affected variables of the same scenario:
     df_change_notaffected_pd = df_change_pd[~df_change_pd.variable.isin(varsum)]
-    df_change_notaffected_pd = df_change_notaffected_pd.drop("exclude", axis=1)
+    try:
+        df_change_notaffected_pd = df_change_notaffected_pd.drop(
+            columns=["exclude"]
+        )  # drop exclude column in this timeseries
+    except KeyError:
+        pass
     df_change_notaffected_pyam = pyam.IamDataFrame(df_change_notaffected_pd)
+
+    # group and sum the variables that are affected
     df_change_pd = df_change_pd[df_change_pd.variable.isin(varsum)]
+    try:
+        df_change_pd = df_change_pd.drop(
+            columns=["exclude"]
+        )  # drop exclude column in this timeseries
+    except KeyError:
+        pass
     df_change_pd = df_change_pd.groupby(
-        by=["model", "scenario", "year"], as_index=False
+        by=["model", "scenario", "region", "unit", "year"], as_index=False
     )
-    df_change_pd = df_change_pd.sum()
+    df_change_pd = df_change_pd.sum(numeric_only=True)
     df_change_pd["variable"] = "Emissions|CO2|Energy and Industrial Processes"
-    df_change_pd["unit"] = "Mt CO2/yr"
-    df_change_pd["region"] = "World"
-    df_change_pd.drop("exclude", axis=1, inplace=True)
+
+    # recombine variables of the scenarios that were changed (and change back to pyam IamDataFrame)
     df_change_pyam = pyam.IamDataFrame(df_change_pd)
     df_change = pyam.concat([df_change_pyam, df_change_notaffected_pyam])
 
-    # recombine dataframes
+    # recombine scenarios with and without changes dataframes
     df_new = pyam.concat([df_change, df_nochange])
 
     return df_new
@@ -891,7 +877,7 @@ def perform_input_checks(
     df = pyam.IamDataFrame(pd.concat(dfnew))
 
     LOGGER.info("CHECK: reclassify Waste and Other CO2 under E&IP.")
-    df.reset_exclude()
+    df.exclude = False
     df = reclassify_waste_and_other_co2_ar6(df)
 
     LOGGER.info("CHECK: delete rows only reporting zero for the entire timeframe.")
@@ -974,7 +960,7 @@ def infiller_vetting(
         {f"{prefix}Emissions|VOC": {"up": 50000}},
     ]
 
-    df.reset_exclude()
+    df.exclude = False
     for criterion in em_criteria:
         df.validate(criteria=criterion, exclude_on_fail=True)
     # TODO: replace filter by something faster, working on the meta

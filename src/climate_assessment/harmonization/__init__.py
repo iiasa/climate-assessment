@@ -206,7 +206,6 @@ def run_harmonization(df, instance, prefix):
         filename="dropped_rows",
         harmonization_year=harmonization_year,
     )  # note: this process is repeated after harmonization. Before is slightly nicer, but not enough.
-    scenarios = scenarios.filter(year=output_timesteps).timeseries()
 
     # TODO: remove hard-coding
     overrides = pd.DataFrame(
@@ -301,6 +300,7 @@ def run_harmonization(df, instance, prefix):
     )
     LOGGER.info("Harmonisation overrides:\n%s", overrides)
 
+    scenarios = scenarios.filter(year=output_timesteps).timeseries()
     with parallel_progress_bar(tqdm.tqdm(desc="Harmonisation")):
         LOGGER.info("Harmonising in parallel")
         # TODO: remove hard-coding of n_jobs
@@ -313,6 +313,18 @@ def run_harmonization(df, instance, prefix):
             )
             for _, msdf in scenarios.groupby(["model", "scenario"])
         )
+
+    LOGGER.info("Hacking around some regression in aneris - pyam stack")
+
+    def drop_broken_stuff(indf):
+        out = indf.copy()
+        idx_length = len(out.index.names)
+        drop_levels = list(range(idx_length // 2, idx_length))
+        out.index = out.index.droplevel(drop_levels)
+
+        return out
+
+    scenarios_harmonized = [drop_broken_stuff(s) for s in scenarios_harmonized]
 
     LOGGER.info("Combining results")
     scenarios_harmonized = pd.concat(scenarios_harmonized).reset_index()

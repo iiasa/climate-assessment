@@ -181,9 +181,9 @@ def calculate_exceedance_probability_timeseries(
         except AssertionError:
             LOGGER.exception("Careful of scenarios which break match with history!")
 
-    exceedance_probability_timeseries[
-        "variable"
-    ] = exceedance_probability_calculation_var
+    exceedance_probability_timeseries["variable"] = (
+        exceedance_probability_calculation_var
+    )
     return exceedance_probability_timeseries
 
 
@@ -520,7 +520,7 @@ def post_process(
         return out
 
     meta_table = (
-        meta_table.groupby("climate_model")
+        meta_table.groupby("climate_model", group_keys=False)
         .apply(mangle_meta_table_climate_model)
         .reset_index("climate_model", drop=True)
     )

@@ -188,7 +188,9 @@ def test_reclassify_co2_ar6():
     processed_input_emissions_file = os.path.join(
         TEST_DATA_DIR, "ex2_adjusted-waste-other.csv"
     )
-
+    # import pdb
+    # pdb.set_trace()
+    # pyam.compare(reclassify_waste_and_other_co2_ar6(pyam.IamDataFrame(input_emissions_file)), pyam.IamDataFrame(processed_input_emissions_file), )
     assert reclassify_waste_and_other_co2_ar6(
         pyam.IamDataFrame(input_emissions_file)
     ).equals(pyam.IamDataFrame(processed_input_emissions_file))
