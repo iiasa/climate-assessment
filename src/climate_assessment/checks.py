@@ -545,78 +545,90 @@ def check_negatives(
     """
     Check for negative emissions and remove any timeseries which has negative non-CO2 values.
     """
-    # set small non-negative non-CO2 values to zero
-    df_co2 = df.filter(variable=f"{prefix}Emissions|CO2*").timeseries()
-    df_nonco2 = df.filter(variable=f"{prefix}Emissions|CO2*", keep=False).timeseries()
-    df_nonco2 = df_nonco2.where(
-        (df_nonco2 > 0) | (df_nonco2 < negativethreshold) | df_nonco2.isnull(), other=0
-    )
-    df = pyam.IamDataFrame(pd.concat([df_co2, df_nonco2]))
 
-    # TODO: only checking for negatives in these variables, not in cfcs/minor gases
-    emissions_noco2 = [
-        "Emissions|BC",
-        "Emissions|PFC|C2F6",
-        "Emissions|PFC|C6F14",
-        "Emissions|PFC|CF4",
-        "Emissions|CO",
-        "Emissions|CH4",
-        "Emissions|F-Gases",
-        "Emissions|HFC",
-        "Emissions|HFC|HFC125",
-        "Emissions|HFC|HFC134a",
-        "Emissions|HFC|HFC143a",
-        "Emissions|HFC|HFC227ea",
-        "Emissions|HFC|HFC23",
-        # 'Emissions|HFC|HFC245ca',  # not in historical dataset (RCMIP)
-        # "Emissions|HFC|HFC245fa",  # all nan in historical dataset (RCMIP)
-        "Emissions|HFC|HFC32",
-        "Emissions|HFC|HFC43-10",
-        "Emissions|N2O",
-        "Emissions|NH3",
-        "Emissions|NOx",
-        "Emissions|OC",
-        "Emissions|PFC",
-        "Emissions|SF6",
-        "Emissions|Sulfur",
-        "Emissions|VOC",
-    ]
-    df_nonco2 = df.filter(
-        variable=[f"{prefix}{s}" for s in emissions_noco2]
-    ).timeseries()
+    if df.filter(variable=f"{prefix}Emissions|CO2*", keep=False).empty:
+        # if there are only CO2 emissions in this emissions set, return input directly
+        return df
+    else:
+        # if there are non-CO2 emissions, perform a couple of checks and small modifications
 
-    # remove any timeseries which still have negative non-CO2 values
-    negative_nonco2 = (df_nonco2 < 0).any(axis=1).groupby(["model", "scenario"]).sum()
-    negative_nonco2.name = "negative_nonco2_count"
-    # make the negative non CO2 count line up with meta and fill anything which
-    # isn't there (i.e. provides CO2 only) with 0
-    negative_nonco2 = negative_nonco2.align(df.meta)[0].fillna(0)
-
-    df.set_meta(negative_nonco2)
-    df_no_negatives = df.filter(negative_nonco2_count=0.0)
-    df_negatives = df.filter(negative_nonco2_count=0.0, keep=False)
-
-    if filename:
-        _write_file(
-            outdir,
-            df_negatives,
-            "{}_excluded_scenarios_unexpectednegatives.csv".format(filename),
+        # set small non-negative non-CO2 values to zero
+        df_co2 = df.filter(variable=f"{prefix}Emissions|CO2*").timeseries()
+        df_nonco2 = df.filter(
+            variable=f"{prefix}Emissions|CO2*", keep=False
+        ).timeseries()
+        df_nonco2 = df_nonco2.where(
+            (df_nonco2 > 0) | (df_nonco2 < negativethreshold) | df_nonco2.isnull(),
+            other=0,
         )
+        df = pyam.IamDataFrame(pd.concat([df_co2, df_nonco2]))
 
-    # the case of skipping the entire scenario - remove from df to be passed on to harmonization.
-    for model, scen in df_negatives.index:
-        LOGGER.info(
-            "\n==================================\n"
-            + "Unexpected (non-CO2) negative emissions found in "
-            + "scenario "
-            + scen
-            + " produced by "
-            + model
-            + "!\n"
-            + "=================================="
+        # only checking for negatives in these variables, not in cfcs/minor gases (which are always infilled for now)
+        emissions_noco2 = [
+            "Emissions|BC",
+            "Emissions|PFC|C2F6",
+            "Emissions|PFC|C6F14",
+            "Emissions|PFC|CF4",
+            "Emissions|CO",
+            "Emissions|CH4",
+            "Emissions|F-Gases",
+            "Emissions|HFC",
+            "Emissions|HFC|HFC125",
+            "Emissions|HFC|HFC134a",
+            "Emissions|HFC|HFC143a",
+            "Emissions|HFC|HFC227ea",
+            "Emissions|HFC|HFC23",
+            # 'Emissions|HFC|HFC245ca',  # not in historical dataset (RCMIP)
+            # "Emissions|HFC|HFC245fa",  # all nan in historical dataset (RCMIP)
+            "Emissions|HFC|HFC32",
+            "Emissions|HFC|HFC43-10",
+            "Emissions|N2O",
+            "Emissions|NH3",
+            "Emissions|NOx",
+            "Emissions|OC",
+            "Emissions|PFC",
+            "Emissions|SF6",
+            "Emissions|Sulfur",
+            "Emissions|VOC",
+        ]
+        df_nonco2 = df.filter(
+            variable=[f"{prefix}{s}" for s in emissions_noco2]
+        ).timeseries()
+
+        # remove any timeseries which still have negative non-CO2 values
+        negative_nonco2 = (
+            (df_nonco2 < 0).any(axis=1).groupby(["model", "scenario"]).sum()
         )
+        negative_nonco2.name = "negative_nonco2_count"
+        # make the negative non CO2 count line up with meta and fill anything which
+        # isn't there (i.e. provides CO2 only) with 0
+        negative_nonco2 = negative_nonco2.align(df.meta)[0].fillna(0)
 
-    return df_no_negatives
+        df.set_meta(negative_nonco2)
+        df_no_negatives = df.filter(negative_nonco2_count=0.0)
+        df_negatives = df.filter(negative_nonco2_count=0.0, keep=False)
+
+        if filename:
+            _write_file(
+                outdir,
+                df_negatives,
+                "{}_excluded_scenarios_unexpectednegatives.csv".format(filename),
+            )
+
+        # the case of skipping the entire scenario - remove from df to be passed on to harmonization.
+        for model, scen in df_negatives.index:
+            LOGGER.info(
+                "\n==================================\n"
+                + "Unexpected (non-CO2) negative emissions found in "
+                + "scenario "
+                + scen
+                + " produced by "
+                + model
+                + "!\n"
+                + "=================================="
+            )
+
+        return df_no_negatives
 
 
 def remove_rows_with_zero_in_harmonization_year(
@@ -1047,6 +1059,11 @@ def sanity_check_hierarchy(
     """Check that hierarchy of variables is internally consistent (in this case
     check that Emissions|CO2 is the sum of AFOLU and Energy and Industrial
     Processes emissions)"""
+
+    if co2_inf_db.filter(variable="Emissions|CO2", keep=False).empty:
+        # if there is only "Emissions|CO2", then this check does not make sense,
+        # because there is no "*|Harmonized|*" version of out_afolu and out_fossil
+        return
 
     def _concat_df(iam_df, prefix):
         concat_iam_df = pyam.concat(
