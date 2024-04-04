@@ -69,10 +69,10 @@ jobs:
         poetry config virtualenvs.create true
         poetry config virtualenvs.in-project true
 
-    - name: Install test dependencies
+    - name: Install test dependencies and package
       shell: bash
       run: |
-        poetry install --no-interaction --no-root --all-extras --only 'main,tests'
+        poetry install --no-interaction --all-extras --only 'main,tests'
 
     - name: Test with pytest
       run: |
