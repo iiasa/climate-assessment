@@ -1,27 +1,33 @@
-from pathlib import Path
+"""
+Climate assesssment workflow
+"""
 
 import pyam
-from setuptools_scm import get_version
 
 try:
-    from importlib.metadata import version
+    from importlib.metadata import version as _version
 except ImportError:
     # no recourse if the fallback isn't there either...
-    from importlib_metadata import version
+    from importlib_metadata import version as _version
 
-# get version number either from git (preferred) or metadata
 try:
-    __version__ = get_version(Path(__file__).parents[1])
-except LookupError:
-    __version__ = version("climate-assessment")
+    __version__ = _version("scmdata")
+except Exception:  # pylint: disable=broad-except  # pragma: no cover
+    # Local copy, not installed with setuptools
+    __version__ = "unknown"
 
 
-# auxiliary pyam-based function for downloading IAMC data
 def retrieve_data(variable_list, region_list, db, username, pw):
+    """
+    Auxiliary pyam-based function for downloading IAMC data
+
+    Should be removed, or at least moved, in future
+    """
     conn = pyam.iiasa.Connection(db, creds=(username, pw))
     valid_scenarios = ["*"]
     data = conn.query(
         scenario=valid_scenarios, variable=variable_list, region=region_list
     ).drop("meta", axis=1)
     data = data.drop("subannual", axis=1)
+
     return pyam.IamDataFrame(data)

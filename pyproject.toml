@@ -34,3 +34,92 @@ homepage = "https://github.com/iiasa/climate-assessment"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
+aneris_iamc = "==0.3.1"
+fair = "==1.6.2"
+joblib = "==1.3.2"
+openscm-runner = "==0.12.1"
+pandas = "==2.2.0"
+pooch = "==1.8.0"
+pyam-iamc = "==2.1.0"
+scmdata = "==0.17.0"
+silicone = "==1.3.0"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.7.0"
+
+
+[tool.poetry.group.tests.dependencies]
+pytest = "^8.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "nightly: Slow-running nightly tests.",
+    "wg3: Tests for exact reproduction of WG3 database.",
+]
+addopts = [
+    "-m",
+    "not nightly and not wg3",
+    "--import-mode=importlib",
+    "--ignore=tests/test-data"
+]
+
+[tool.ruff]
+src = ["src"]
+target-version = "py39"
+select = [
+    "E",  # pycodestyle error
+    "W",  # pycodestyle warning
+    "F",  # pyflakes
+    "I",  # isort
+    "D",  # pydocstyle
+    "PL",  # pylint
+    "TRY",  # tryceratops
+    "NPY",  # numpy rules
+    "RUF",  # ruff specifics
+    "UP",  # pyupgrade
+    "S",  # flake8-bandit
+    # pandas support via pandas-vet. In some cases we will want to disable
+    # this because it can lead to too many false positives.
+    "PD",
+]
+unfixable = [
+    "PD002",  # Disable autofix for inplace as this often introduces bugs
+]
+ignore = [
+    "D200",  # One-line docstring should fit on one line with quotes
+    "D400",  # First line should end with a period
+    "D105",  # Missing docstring in magic method
+    "UP007",
+    "PD011",  # Ruff confused about APIs
+]
+# Provide some leeway for long docstring, this is otherwise handled by black
+line-length = 88
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.per-file-ignores]
+"test*.py" = [
+    "D",  # Documentation not needed in tests
+    "S101",  # S101 Use of `assert` detected
+    "PLR2004" # Magic value used in comparison
+]
+"notebooks/*" = [
+    "D100",  # Missing docstring at the top of file
+    "E402",  # Module level import not at top of file
+    "S101",  # Use of `assert` detected
+]
+"scripts/*" = [
+    "S101",  # S101 Use of `assert` detected
+]
+
+[tool.ruff.isort]
+known-first-party = ["src"]
+
+[tool.ruff.pydocstyle]
+convention = "numpy"
