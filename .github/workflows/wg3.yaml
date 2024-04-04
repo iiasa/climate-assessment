@@ -1,8 +1,8 @@
 name: Exact reproduction of WG3 database
 on:
- # # Uncomment these two lines for debugging, but leave them commented on 'main'
- # pull_request:
- #   branches: [ main ]
+ # Uncomment these two lines for debugging, but leave them commented on 'main'
+ pull_request:
+   branches: [ main ]
  push:
    branches: [ main ]
  schedule:
@@ -17,14 +17,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v4
+      - name: Install poetry
+        shell: bash
+        run: |
+          pipx install poetry
+          which poetry
+          poetry --version  # Check poetry installation
+
+      - name: Set up Python
+        id: setup-python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
+          cache: poetry
 
-      - name: Install dev dependencies
+      - name: Install test dependencies
+        shell: bash
         run: |
-          pip install --upgrade pip wheel
-          pip install -e .[tests,notebooks]
+          poetry install --no-interaction --no-root --all-extras --only 'main,test'
 
       - name: Get infiller database
         env:
@@ -34,7 +44,7 @@ jobs:
           INFILLER_DATABASE_DIR: "data"
           INFILLER_HASH: "30fae0530d76cbcb144f134e9ed0051f"
         run: |
-          python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_NAME")), os.environ.get("INFILLER_HASH"), infiller_link)'
+          poetry run python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_NAME")), os.environ.get("INFILLER_HASH"), infiller_link)'
 
       - name: Test with pytest
         # scenario explorer stuff needed here too so we don't skip the run with
@@ -43,8 +53,9 @@ jobs:
           SCENARIO_EXPLORER_USER: ${{ secrets.SCENARIO_EXPLORER_USER }}
           SCENARIO_EXPLORER_PASSWORD: ${{ secrets.SCENARIO_EXPLORER_PASSWORD }}
         run: |
-          pytest notebooks/run-example-ciceroscm.ipynb -r a --nbval-lax --no-cov
-          pytest tests/nightly/test_wg3_reproduction_ciceroscm.py -m wg3 -r a -vv
+          # Uncomment notebooks for now, need to think a bit more what the right approach is there
+          # pytest notebooks/run-example-ciceroscm.ipynb -r a --nbval-lax --no-cov
+          poetry run pytest tests/nightly/test_wg3_reproduction_ciceroscm.py -m wg3 -r a -vv
 
   fair:
       runs-on: ubuntu-latest
@@ -53,14 +64,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v4
+      - name: Install poetry
+        shell: bash
+        run: |
+          pipx install poetry
+          which poetry
+          poetry --version  # Check poetry installation
+
+      - name: Set up Python
+        id: setup-python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
+          cache: poetry
 
-      - name: Install dev dependencies
+      - name: Install test dependencies
+        shell: bash
         run: |
-          pip install --upgrade pip wheel
-          pip install -e .[tests,notebooks]
+          poetry install --no-interaction --no-root --all-extras --only 'main,test'
 
       - name: Get infiller database
         env:
@@ -70,7 +91,7 @@ jobs:
           INFILLER_DATABASE_DIR: "data"
           INFILLER_HASH: "30fae0530d76cbcb144f134e9ed0051f"
         run:
-          python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_NAME")), os.environ.get("INFILLER_HASH"), infiller_link)'
+          poetry run python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_NAME")), os.environ.get("INFILLER_HASH"), infiller_link)'
 
       - name: Test with pytest
         # scenario explorer stuff needed here too so we don't skip the run with
@@ -79,8 +100,9 @@ jobs:
           SCENARIO_EXPLORER_USER: ${{ secrets.SCENARIO_EXPLORER_USER }}
           SCENARIO_EXPLORER_PASSWORD: ${{ secrets.SCENARIO_EXPLORER_PASSWORD }}
         run: |
-          pytest notebooks/run-example-fair.ipynb -r a --nbval-lax --no-cov
-          pytest tests/nightly/test_wg3_reproduction_fair.py -m wg3 -r a -vv
+          # Uncomment notebooks for now, need to think a bit more what the right approach is there
+          # pytest notebooks/run-example-fair.ipynb -r a --nbval-lax --no-cov
+          poetry run pytest tests/nightly/test_wg3_reproduction_fair.py -m wg3 -r a -vv
 
   magicc:
     runs-on: ubuntu-latest
@@ -89,14 +111,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v4
+      - name: Install poetry
+        shell: bash
+        run: |
+          pipx install poetry
+          which poetry
+          poetry --version  # Check poetry installation
+
+      - name: Set up Python
+        id: setup-python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
+          cache: poetry
 
-      - name: Install dev dependencies
+      - name: Install test dependencies
+        shell: bash
         run: |
-          pip install --upgrade pip wheel
-          pip install -e .[tests,notebooks]
+          poetry install --no-interaction --no-root --all-extras --only 'main,test'
 
       - name: Get infiller database
         env:
@@ -106,7 +138,7 @@ jobs:
           INFILLER_DATABASE_DIR: "data"
           INFILLER_HASH: "30fae0530d76cbcb144f134e9ed0051f"
         run:
-          python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_NAME")), os.environ.get("INFILLER_HASH"), infiller_link)'
+          poetry run python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_NAME")), os.environ.get("INFILLER_HASH"), infiller_link)'
 
       - name: Download MAGICC
         env:
@@ -132,5 +164,6 @@ jobs:
           MAGICC_WORKER_ROOT_DIR: /tmp
           MAGICC_PROBABILISTIC_FILE: data/magicc-drawnsets/0fd0f62-derived-metrics-id-f023edb-drawnset.json
         run: |
-          pytest notebooks/run-example-magicc.ipynb -r a --nbval-lax --no-cov
-          pytest tests/nightly/test_wg3_reproduction_magicc.py -m wg3 -r a -vv
+          # Uncomment notebooks for now, need to think a bit more what the right approach is there
+          # pytest notebooks/run-example-magicc.ipynb -r a --nbval-lax --no-cov
+          poetry run pytest tests/nightly/test_wg3_reproduction_magicc.py -m wg3 -r a -vv

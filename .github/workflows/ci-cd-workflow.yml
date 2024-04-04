@@ -13,11 +13,21 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - uses: actions/setup-python@v4
+    - name: Install poetry
+      shell: bash
+      run: |
+        pipx install poetry
+        which poetry
+        poetry --version  # Check poetry installation
+
+    - name: Set up Python
+      id: setup-python
+      uses: actions/setup-python@v5
       with:
         python-version: "3.10"
+        cache: poetry
 
-    - name: Set Poetry environment
+    - name: Set up Poetry environment
       shell: bash
       run: |
         poetry config virtualenvs.create true
@@ -43,11 +53,17 @@ jobs:
       with:
         python-version: "3.10"
 
-    - name: Install test dependencies
+    - name: Set up Poetry environment
+      shell: bash
       run: |
-        pip install --upgrade pip wheel
-        pip install -e .[tests]
+        poetry config virtualenvs.create true
+        poetry config virtualenvs.in-project true
+
+    - name: Install test dependencies
+      shell: bash
+      run: |
+        poetry install --no-interaction --no-root --all-extras --only 'main,test'
 
     - name: Test with pytest
       run: |
-          pytest tests -m "not nightly and not wg3" -r a -vv --cov=climate_assessment --cov-report=xml
+        poetry run pytest tests -m "not nightly and not wg3" -r a -vv --cov=climate_assessment --cov-report=xml

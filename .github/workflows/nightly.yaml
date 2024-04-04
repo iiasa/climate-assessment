@@ -1,8 +1,8 @@
 name: Nightly workflow tests
 on:
  # Uncomment these two lines for debugging, but leave them commented on 'main'
- # pull_request:
- #   branches: [ main ]
+ pull_request:
+   branches: [ main ]
  push:
    branches: [ main ]
  schedule:
@@ -17,14 +17,24 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - uses: actions/setup-python@v4
+    - name: Install poetry
+      shell: bash
+      run: |
+        pipx install poetry
+        which poetry
+        poetry --version  # Check poetry installation
+
+    - name: Set up Python
+      id: setup-python
+      uses: actions/setup-python@v5
       with:
         python-version: "3.10"
+        cache: poetry
 
-    - name: Install dev dependencies
+    - name: Install test dependencies
+      shell: bash
       run: |
-        pip install --upgrade pip wheel
-        pip install -e .[tests]
+        poetry install --no-interaction --no-root --all-extras --only 'main,test'
 
     - name: Download MAGICC
       run: |
@@ -42,7 +52,7 @@ jobs:
         MAGICC_WORKER_NUMBER: 4
         MAGICC_WORKER_ROOT_DIR: /tmp
       run: |
-          MAGICC_PROBABILISTIC_FILE=data/magicc-drawnsets/0fd0f62-derived-metrics-id-f023edb-drawnset.json pytest tests -m nightly -r a -vv
+          MAGICC_PROBABILISTIC_FILE=data/magicc-drawnsets/0fd0f62-derived-metrics-id-f023edb-drawnset.json poetry run pytest tests -m nightly -r a -vv
 
     - name: Test run with .env only
       run: |
@@ -50,4 +60,4 @@ jobs:
           echo "MAGICC_WORKER_NUMBER=4" >> .env
           echo "MAGICC_WORKER_ROOT_DIR=/tmp" >> .env
 
-          MAGICC_PROBABILISTIC_FILE=data/magicc-drawnsets/0fd0f62-derived-metrics-id-f023edb-drawnset.json pytest tests/nightly/test_workflow_nightly.py -m nightly -r a -vv
+          MAGICC_PROBABILISTIC_FILE=data/magicc-drawnsets/0fd0f62-derived-metrics-id-f023edb-drawnset.json poetry run pytest tests/nightly/test_workflow_nightly.py -m nightly -r a -vv
