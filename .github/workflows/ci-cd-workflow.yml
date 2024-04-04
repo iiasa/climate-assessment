@@ -72,7 +72,7 @@ jobs:
     - name: Install test dependencies
       shell: bash
       run: |
-        poetry install --no-interaction --no-root --all-extras --only 'main,test'
+        poetry install --no-interaction --no-root --all-extras --only 'main,tests'
 
     - name: Test with pytest
       run: |
