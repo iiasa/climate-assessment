@@ -477,6 +477,20 @@ files = [
 test = ["pytest (>=6)"]
 
 [[package]]
+name = "f90nml"
+version = "1.4.4"
+description = "Fortran 90 namelist parser"
+optional = false
+python-versions = "*"
+files = [
+    {file = "f90nml-1.4.4-py2.py3-none-any.whl", hash = "sha256:58d91eb0f9a424a48fe5df868cbb33c86800f1026d6e7f3c0f663c930dddc644"},
+    {file = "f90nml-1.4.4.tar.gz", hash = "sha256:65e8e135779895245238cbf6be5b1b80d6c2b8c9350c9cdce6183a31bdfd7622"},
+]
+
+[package.extras]
+yaml = ["PyYAML"]
+
+[[package]]
 name = "fair"
 version = "1.6.2"
 description = "Python package to perform calculations with the FaIR simple climate model"
@@ -1459,6 +1473,24 @@ test = ["hypothesis (>=6.46.1)", "pytest (>=7.3.2)", "pytest-xdist (>=2.2.0)"]
 xml = ["lxml (>=4.9.2)"]
 
 [[package]]
+name = "pandas-datapackage-reader"
+version = "0.18.0"
+description = "Pandas Data Package Reader"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pandas-datapackage-reader-0.18.0.tar.gz", hash = "sha256:ced0bb44a9a703a67a956e3b0314238d48726b09ed9ae3ce140344561f900902"},
+    {file = "pandas_datapackage_reader-0.18.0-py2.py3-none-any.whl", hash = "sha256:a4660b06f533ccc35eb2f9f7cefe52b9abb7da82f7e66ad5dc52ae1c85d13b1f"},
+]
+
+[package.dependencies]
+pandas = ">=0.24.0"
+requests = "*"
+
+[package.extras]
+tests = ["geopandas", "pytest (>=4.1)"]
+
+[[package]]
 name = "pandera"
 version = "0.17.2"
 description = "A light-weight and flexible data validation and testing tool for statistical data objects."
@@ -1999,6 +2031,32 @@ crypto = ["cryptography (>=3.4.0)"]
 dev = ["coverage[toml] (==5.0.4)", "cryptography (>=3.4.0)", "pre-commit", "pytest (>=6.0.0,<7.0.0)", "sphinx (>=4.5.0,<5.0.0)", "sphinx-rtd-theme", "zope.interface"]
 docs = ["sphinx (>=4.5.0,<5.0.0)", "sphinx-rtd-theme", "zope.interface"]
 tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
+
+[[package]]
+name = "pymagicc"
+version = "2.1.4"
+description = "Python wrapper for the simple climate model MAGICC"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pymagicc-2.1.4-py2.py3-none-any.whl", hash = "sha256:4efc87c2b124efa47931b11588a72d5c4ded6effd1b66e60b18ad3cab662e895"},
+    {file = "pymagicc-2.1.4.tar.gz", hash = "sha256:30b8fef0694a034ee2011bd349a32668d1d543c5b3d03bafec0d137bef8cb772"},
+]
+
+[package.dependencies]
+f90nml = "*"
+pandas = "*"
+pandas-datapackage-reader = "*"
+PyYAML = "*"
+scmdata = "*"
+versioneer = "*"
+
+[package.extras]
+deploy = ["setuptools (>=38.6.0)", "twine (>=1.11.0)", "wheel (>=0.31.0)"]
+dev = ["bandit", "black", "codecov", "expectexception", "flake8", "goodtables", "isort (>=5)", "nbdime", "nbval", "notebook", "pyam-iamc (>=0.3.0)", "pydoc-markdown", "pydocstyle", "pylint", "pytest (>=7)", "pytest-benchmark", "pytest-cov", "pytest-mock", "pytest-xdist", "scipy", "seaborn", "setuptools (>=38.6.0)", "sphinx (>2.1)", "sphinx-autodoc-typehints", "sphinx-rtd-theme", "twine (>=1.11.0)", "wheel (>=0.31.0)"]
+docs = ["pydoc-markdown", "sphinx (>2.1)", "sphinx-autodoc-typehints", "sphinx-rtd-theme"]
+notebooks = ["expectexception", "notebook", "pyam-iamc (>=0.3.0)", "seaborn"]
+tests = ["codecov", "goodtables", "nbval", "pytest (>=7)", "pytest-benchmark", "pytest-cov", "pytest-mock", "pytest-xdist", "scipy", "seaborn"]
 
 [[package]]
 name = "pyomo"
@@ -2681,6 +2739,20 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
+name = "versioneer"
+version = "0.29"
+description = "Easy VCS-based management of project version strings"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "versioneer-0.29-py3-none-any.whl", hash = "sha256:0f1a137bb5d6811e96a79bb0486798aeae9b9c6efc24b389659cebb0ee396cb9"},
+    {file = "versioneer-0.29.tar.gz", hash = "sha256:5ab283b9857211d61b53318b7c792cf68e798e765ee17c27ade9f6c924235731"},
+]
+
+[package.extras]
+toml = ["tomli"]
+
+[[package]]
 name = "virtualenv"
 version = "20.25.1"
 description = "Virtual Python Environment builder"
@@ -2862,4 +2934,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.11"
-content-hash = "f3244eec72e35227c05b982bc70e9cc6350cf98bfd8974518b90448f6fbca1bc"
+content-hash = "12258706d548dcd4d2e688dbd8f74e360c1757625d6ec6d1dd8048e61d87f48a"
