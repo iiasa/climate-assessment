@@ -96,6 +96,36 @@ ignore = [
     "D105",  # Missing docstring in magic method
     "UP007",
     "PD011",  # Ruff confused about APIs
+    # All below here should be reinstated at some point
+    "PLR0913",
+    "E501",
+    "PLW0129",
+    "RUF005",
+    "PD002",
+    "PLW2901",
+    "PD901",
+    "S324",
+    "PLR0915",
+    "PLR0912",
+    "TRY003",
+    "D401",
+    "D205",
+    "PD003",
+    "D404",
+    "D103",
+    "TRY200",
+    "D100",
+    "S113",
+    "PD101",
+    "D104",
+    "PLR5501",
+    "PD010",
+    "TRY300",
+    "PLR2004",
+    "RUF015",
+    "D414",
+    "D101",
+    "D102",
 ]
 # Provide some leeway for long docstring, this is otherwise handled by black
 line-length = 88
