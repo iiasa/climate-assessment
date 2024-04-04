@@ -52,6 +52,8 @@ virtual-environment:  ## update virtual environment, create a new one if it does
 	poetry config virtualenvs.in-project true
 	poetry install --all-extras
 	poetry run pre-commit install
+	# Also export a requirements.txt file
+	poetry export -f requirements.txt --output requirements.txt
 
 
 .PHONY: build_and_push_image
