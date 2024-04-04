@@ -68,7 +68,7 @@ def postprocessing(harmonized_results, prefix):
     #    replace prefix
     harmonized_results["variable"] = (
         harmonized_results["variable"]
-        .map(lambda x: x.replace(prefix, "{}|Harmonized".format(prefix)))
+        .map(lambda x: x.replace(prefix, f"{prefix}|Harmonized"))
         .astype(str)
     )
     harmonized_results = pyam.IamDataFrame(harmonized_results)
@@ -142,7 +142,7 @@ def run_harmonization(df, instance, prefix):
     :class:`pyam.IamDataFrame`
         Harmonized scenarios.
     """
-    LOGGER.info("Using {} instance for harmonization".format(instance))
+    LOGGER.info(f"Using {instance} instance for harmonization")
 
     df_hist = scmdata.ScmRun(
         getpath("history_" + instance + ".csv"), lowercase_cols=True

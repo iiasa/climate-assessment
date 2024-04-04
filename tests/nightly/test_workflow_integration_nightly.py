@@ -70,7 +70,7 @@ def test_workflow_historical_warming(
     result = runner.invoke(
         climate_assessment.cli.workflow,
         [
-            os.path.join(test_data_dir, "{}.csv".format(emissions_id)),
+            os.path.join(test_data_dir, f"{emissions_id}.csv"),
             out_dir,
             "--num-cfgs",
             10,
@@ -127,7 +127,7 @@ def test_historical_ref_period_out_of_order(
     result = runner.invoke(
         climate_assessment.cli.workflow,
         [
-            os.path.join(test_data_dir, "{}.csv".format(emissions_id)),
+            os.path.join(test_data_dir, f"{emissions_id}.csv"),
             out_dir,
             "--num-cfgs",
             10,
@@ -180,7 +180,7 @@ def test_historical_ref_period_badly_formed(
     result = runner.invoke(
         climate_assessment.cli.workflow,
         [
-            os.path.join(test_data_dir, "{}.csv".format(emissions_id)),
+            os.path.join(test_data_dir, f"{emissions_id}.csv"),
             out_dir,
             "--num-cfgs",
             10,
@@ -228,7 +228,7 @@ def test_historical_eval_period_out_of_order(
     result = runner.invoke(
         climate_assessment.cli.workflow,
         [
-            os.path.join(test_data_dir, "{}.csv".format(emissions_id)),
+            os.path.join(test_data_dir, f"{emissions_id}.csv"),
             out_dir,
             "--num-cfgs",
             10,
@@ -281,7 +281,7 @@ def test_historical_eval_period_badly_formed(
     result = runner.invoke(
         climate_assessment.cli.workflow,
         [
-            os.path.join(test_data_dir, "{}.csv".format(emissions_id)),
+            os.path.join(test_data_dir, f"{emissions_id}.csv"),
             out_dir,
             "--num-cfgs",
             10,

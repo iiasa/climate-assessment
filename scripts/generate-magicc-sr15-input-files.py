@@ -57,7 +57,7 @@ def get_sr15_name(f):
 
 
 for f in file_list:
-    with open(os.path.join(MAGICC_RUN_DIR, f), "r") as fh:
+    with open(os.path.join(MAGICC_RUN_DIR, f)) as fh:
         contents = fh.read()
 
     with tempfile.TemporaryDirectory() as td:

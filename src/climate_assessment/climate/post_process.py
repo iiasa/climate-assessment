@@ -21,7 +21,7 @@ _CLIMATE_VARIABLE_DEFINITION_CSV = os.path.join(
 )
 
 
-@lru_cache()
+@lru_cache
 def _get_climate_variable_definitions(fname):
     return pd.read_csv(fname)
 
@@ -124,7 +124,7 @@ def calculate_exceedance_probability_timeseries(
     )
 
     exceedance_probability_timeseries_raw = res.filter(
-        variable="Raw {}".format(exceedance_probability_calculation_var),
+        variable=f"Raw {exceedance_probability_calculation_var}",
         unit=historical_warming_unit,
     )
     exceedance_probability_timeseries_rel_ref_period = (
@@ -176,14 +176,14 @@ def calculate_exceedance_probability_timeseries(
                 check_vals,
                 historical_warming,
                 rtol=1e-2,  # to within 1%
-                err_msg="{}".format(check_vals),
+                err_msg=f"{check_vals}",
             )
         except AssertionError:
             LOGGER.exception("Careful of scenarios which break match with history!")
 
-    exceedance_probability_timeseries["variable"] = (
-        exceedance_probability_calculation_var
-    )
+    exceedance_probability_timeseries[
+        "variable"
+    ] = exceedance_probability_calculation_var
     return exceedance_probability_timeseries
 
 
@@ -387,7 +387,7 @@ def post_process(
             ]["Unit"]
         except KeyError as exc:
             raise ValueError(
-                "{} not in {}".format(variable, _CLIMATE_VARIABLE_DEFINITION_CSV)
+                f"{variable} not in {_CLIMATE_VARIABLE_DEFINITION_CSV}"
             ) from exc
         try:
             return vdf.convert_unit(standard_unit)
@@ -434,12 +434,12 @@ def post_process(
             (
                 exceedance_probs_by_temp_threshold,
                 scmdata.processing.calculate_exceedance_probabilities,
-                "Exceedance Probability {}C".format(threshold),
+                f"Exceedance Probability {threshold}C",
             ),
             (
                 exceedance_probs_tss,
                 scmdata.processing.calculate_exceedance_probabilities_over_time,
-                "Exceedance Probability {}C".format(threshold),
+                f"Exceedance Probability {threshold}C",
             ),
         ):
             store.append(
@@ -490,7 +490,7 @@ def post_process(
         if np.isclose(percentile, 50):
             plabel = "median"
         else:
-            plabel = "p{}".format(percentile)
+            plabel = f"p{percentile}"
 
         return plabel
 
@@ -515,7 +515,7 @@ def post_process(
     def mangle_meta_table_climate_model(idf):
         out = idf.copy()
         climate_model = idf.name
-        out.columns = out.columns + " ({})".format(climate_model)
+        out.columns = out.columns + f" ({climate_model})"
 
         return out
 

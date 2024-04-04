@@ -22,7 +22,7 @@ def check_output(emms_id, output_dir, expected_output_dir, update_expected_files
     ]
 
     for suffix in suffixes:
-        filename = "{}{}".format(emms_id, suffix)
+        filename = f"{emms_id}{suffix}"
 
         file_to_check = os.path.join(output_dir, filename)
         file_expected = os.path.join(expected_output_dir, filename)
@@ -51,7 +51,7 @@ def test_workflow_harmonization_and_infilling(
     result = runner.invoke(
         climate_assessment.cli.harmonize_and_infill,
         [
-            os.path.join(test_data_dir, "{}.csv".format(emissions_id)),
+            os.path.join(test_data_dir, f"{emissions_id}.csv"),
             out_dir,
             "--infilling-database",
             os.path.join(
@@ -76,7 +76,7 @@ def test_workflow_harmonization_and_infilling(
         # output should be identical to what comes out of the workflow tests
         idx = ["Model", "Scenario", "Region", "Variable", "Unit"]
 
-        filename = "{}_harmonized_infilled.csv".format(emissions_id)
+        filename = f"{emissions_id}_harmonized_infilled.csv"
         workflow_res = pd.read_csv(
             os.path.join(test_data_dir, "workflow-magicc", filename)
         ).set_index(idx)

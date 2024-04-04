@@ -103,7 +103,7 @@ def test_workflow_infilling(tmpdir, test_data_dir, update_expected_files):
         # workflow output does not contain Kyoto summary in _harmonized_infilled file
         here_res = here_res[~here_res["Variable"].str.contains("Kyoto")].set_index(idx)
 
-        workflow_filename = "{}_harmonized_infilled.csv".format(emissions_id)
+        workflow_filename = f"{emissions_id}_harmonized_infilled.csv"
         workflow_res = pd.read_csv(
             os.path.join(
                 test_data_dir,

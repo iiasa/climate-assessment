@@ -3,7 +3,7 @@ import pandas as pd
 import pyam
 import pytest
 
-import climate_assessment.utils as utils
+from climate_assessment import utils
 
 tdownscale_df = pyam.IamDataFrame(
     pd.DataFrame(

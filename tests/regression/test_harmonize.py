@@ -23,7 +23,7 @@ def check_output(
     ]
 
     for suffix in suffixes:
-        filename = "{}{}".format(emms_id, suffix)
+        filename = f"{emms_id}{suffix}"
 
         file_to_check = os.path.join(output_dir, filename)
         file_expected = os.path.join(expected_output_dir, filename)
@@ -54,7 +54,7 @@ def test_workflow_harmonization(tmpdir, test_data_dir, update_expected_files):
     result = runner.invoke(
         climate_assessment.cli.harmonize,
         [
-            os.path.join(test_data_dir, "{}.csv".format(emissions_id)),
+            os.path.join(test_data_dir, f"{emissions_id}.csv"),
             out_dir,
         ],
     )
@@ -74,12 +74,12 @@ def test_workflow_harmonization(tmpdir, test_data_dir, update_expected_files):
         # output should be identical to what comes out of the workflow tests
         idx = ["Model", "Scenario", "Region", "Variable", "Unit"]
 
-        filename = "{}_harmonized.csv".format(emissions_id)
+        filename = f"{emissions_id}_harmonized.csv"
         here_res = pd.read_csv(os.path.join(out_dir, filename))
         # workflow output does not contain Kyoto summary in _harmonized file
         here_res = here_res[~here_res["Variable"].str.contains("Kyoto")].set_index(idx)
 
-        workflow_filename = "{}_harmonized_infilled.csv".format(emissions_id)
+        workflow_filename = f"{emissions_id}_harmonized_infilled.csv"
         workflow_res = pd.read_csv(
             os.path.join(test_data_dir, "workflow-magicc", workflow_filename)
         )
@@ -119,7 +119,7 @@ def test_workflow_harmonization(tmpdir, test_data_dir, update_expected_files):
     result_2015 = runner_2015.invoke(
         climate_assessment.cli.harmonize,
         [
-            os.path.join(test_data_dir, "{}.csv".format(emissions_id_2015)),
+            os.path.join(test_data_dir, f"{emissions_id_2015}.csv"),
             out_dir,
         ],
     )
@@ -141,7 +141,7 @@ def test_workflow_harmonization_noinputchecks(
     result = runner.invoke(
         climate_assessment.cli.harmonize,
         [
-            os.path.join(test_data_dir, "{}.csv".format(emissions_id)),
+            os.path.join(test_data_dir, f"{emissions_id}.csv"),
             out_dir,
             "--no-inputcheck",
         ],

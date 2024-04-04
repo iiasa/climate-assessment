@@ -109,10 +109,9 @@ def climate_assessment(
         :class:`pyam.IamDataFrame` containing climate assessment
     """
     ## Setup bits and pieces
-    datafile_output_name = "{}_IAMC_climateassessment.csv".format(key_string)
+    datafile_output_name = f"{key_string}_IAMC_climateassessment.csv"
     datafile_output_meta_name = (
-        "{}_exceedance_probabilities.csv".format(key_string)
-        .replace(" ", "")
+        f"{key_string}_exceedance_probabilities.csv".replace(" ", "")
         .replace("/", "-")
         .replace("%", "pc")
     )
@@ -138,7 +137,7 @@ def climate_assessment(
     def add_batch_id_to_outpath(ipath):
         _, ext = os.path.splitext(ipath)
 
-        return ipath.replace(ext, "{:04d}{}".format(batch_no, ext))
+        return ipath.replace(ext, f"{batch_no:04d}{ext}")
 
     def save_pyam_style_csv(outpath, scmdf, meta=False):
         """
@@ -206,7 +205,7 @@ def climate_assessment(
             )
 
             LOGGER.info(
-                "\n\n Batch run finished - now saving batch number {}.".format(batch_no)
+                f"\n\n Batch run finished - now saving batch number {batch_no}."
                 + "\n\n"
             )
             save_pyam_style_csv(
@@ -231,14 +230,12 @@ def climate_assessment(
     for i in tqdman.tqdm(range(batch_no), desc="Reading batches"):
         # combine the IAMC dataframe
         _, ext = os.path.splitext(data_file_output)
-        batch_df_string = data_file_output.replace(ext, "{:04d}{}".format(i, ext))
+        batch_df_string = data_file_output.replace(ext, f"{i:04d}{ext}")
         full_output.append(pd.read_csv(batch_df_string))
 
         # combine the meta file with exceedance probabilities
         _, ext = os.path.splitext(data_file_output_meta)
-        batch_df_meta_string = data_file_output_meta.replace(
-            ext, "{:04d}{}".format(i, ext)
-        )
+        batch_df_meta_string = data_file_output_meta.replace(ext, f"{i:04d}{ext}")
         meta.append(pd.read_csv(batch_df_meta_string))
 
     LOGGER.info("Joining meta using pandas")
@@ -249,7 +246,7 @@ def climate_assessment(
     meta.to_excel(
         os.path.join(
             outdir,
-            "{}_full_exceedance_probabilities.xlsx".format(key_string),
+            f"{key_string}_full_exceedance_probabilities.xlsx",
         )
     )
 
@@ -269,7 +266,7 @@ def climate_assessment(
 
     LOGGER.info("Writing output to excel")
     full_output.to_excel(
-        os.path.join(outdir, "{}_IAMC_climateassessment.xlsx".format(key_string))
+        os.path.join(outdir, f"{key_string}_IAMC_climateassessment.xlsx")
     )
 
     return full_output
@@ -440,7 +437,7 @@ def _get_model_configs_and_out_configs(
         )
         climate_model_cfgs["MAGICC7"] = magicc7_cfgs
         climate_models_out_config = {"MAGICC7": magicc7_out_config}
-        LOGGER.info("Running MAGICC7 {} configs".format(len(magicc7_cfgs)))
+        LOGGER.info(f"Running MAGICC7 {len(magicc7_cfgs)} configs")
 
     elif model.lower() == "fair":
         if model_version is None:
@@ -453,7 +450,7 @@ def _get_model_configs_and_out_configs(
         )
         climate_model_cfgs["FAIR"] = fair_cfgs
         climate_models_out_config = None
-        LOGGER.info("Running FAIR {} configs".format(len(fair_cfgs)))
+        LOGGER.info(f"Running FAIR {len(fair_cfgs)} configs")
 
     elif model.lower() == "ciceroscm":
         if model_version is None:
@@ -465,6 +462,6 @@ def _get_model_configs_and_out_configs(
         )
         climate_model_cfgs["CICEROSCM"] = ciceroscm_cfgs
         climate_models_out_config = None
-        LOGGER.info("Running CICEROSCM {} configs".format(len(ciceroscm_cfgs)))
+        LOGGER.info(f"Running CICEROSCM {len(ciceroscm_cfgs)} configs")
 
     return climate_model_cfgs, climate_models_out_config

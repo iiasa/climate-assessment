@@ -19,16 +19,15 @@ def get_magicc7_configurations(
     """
     Get configuration for MAGICC7
     """
-
     if MAGICC7.get_version() != magicc_version:
         # version strings for linux and windows might be different!
         raise AssertionError(MAGICC7.get_version())
 
-    with open(magicc_probabilistic_file, "r") as fh:
+    with open(magicc_probabilistic_file) as fh:
         cfgs_raw = json.load(fh)
 
     if magicc_extra_config is not None:
-        with open(magicc_extra_config, "r") as fh:
+        with open(magicc_extra_config) as fh:
             extra_cfgs = json.load(fh)
     else:
         extra_cfgs = {}
@@ -116,7 +115,7 @@ def calculate_co2_and_nonco2_warming_magicc(res):
     if not climate_model.startswith("MAGICC"):
         raise AssertionError(
             "Should only have magicc results here, received "
-            "climate_model: {}".format(climate_model)
+            f"climate_model: {climate_model}"
         )
 
     LOGGER.debug("Removing everything except Raw Surface Temperature (GSAT)")

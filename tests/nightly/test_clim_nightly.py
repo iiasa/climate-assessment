@@ -31,7 +31,7 @@ def check_output(output_dir, expected_output_dir, update_expected_files, rtol=1e
                     res.T,
                     exp.T,
                     check_like=True,
-                    obj="{} {}".format(sheet, os.path.basename(file_to_check)),
+                    obj=f"{sheet} {os.path.basename(file_to_check)}",
                     rtol=rtol,
                 )
 

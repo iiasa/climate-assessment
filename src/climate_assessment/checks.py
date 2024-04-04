@@ -52,7 +52,7 @@ def add_categorization(
     if model.lower() == "fair":
         if model_version is None:
             model_version = DEFAULT_FAIR_VERSION
-        model_str = "FaIRv{}".format(model_version)
+        model_str = f"FaIRv{model_version}"
     elif model.lower() == "ciceroscm":
         if model_version is None:
             model_version = DEFAULT_CICEROSCM_VERSION
@@ -60,28 +60,26 @@ def add_categorization(
     else:
         if model_version is None:
             model_version = DEFAULT_MAGICC_VERSION
-        model_str = "MAGICC{}".format(model_version)
+        model_str = f"MAGICC{model_version}"
 
     # TODO: move this into the climate post-processing in future
     for p in eoc_percentiles:
-        v = "{}|Surface Temperature (GSAT)|{}|{:.1f}th Percentile".format(
-            prefix, model_str, p
-        )
+        v = f"{prefix}|Surface Temperature (GSAT)|{model_str}|{p:.1f}th Percentile"
         p_temperature = dfar6.filter(variable=v).timeseries()
-        p_name = "median" if p == 50 else "p{:.0f}".format(p)
-        name = "{} warming in 2100 ({})".format(p_name, model_str)
+        p_name = "median" if p == 50 else f"p{p:.0f}"
+        name = f"{p_name} warming in 2100 ({model_str})"
         dfar6.set_meta(p_temperature[2100], name)
-        meta_docs[name] = (
-            "{} warming above in 2100 above pre-industrial temperature as computed by {}".format(
-                p_name, model_str
-            )
+        meta_docs[
+            name
+        ] = "{} warming above in 2100 above pre-industrial temperature as computed by {}".format(
+            p_name, model_str
         )
 
     # select columns used for categorization
-    TmedEOC = "median warming in 2100 ({})".format(model_str)
-    Tp33Peak = "p33 peak warming ({})".format(model_str)
-    TmedPeak = "median peak warming ({})".format(model_str)
-    Tp67Peak = "p67 peak warming ({})".format(model_str)
+    TmedEOC = f"median warming in 2100 ({model_str})"
+    Tp33Peak = f"p33 peak warming ({model_str})"
+    TmedPeak = f"median peak warming ({model_str})"
+    Tp67Peak = f"p67 peak warming ({model_str})"
 
     # set default for if no climate assessment happened
     dfar6.meta["Category"] = "no-climate-assessment"
@@ -171,8 +169,8 @@ def add_completeness_category(
     prefix="AR6 climate diagnostics|Harmonized|",
 ):
     """Add a meta column that specified the reporting completeness based
-    on qualitative categories."""
-
+    on qualitative categories.
+    """
     # "low confidence"
     low_vars = [
         str(prefix + "Emissions|CO2"),
@@ -265,7 +263,7 @@ def add_completeness_category(
                         _write_file(
                             outdir,
                             df_remaining,
-                            "{}_excluded_scenarios_noconfidence.csv".format(filename),
+                            f"{filename}_excluded_scenarios_noconfidence.csv",
                         )
                     # combine all the dataframes
                     df_confidence_column = pyam.concat(
@@ -288,7 +286,8 @@ def add_completeness_category(
 def co2_energyandindustrialprocesses(df):
     """Auxiliary function for :func:`climate_assessment.checks.check_reported_co2`.
     Check if either CO2|Energy and Industrial are reported.
-    Add the aggregate Energy and Industrial, if only subcomponents reported"""
+    Add the aggregate Energy and Industrial, if only subcomponents reported
+    """
     co2_sector_detail = True
     df_variables = df.index.get_level_values("variable")
     if "Emissions|CO2|Energy and Industrial Processes" not in df_variables:
@@ -404,7 +403,7 @@ def check_reported_co2(df, filename, output_csv=False, outdir="output"):
         _write_file(
             outdir,
             df_noco2,
-            "{}_excluded_scenarios_noCO2orCO2EnIPreported.csv".format(filename),
+            f"{filename}_excluded_scenarios_noCO2orCO2EnIPreported.csv",
         )
 
     if not df_withco2:
@@ -416,7 +415,8 @@ def check_reported_co2(df, filename, output_csv=False, outdir="output"):
 
 def check_against_historical(df, filename, instance, output_csv=False, outdir="output"):
     """Check against historical data.
-    Currently requires 2015 to already be in the dataframe."""
+    Currently requires 2015 to already be in the dataframe.
+    """
     HISTORY_FOLDER_name = "harmonization"
     HISTORY_FOLDER = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), HISTORY_FOLDER_name
@@ -517,7 +517,7 @@ def check_against_historical(df, filename, instance, output_csv=False, outdir="o
         _write_file(
             outdir,
             divergent,
-            "{}_excluded_scenarios_toofarfromhistorical.csv".format(filename),
+            f"{filename}_excluded_scenarios_toofarfromhistorical.csv",
         )
 
     # the case of skipping the entire scenario - remove from df to be passed on to harmonization.
@@ -600,7 +600,7 @@ def check_negatives(
         _write_file(
             outdir,
             df_negatives,
-            "{}_excluded_scenarios_unexpectednegatives.csv".format(filename),
+            f"{filename}_excluded_scenarios_unexpectednegatives.csv",
         )
 
     # the case of skipping the entire scenario - remove from df to be passed on to harmonization.
@@ -641,14 +641,14 @@ def remove_rows_with_zero_in_harmonization_year(
             + "\nharmonization. We will later replace "
             + "\nthese timeseries by infilled timeseries."
             + "\n=================================="
-            + "\n{}".format(zero_historical)
+            + f"\n{zero_historical}"
         )
 
     if filename and not zero_historical.empty:
         _write_file(
             outdir,
             zero_historical,
-            "{}_excluded_timeseries_zero_harmonization_year.csv".format(filename),
+            f"{filename}_excluded_timeseries_zero_harmonization_year.csv",
         )
 
     return df
@@ -671,14 +671,14 @@ def remove_rows_with_only_zero(df, filename=None, outdir="output"):
             + "\nbecause they report zero in every"
             + "\ntimestep."
             + "\n=================================="
-            + "\n{}".format(zeros)
+            + f"\n{zeros}"
         )
 
     if filename and not zeros.empty:
         _write_file(
             outdir,
             zeros,
-            "{}_excluded_timeseries_all_zero.csv".format(filename),
+            f"{filename}_excluded_timeseries_all_zero.csv",
         )
 
     return df
@@ -728,9 +728,7 @@ def require_allyears(
     # write out if wanted
     if output_csv:
         dft_out = pyam.IamDataFrame(dft_out)
-        _write_file(
-            outdir, dft_out, "{}_excluded_variables_notallyears.csv".format(filename)
-        )
+        _write_file(outdir, dft_out, f"{filename}_excluded_variables_notallyears.csv")
     return pyam.IamDataFrame(dft)
 
 
@@ -851,7 +849,7 @@ def perform_input_checks(
         Path to output folder.
 
     Returns
-    ----------
+    -------
     :class:`pyam.IamDataFrame`
         IAM dataframe with only model-scenario that will be  without emissions.
         Output also includes the input emissions. The output is interpolated
@@ -926,9 +924,7 @@ def perform_input_checks(
         )
 
     if output_csv_files:
-        _write_file(
-            outdir, df, "{}_checkedinput_{}.csv".format(output_filename, typechecks)
-        )
+        _write_file(outdir, df, f"{output_filename}_checkedinput_{typechecks}.csv")
 
     return df
 
@@ -971,8 +967,8 @@ def infiller_vetting(
 
 def sanity_check_bounds_kyoto_emissions(output_postprocess, out_kyoto_infilled):
     """Check that the calculated Kyoto gases of the infilled emissions data
-    are within certain bounds"""
-
+    are within certain bounds
+    """
     # Use dataframe instead of IAM dataframe
     df_out = output_postprocess.data
     years_bound = {"2015": [50000, 60000], "2020": [45000, 65000]}
@@ -1011,7 +1007,8 @@ def sanity_check_comparison_kyoto_gases(
 ):
     """Check that the calculated Kyoto gases of the infilled emissions data
     is in every year smaller than the calculated Kyoto gases of the harmonized
-    emission data"""
+    emission data
+    """
 
     def _helper(out_kyoto):
         # Use dataframe instead of IAM dataframe
@@ -1046,7 +1043,8 @@ def sanity_check_hierarchy(
 ):
     """Check that hierarchy of variables is internally consistent (in this case
     check that Emissions|CO2 is the sum of AFOLU and Energy and Industrial
-    Processes emissions)"""
+    Processes emissions)
+    """
 
     def _concat_df(iam_df, prefix):
         concat_iam_df = pyam.concat(

@@ -58,7 +58,6 @@ def harmonization_and_infilling(
         written to the outdir. Returns False if there are no complete scenarios
         to be run.
     """
-
     if instance == "ar6":
         infilled_start_year = 2015
     elif instance == "sr15":
@@ -112,7 +111,7 @@ def harmonization_and_infilling(
         #  write out combined results of harmonization and infilling
         # write out csv file with all data (no meta)
         out_file_infilled = os.path.join(
-            outdir, "{}_harmonized_infilled.csv".format(key_string)
+            outdir, f"{key_string}_harmonized_infilled.csv"
         )
 
         LOGGER.info("Writing infilled data as csv to: %s", out_file_infilled)

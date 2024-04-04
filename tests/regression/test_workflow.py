@@ -25,7 +25,7 @@ def test_workflow_ciceroscm(
     result = runner.invoke(
         climate_assessment.cli.workflow,
         [
-            os.path.join(test_data_dir, "{}.csv".format(emissions_id)),
+            os.path.join(test_data_dir, f"{emissions_id}.csv"),
             out_dir,
             "--num-cfgs",
             6,
@@ -73,7 +73,7 @@ def test_workflow_fair(
     result = runner.invoke(
         climate_assessment.cli.workflow,
         [
-            os.path.join(test_data_dir, "{}.csv".format(emissions_id)),
+            os.path.join(test_data_dir, f"{emissions_id}.csv"),
             out_dir,
             "--num-cfgs",
             6,
