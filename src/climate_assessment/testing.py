@@ -1,9 +1,11 @@
 import os.path
 import traceback
+from pathlib import Path
 
 import pooch
 import pyam
 import requests
+import toml
 
 
 def _format_traceback_and_stdout_from_click_result(result):
@@ -14,16 +16,23 @@ def _get_infiller_download_link(filename):
     """
     Get infiller download link, intended only for use in CI
     """
-    pyam.iiasa.set_config(
-        os.environ.get("SCENARIO_EXPLORER_USER"),
-        os.environ.get("SCENARIO_EXPLORER_PASSWORD"),
-        "iiasa_creds.yaml",
-    )
+
+    credentials_file = Path.home() / ".local" / "share" / "ixmp4" / "credentials.toml"
+    with open(credentials_file, "w") as f:
+        toml.dump(
+            {
+                "default": {
+                    "username": os.environ.get("SCENARIO_EXPLORER_USER"),
+                    "password": os.environ.get("SCENARIO_EXPLORER_PASSWORD"),
+                }
+            }
+        )
+
     try:
-        conn = pyam.iiasa.Connection(creds="iiasa_creds.yaml")
+        conn = pyam.iiasa.Connection()
     finally:
         # remove the yaml cred file
-        os.remove("iiasa_creds.yaml")
+        credentials_file.unlink()
 
     infiller_url = (
         "https://db1.ene.iiasa.ac.at/ar6-public-api/rest/v2.1/files/"
