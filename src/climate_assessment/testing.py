@@ -25,7 +25,8 @@ def _get_infiller_download_link(filename):
                     "username": os.environ.get("SCENARIO_EXPLORER_USER"),
                     "password": os.environ.get("SCENARIO_EXPLORER_PASSWORD"),
                 }
-            },f
+            },
+            f,
         )
 
     try:
