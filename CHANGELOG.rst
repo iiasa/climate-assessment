@@ -19,6 +19,7 @@ master
 
 Added
 ~~~~~
+
 - (`#50 https://github.com/iiasa/climate-assessment/pull/50`_) Update scmdata and other dependencies and rewrite a few functions
 - (`#43 https://github.com/iiasa/climate-assessment/pull/43`_) Add combined CSV output option to :func:`climate_assessment.cli.clim_cli`
 - (`#40 https://github.com/iiasa/climate-assessment/pull/40`_) Update awscli to >= 1.29.4
@@ -31,6 +32,8 @@ Added
 
 Fixed
 ~~~~~
+
+- (`#55 https://github.com/iiasa/climate-assessment/pull/55`_) Pinned requirements to make install more reproducible for users
 - (`#49 https://github.com/iiasa/climate-assessment/pull/49`_) Fix if all emissions data starts in 2015, in :func:`add_year_historical_percentage_offset`
 
 
