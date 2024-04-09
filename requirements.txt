@@ -916,9 +916,9 @@ pydantic==2.6.4 ; python_version >= "3.10" and python_version < "3.11" \
 pyjwt==2.8.0 ; python_version >= "3.10" and python_version < "3.11" \
     --hash=sha256:57e28d156e3d5c10088e0c68abb90bfac3df82b40a71bd0daa20c65ccd5c23de \
     --hash=sha256:59127c392cc44c2da5bb3192169a91f429924e17aff6534d70fdc02ab3e04320
-pymagicc==2.1.4 ; python_version >= "3.10" and python_version < "3.11" \
-    --hash=sha256:30b8fef0694a034ee2011bd349a32668d1d543c5b3d03bafec0d137bef8cb772 \
-    --hash=sha256:4efc87c2b124efa47931b11588a72d5c4ded6effd1b66e60b18ad3cab662e895
+pymagicc==2.1.5 ; python_version >= "3.10" and python_version < "3.11" \
+    --hash=sha256:689359bf39f40cf3e7f6ed7ef411b0b26e40e79308839a5ee15cb2575e760434 \
+    --hash=sha256:ba3dcc4e8904edbb30f0a58875fb1fbd66b5b6dd76ca31ba8ad7f21fc740e8b3
 pyomo==6.7.1 ; python_version >= "3.10" and python_version < "3.11" \
     --hash=sha256:111f40517640149f440eded00091041fb5091c6d5497b687e4b7b3bb45e11726 \
     --hash=sha256:119cc5337177457250d7d450688687ccb4230ac3ab70774390307bbe3cb19871 \
