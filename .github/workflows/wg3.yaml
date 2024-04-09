@@ -1,4 +1,6 @@
 name: Exact reproduction of WG3 database
+# Note: CICERO not included because of a fix that has since been made to its heat uptake,
+# see https://github.com/openscm/openscm-runner/pull/89
 on:
  # Uncomment these two lines for debugging, but leave them commented on 'main'
  pull_request:
@@ -10,53 +12,6 @@ on:
  - cron: "0 5 * * *"
 
 jobs:
-  ciceroscm:
-      runs-on: ubuntu-latest
-
-      steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Install poetry
-        shell: bash
-        run: |
-          pipx install poetry
-          which poetry
-          poetry --version  # Check poetry installation
-
-      - name: Set up Python
-        id: setup-python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-          cache: poetry
-
-      - name: Install test dependencies and package
-        shell: bash
-        run: |
-          poetry install --no-interaction --all-extras --only 'main,tests'
-
-      - name: Get infiller database
-        env:
-          SCENARIO_EXPLORER_USER: ${{ secrets.SCENARIO_EXPLORER_USER }}
-          SCENARIO_EXPLORER_PASSWORD: ${{ secrets.SCENARIO_EXPLORER_PASSWORD }}
-          INFILLER_DATABASE_NAME: "1652361598937-ar6_emissions_vetted_infillerdatabase_10.5281-zenodo.6390768.csv"
-          INFILLER_DATABASE_DIR: "data"
-          INFILLER_HASH: "30fae0530d76cbcb144f134e9ed0051f"
-        run: |
-          poetry run python -c 'import os.path; from climate_assessment.testing import _get_infiller_download_link, _file_available_or_downloaded; infiller_link = _get_infiller_download_link(os.environ.get("INFILLER_DATABASE_NAME")); _file_available_or_downloaded(os.path.join(os.environ.get("INFILLER_DATABASE_DIR"), os.environ.get("INFILLER_DATABASE_NAME")), os.environ.get("INFILLER_HASH"), infiller_link)'
-
-      - name: Test with pytest
-        # scenario explorer stuff needed here too so we don't skip the run with
-        # pytest
-        env:
-          SCENARIO_EXPLORER_USER: ${{ secrets.SCENARIO_EXPLORER_USER }}
-          SCENARIO_EXPLORER_PASSWORD: ${{ secrets.SCENARIO_EXPLORER_PASSWORD }}
-        run: |
-          # Uncomment notebooks for now, need to think a bit more what the right approach is there
-          # pytest notebooks/run-example-ciceroscm.ipynb -r a --nbval-lax --no-cov
-          poetry run pytest tests/nightly/test_wg3_reproduction_ciceroscm.py -m wg3 -r a -vv
-
   fair:
       runs-on: ubuntu-latest
 
