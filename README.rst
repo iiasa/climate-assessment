@@ -13,8 +13,13 @@ It also allows for assessing new emissions pathways in a way that is fully consi
 Installation
 ------------
 
+Note: the package's requirements are currently extremely strict.
+This is done to make it more likely that installation will result in a valid environment.
+If you want a fully specified environment, please use the ``poetry.lock`` or ``requirements.txt`` file provided in this repository.
+We hope to make the package more libary-like, with looser requirements, in future.
+
 Using ``pip``
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
 
 `pip`_ is Python's default package management system.
 
