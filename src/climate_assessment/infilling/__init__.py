@@ -60,8 +60,8 @@ def run_infilling(
 
     # We can prefix a string to the beginning of some variables to show they are infilled
     # TODO: remove hard-coding of string here
-    infilled_data_prefix = "{}|Infilled".format(prefix)
-    harmonized_prefix = "{}|Harmonized".format(prefix)
+    infilled_data_prefix = f"{prefix}|Infilled"
+    harmonized_prefix = f"{prefix}|Harmonized"
 
     # Here we specify the types of cruncher, choosing from silicone package modules.
     # This is a list of cruncher types, of the same length as the leader and required
@@ -163,9 +163,7 @@ def run_infilling(
     if len(database["region"].unique()) > 1:
         raise AssertionError(
             "Different regions should be "
-            "infilled separately. Your database has regions {}".format(
-                database.regions()
-            )
+            f"infilled separately. Your database has regions {database.regions()}"
         )
 
     to_fill_orig = harmonised_df.copy()

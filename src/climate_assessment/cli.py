@@ -267,7 +267,6 @@ def _setup_logging(logger):
     logger : :class:`logging.getLogger`
         Input Logger instance created by logging.getLogger(name).
     """
-
     init_logging(logger)
 
     logger.info("Silencing pyam loggers")
@@ -594,9 +593,7 @@ def run_workflow(
         return
 
     # read in infilled database
-    infilled_emissions = os.path.join(
-        outdir, "{}_harmonized_infilled.csv".format(key_string)
-    )
+    infilled_emissions = os.path.join(outdir, f"{key_string}_harmonized_infilled.csv")
     LOGGER.info("Reading in infilled scenarios from: %s", infilled_emissions)
     df_infilled = pyam.IamDataFrame(infilled_emissions)
 
@@ -745,7 +742,7 @@ def harmonize(
             prefixes=[f"{prefix}|Harmonized|"],
         )
 
-    df_harmonized.to_csv(os.path.join(outdir, "{}_harmonized.csv".format(key_string)))
+    df_harmonized.to_csv(os.path.join(outdir, f"{key_string}_harmonized.csv"))
 
 
 @click.command(context_settings={"help_option_names": ["-h", "--help"]})
@@ -814,7 +811,7 @@ def create_infiller_database(
 
     LOGGER.info("Saving output")
     df_infiller_database.to_csv(
-        os.path.join(outdir, "{}_infillerdatabase.csv".format(key_string))
+        os.path.join(outdir, f"{key_string}_infillerdatabase.csv")
     )
 
 
@@ -1037,8 +1034,8 @@ def postprocess(
     LOGGER = logging.getLogger("clim_cli")
     _setup_logging(LOGGER)
 
-    LOGGER.info("Merging {} files: {}".format(len(rawoutput_files), rawoutput_files))
-    LOGGER.info("Saving output as {}".format(os.path.join(outdir, output_file)))
+    LOGGER.info(f"Merging {len(rawoutput_files)} files: {rawoutput_files}")
+    LOGGER.info(f"Saving output as {os.path.join(outdir, output_file)}")
 
     with ProcessPoolExecutor(max_workers=n_workers) as executor:
         futures = [
@@ -1062,7 +1059,7 @@ def postprocess(
             results.append(r.result().meta)
 
     out_fname = os.path.join(outdir, output_file)
-    LOGGER.info("Saving merged meta to {}".format(out_fname))
+    LOGGER.info(f"Saving merged meta to {out_fname}")
     pd.concat(results).to_csv(out_fname)
 
 

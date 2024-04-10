@@ -6,27 +6,41 @@ on:
    branches: [ main ]
 
 jobs:
-  linting-and-docs:
+  linting:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - uses: actions/setup-python@v4
+    - name: Install poetry
+      shell: bash
+      run: |
+        pipx install poetry
+        which poetry
+        poetry --version  # Check poetry installation
+
+    - name: Set up Python
+      id: setup-python
+      uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
+        python-version: "3.11"
+        cache: poetry
+
+    - name: Set up Poetry environment
+      shell: bash
+      run: |
+        poetry config virtualenvs.create true
+        poetry config virtualenvs.in-project true
 
     - name: Install dev dependencies
+      shell: bash
       run: |
-        pip install --upgrade pip wheel
-        pip install -e .[docs,tests,deploy,linter,notebooks]
-    # TODO: add `pylint src` and `pydocstyle src` and docs
+        poetry install --no-interaction --no-root --all-extras --only 'main,dev'
+
     - name: Formatting and linters
       run: |
-        black --check src scripts tests setup.py --exclude doc/conf.py
-        isort --check-only --quiet src scripts tests setup.py doc/conf.py
-        flake8 src scripts tests setup.py doc/conf.py
+        poetry run pre-commit run --all-files
 
   build:
     runs-on: ubuntu-latest
@@ -35,41 +49,31 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - uses: actions/setup-python@v4
-      with:
-        python-version: "3.10"
-
-    - name: Install test dependencies
+    - name: Install poetry
+      shell: bash
       run: |
-        pip install --upgrade pip wheel
-        pip install -e .[tests]
+        pipx install poetry
+        which poetry
+        poetry --version  # Check poetry installation
+
+    - name: Set up Python
+      id: setup-python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+        cache: poetry
+
+    - name: Set up Poetry environment
+      shell: bash
+      run: |
+        poetry config virtualenvs.create true
+        poetry config virtualenvs.in-project true
+
+    - name: Install test dependencies and package
+      shell: bash
+      run: |
+        poetry install --no-interaction --all-extras --only 'main,tests,dev'
 
     - name: Test with pytest
       run: |
-          pytest tests -m "not nightly and not wg3" -r a -vv --cov=climate_assessment --cov-report=xml
-# ToDo uncomment as soon as package is published - action only runs on PR, workflow_dispatch is not covered
-#    - name: Monitor coverage
-#      if: github.event_name == 'pull_request'
-#      uses: orgoro/coverage@v2
-#      with:
-#        coverageFile: coverage.xml
-#        token: ${{ secrets.GITHUB_TOKEN }}
-#        thresholdAll: 0.78
-#        thresholdNew: 1
-#        thresholdModified: 0.78
-
-  scripts:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - uses: actions/setup-python@v4
-      with:
-        python-version: "3.10"
-
-    - name: Install dependencies
-      run: |
-        pip install --upgrade pip wheel
-        pip install -e .
+        poetry run pytest tests -m "not nightly and not wg3" -r a -vv --cov=climate_assessment --cov-report=xml

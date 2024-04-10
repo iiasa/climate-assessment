@@ -19,7 +19,7 @@ def get_ciceroscm_configurations(
         # version strings for linux and windows might be different!
         raise AssertionError(CICEROSCM.get_version())
 
-    with open(ciceroscm_probabilistic_file, "r") as fh:
+    with open(ciceroscm_probabilistic_file) as fh:
         cfgs_raw = json.load(fh)
     ciceroscm_cfgs = [c for c in cfgs_raw[:num_cfgs][:]]
 

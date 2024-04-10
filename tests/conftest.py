@@ -110,7 +110,7 @@ def update_expected_files(request):
 
 
 def _get_filename(emissions_id, suffix):
-    return "{}{}".format(emissions_id, suffix)
+    return f"{emissions_id}{suffix}"
 
 
 @pytest.fixture
@@ -199,7 +199,7 @@ def check_workflow_output():
                     shutil.copyfile(file_to_check, file_expected)
                 continue
 
-            print("Checking {}".format(file_to_check))
+            print(f"Checking {file_to_check}")
             if "_full_exceedance_probabilities" in suffix:
 
                 def load_exceedance_probs(fp):
@@ -231,50 +231,50 @@ def check_workflow_output():
                 cols_to_keep = [
                     "Category",
                     "Category_name",
-                    "Exceedance Probability 1.5C ({})".format(model_version_str),
-                    "Exceedance Probability 2.0C ({})".format(model_version_str),
-                    "Exceedance Probability 2.5C ({})".format(model_version_str),
-                    "Exceedance Probability 3.0C ({})".format(model_version_str),
-                    "Exceedance Probability 3.5C ({})".format(model_version_str),
-                    "Exceedance Probability 4.0C ({})".format(model_version_str),
-                    "Exceedance Probability 4.5C ({})".format(model_version_str),
-                    "Exceedance Probability 5.0C ({})".format(model_version_str),
-                    "p5 peak warming ({})".format(model_version_str),
-                    "p10 peak warming ({})".format(model_version_str),
-                    "p17 peak warming ({})".format(model_version_str),
-                    "p25 peak warming ({})".format(model_version_str),
-                    "p33 peak warming ({})".format(model_version_str),
-                    "median peak warming ({})".format(model_version_str),
-                    "p66 peak warming ({})".format(model_version_str),
-                    "p67 peak warming ({})".format(model_version_str),
-                    "p75 peak warming ({})".format(model_version_str),
-                    "p83 peak warming ({})".format(model_version_str),
-                    "p90 peak warming ({})".format(model_version_str),
-                    "p95 peak warming ({})".format(model_version_str),
-                    "p5 warming in 2100 ({})".format(model_version_str),
-                    "p10 warming in 2100 ({})".format(model_version_str),
-                    "p17 warming in 2100 ({})".format(model_version_str),
-                    "p25 warming in 2100 ({})".format(model_version_str),
-                    "p33 warming in 2100 ({})".format(model_version_str),
-                    "median warming in 2100 ({})".format(model_version_str),
-                    "p66 warming in 2100 ({})".format(model_version_str),
-                    "p67 warming in 2100 ({})".format(model_version_str),
-                    "p75 warming in 2100 ({})".format(model_version_str),
-                    "p83 warming in 2100 ({})".format(model_version_str),
-                    "p90 warming in 2100 ({})".format(model_version_str),
-                    "p95 warming in 2100 ({})".format(model_version_str),
-                    "p5 year of peak warming ({})".format(model_version_str),
-                    "p10 year of peak warming ({})".format(model_version_str),
-                    "p17 year of peak warming ({})".format(model_version_str),
-                    "p25 year of peak warming ({})".format(model_version_str),
-                    "p33 year of peak warming ({})".format(model_version_str),
-                    "median year of peak warming ({})".format(model_version_str),
-                    "p66 year of peak warming ({})".format(model_version_str),
-                    "p67 year of peak warming ({})".format(model_version_str),
-                    "p75 year of peak warming ({})".format(model_version_str),
-                    "p83 year of peak warming ({})".format(model_version_str),
-                    "p90 year of peak warming ({})".format(model_version_str),
-                    "p95 year of peak warming ({})".format(model_version_str),
+                    f"Exceedance Probability 1.5C ({model_version_str})",
+                    f"Exceedance Probability 2.0C ({model_version_str})",
+                    f"Exceedance Probability 2.5C ({model_version_str})",
+                    f"Exceedance Probability 3.0C ({model_version_str})",
+                    f"Exceedance Probability 3.5C ({model_version_str})",
+                    f"Exceedance Probability 4.0C ({model_version_str})",
+                    f"Exceedance Probability 4.5C ({model_version_str})",
+                    f"Exceedance Probability 5.0C ({model_version_str})",
+                    f"p5 peak warming ({model_version_str})",
+                    f"p10 peak warming ({model_version_str})",
+                    f"p17 peak warming ({model_version_str})",
+                    f"p25 peak warming ({model_version_str})",
+                    f"p33 peak warming ({model_version_str})",
+                    f"median peak warming ({model_version_str})",
+                    f"p66 peak warming ({model_version_str})",
+                    f"p67 peak warming ({model_version_str})",
+                    f"p75 peak warming ({model_version_str})",
+                    f"p83 peak warming ({model_version_str})",
+                    f"p90 peak warming ({model_version_str})",
+                    f"p95 peak warming ({model_version_str})",
+                    f"p5 warming in 2100 ({model_version_str})",
+                    f"p10 warming in 2100 ({model_version_str})",
+                    f"p17 warming in 2100 ({model_version_str})",
+                    f"p25 warming in 2100 ({model_version_str})",
+                    f"p33 warming in 2100 ({model_version_str})",
+                    f"median warming in 2100 ({model_version_str})",
+                    f"p66 warming in 2100 ({model_version_str})",
+                    f"p67 warming in 2100 ({model_version_str})",
+                    f"p75 warming in 2100 ({model_version_str})",
+                    f"p83 warming in 2100 ({model_version_str})",
+                    f"p90 warming in 2100 ({model_version_str})",
+                    f"p95 warming in 2100 ({model_version_str})",
+                    f"p5 year of peak warming ({model_version_str})",
+                    f"p10 year of peak warming ({model_version_str})",
+                    f"p17 year of peak warming ({model_version_str})",
+                    f"p25 year of peak warming ({model_version_str})",
+                    f"p33 year of peak warming ({model_version_str})",
+                    f"median year of peak warming ({model_version_str})",
+                    f"p66 year of peak warming ({model_version_str})",
+                    f"p67 year of peak warming ({model_version_str})",
+                    f"p75 year of peak warming ({model_version_str})",
+                    f"p83 year of peak warming ({model_version_str})",
+                    f"p90 year of peak warming ({model_version_str})",
+                    f"p95 year of peak warming ({model_version_str})",
                 ]
 
                 if pyam_df:
@@ -284,9 +284,7 @@ def check_workflow_output():
 
                 assert set(cols_to_drop) == set(
                     expected_meta_cols_to_drop
-                ), "{} not equal to {}".format(
-                    set(cols_to_drop), set(expected_meta_cols_to_drop)
-                )
+                ), f"{set(cols_to_drop)} not equal to {set(expected_meta_cols_to_drop)}"
 
                 if pyam_df:
                     idf.meta = idf.meta[cols_to_keep]
@@ -296,10 +294,10 @@ def check_workflow_output():
                 return idf
 
             if model.upper() == "MAGICC":
-                model_version_str = "MAGICC{}".format(model_version)
+                model_version_str = f"MAGICC{model_version}"
 
             elif model.upper() == "FAIR":
-                model_version_str = "FaIRv{}".format(model_version)
+                model_version_str = f"FaIRv{model_version}"
 
             elif model.upper() == "CICERO-SCM":
                 model_version_str = "CICERO-SCM"

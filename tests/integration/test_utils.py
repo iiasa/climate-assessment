@@ -1,6 +1,5 @@
 import collections
 import logging
-from typing import List
 
 import numpy as np
 import pyam
@@ -95,7 +94,7 @@ def expected_scen(scenario, ch4_gwp):
     return scen_expected
 
 
-def create_dataframe_input(scens: List):
+def create_dataframe_input(scens: list):
     help_lst = collections.defaultdict(list)
     for index, scen in enumerate(scens):
         for emission in scen:
@@ -319,7 +318,7 @@ def test_add_gwp100_kyoto_infilled(caplog):
         "%sEmissions|CO2|Energy and Industrial Processes, %sEmissions|NH3, "
         "%sEmissions|OC, %sEmissions|PFC, %sEmissions|Sulfur, %sEmissions|VOC "
         "are being ignored for the calculation of the GWP100."
-    ), (prefix in caplog.text)
+    ), prefix in caplog.text
 
 
 def test_add_gwp100_kyoto_harmonize(caplog):
@@ -345,7 +344,7 @@ def test_add_gwp100_kyoto_harmonize(caplog):
         " Only the variables %sEmissions|CH4, %sEmissions|CH4, "
         "%sEmissions|CO2, %sEmissions|CO2 are included in the "
         "calculation of the GWP100"
-    ), (prefix in caplog.text)
+    ), prefix in caplog.text
 
 
 def test_add_gwp100_kyoto_empty(caplog):

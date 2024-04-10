@@ -1,8 +1,8 @@
 name: Nightly workflow tests
 on:
  # Uncomment these two lines for debugging, but leave them commented on 'main'
- # pull_request:
- #   branches: [ main ]
+ pull_request:
+   branches: [ main ]
  push:
    branches: [ main ]
  schedule:
@@ -17,21 +17,31 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - uses: actions/setup-python@v4
-      with:
-        python-version: "3.10"
-
-    - name: Install dev dependencies
+    - name: Install poetry
+      shell: bash
       run: |
-        pip install --upgrade pip wheel
-        pip install -e .[tests]
+        pipx install poetry
+        which poetry
+        poetry --version  # Check poetry installation
+
+    - name: Set up Python
+      id: setup-python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+        cache: poetry
+
+    - name: Install test dependencies and package
+      shell: bash
+      run: |
+        poetry install --no-interaction --all-extras --only 'main,tests'
 
     - name: Download MAGICC
       run: |
         mkdir -p bin/magicc/magicc-v7.5.3
         wget -O "bin/magicc/magicc-v7.5.3.tar.gz" "${{ secrets.MAGICC_LINK_FROM_MAGICC_DOT_ORG }}"
         tar -xf bin/magicc/magicc-v7.5.3.tar.gz -C bin/magicc/magicc-v7.5.3
-        MAGICC_RUN_DIR=bin/magicc/magicc-v7.5.3/run/ python scripts/generate-magicc-sr15-input-files.py
+        MAGICC_RUN_DIR=bin/magicc/magicc-v7.5.3/run/ poetry run python scripts/generate-magicc-sr15-input-files.py
         mkdir -p data/magicc-drawnsets
         wget -O "data/magicc-drawnsets/magicc-ar6-0fd0f62-f023edb-drawnset.tar.gz" "${{ secrets.MAGICC_PROB_DISTRIBUTION_LINK_FROM_MAGICC_DOT_ORG }}"
         tar -xf "data/magicc-drawnsets/magicc-ar6-0fd0f62-f023edb-drawnset.tar.gz" -C data/magicc-drawnsets
@@ -42,7 +52,7 @@ jobs:
         MAGICC_WORKER_NUMBER: 4
         MAGICC_WORKER_ROOT_DIR: /tmp
       run: |
-          MAGICC_PROBABILISTIC_FILE=data/magicc-drawnsets/0fd0f62-derived-metrics-id-f023edb-drawnset.json pytest tests -m nightly -r a -vv
+          MAGICC_PROBABILISTIC_FILE=data/magicc-drawnsets/0fd0f62-derived-metrics-id-f023edb-drawnset.json poetry run pytest tests -m nightly -r a -vv
 
     - name: Test run with .env only
       run: |
@@ -50,4 +60,4 @@ jobs:
           echo "MAGICC_WORKER_NUMBER=4" >> .env
           echo "MAGICC_WORKER_ROOT_DIR=/tmp" >> .env
 
-          MAGICC_PROBABILISTIC_FILE=data/magicc-drawnsets/0fd0f62-derived-metrics-id-f023edb-drawnset.json pytest tests/nightly/test_workflow_nightly.py -m nightly -r a -vv
+          MAGICC_PROBABILISTIC_FILE=data/magicc-drawnsets/0fd0f62-derived-metrics-id-f023edb-drawnset.json poetry run pytest tests/nightly/test_workflow_nightly.py -m nightly -r a -vv

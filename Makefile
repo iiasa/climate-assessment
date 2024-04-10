@@ -1,11 +1,7 @@
 .DEFAULT_GOAL := help
 
-VENV_DIR ?= ./venv
 DATA_DIR ?= ./data
 SCRIPTS_DIR ?= ./scripts
-NOTEBOOKS_DIR ?= ./notebooks
-
-FILES_TO_FORMAT_PYTHON=scripts src tests setup.py doc/conf.py
 
 ECR_REGISTRY ?= 652601739724.dkr.ecr.ap-southeast-2.amazonaws.com
 WORKFLOW_IMAGE ?= $(ECR_REGISTRY)/climate_assessment
@@ -30,75 +26,34 @@ help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 .PHONY: test
-test: $(VENV_DIR)  ## run all the tests
-	$(VENV_DIR)/bin/pytest tests -r a
+test:  ## run all the tests
+	poetry run pytest src tests -r a -v --doctest-modules --cov=src
 
 .PHONY: checks
-checks: $(VENV_DIR)  ## run all the checks
-	@echo "=== bandit ==="; $(VENV_DIR)/bin/bandit -c .bandit.yml -r src/climate_assessment || echo "--- bandit failed ---" >&2; \
-		echo "\n\n=== black ==="; $(VENV_DIR)/bin/black --check $(FILES_TO_FORMAT_PYTHON) || echo "--- black failed ---" >&2; \
-		echo "\n\n=== isort ==="; $(VENV_DIR)/bin/isort --check-only --quiet $(FILES_TO_FORMAT_PYTHON) || echo "--- isort failed ---" >&2; \
-		echo "\n\n=== flake8 ==="; $(VENV_DIR)/bin/flake8 $(FILES_TO_FORMAT_PYTHON) || echo "--- flake8 failed ---" >&2; \
-		echo
-
-.PHONY: format-notebooks
-format-notebooks: $(VENV_DIR)  ## format the notebooks
-	@status=$$(git status --porcelain $(NOTEBOOKS_DIR)); \
-	if test ${FORCE} || test "x$${status}" = x; then \
-		$(VENV_DIR)/bin/black-nb $(NOTEBOOKS_DIR); \
-	else \
-		echo Not trying any formatting. Working directory is dirty ... >&2; \
-	fi;
-
-.PHONY: format
-format:  ## re-format files
-	make isort
-	make black
-
-.PHONY: black
-black: $(VENV_DIR)  ## use black to autoformat code
-	@status=$$(git status --porcelain); \
-	if test ${FORCE} ||test "x$${status}" = x; then \
-		$(VENV_DIR)/bin/black --target-version py37 $(FILES_TO_FORMAT_PYTHON); \
-	else \
-		echo Not trying any formatting, working directory is dirty... >&2; \
-	fi;
-
-isort: $(VENV_DIR)  ## format the code
-	@status=$$(git status --porcelain src tests); \
-	if test ${FORCE} || test "x$${status}" = x; then \
-		$(VENV_DIR)/bin/isort $(FILES_TO_FORMAT_PYTHON); \
-	else \
-		echo Not trying any formatting. Working directory is dirty ... >&2; \
-	fi;
+checks:  ## run all the linting checks of the codebase
+	@echo "=== pre-commit ==="; poetry run pre-commit run --all-files || echo "--- pre-commit failed ---" >&2; \
+		echo "======"
 
 .PHONY: docs
-docs: $(VENV_DIR)  ## build the docs
-	$(VENV_DIR)/bin/sphinx-build -M html doc doc/build
+docs:  ## build the docs
+	poetry run sphinx-build -T -b html doc doc/build/html
 
-sr15-test-data: $(VENV_DIR) $(DATA_DIR) $(SR15_EMISSIONS_SCRAPER)  ## download test SR1.5 emissions data
+sr15-test-data: $(DATA_DIR) $(SR15_EMISSIONS_SCRAPER)  ## download test SR1.5 emissions data
 	mkdir -p $(SR15_EMISSIONS_DIR)
-	$(VENV_DIR)/bin/python $(SR15_EMISSIONS_SCRAPER) $(SR15_EMISSIONS_FILE)
+	poetry run python $(SR15_EMISSIONS_SCRAPER) $(SR15_EMISSIONS_FILE)
 
 $(DATA_DIR):
 	mkdir -p $(DATA_DIR)
 
-virtual-environment: $(VENV_DIR)  ## update venv, create a new venv if it doesn't exist
-$(VENV_DIR): setup.py setup.cfg
-	[ -d $(VENV_DIR) ] || python3 -m venv $(VENV_DIR)
-
-	$(VENV_DIR)/bin/pip install --upgrade 'pip>=20.3'
-	$(VENV_DIR)/bin/pip install wheel
-	$(VENV_DIR)/bin/pip install -e .[dev]
-	$(VENV_DIR)/bin/jupyter nbextension enable --py widgetsnbextension --sys-prefix
-
-	touch $(VENV_DIR)
-
-first-venv: ## create a new virtual environment for the very first repo setup
-	python3 -m venv $(VENV_DIR)
-
-	$(VENV_DIR)/bin/pip install --upgrade pip
-	# don't touch here as we don't want this venv to persist anyway
+.PHONY: virtual-environment
+virtual-environment:  ## update virtual environment, create a new one if it doesn't already exist
+	poetry lock --no-update
+	# Put virtual environments in the project
+	poetry config virtualenvs.in-project true
+	poetry install --all-extras
+	poetry run pre-commit install
+	# Also export a requirements.txt file
+	poetry export -f requirements.txt --output requirements.txt
 
 
 .PHONY: build_and_push_image

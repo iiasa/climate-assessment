@@ -17,10 +17,10 @@ def get_fair_configurations(
     if FAIR.get_version() != fair_version:
         raise AssertionError(FAIR.get_version())
 
-    with open(fair_probabilistic_file, "r") as fh:
+    with open(fair_probabilistic_file) as fh:
         cfgs_raw = json.load(fh)
 
-    with open(fair_extra_config, "r") as fh:
+    with open(fair_extra_config) as fh:
         cfgs_common = json.load(fh)
 
     e_pi = [0] * 40

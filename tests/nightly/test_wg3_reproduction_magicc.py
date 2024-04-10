@@ -22,7 +22,7 @@ def test_wg3_magicc(
     result = runner.invoke(
         climate_assessment.cli.workflow,
         [
-            os.path.join(test_data_dir, "{}.csv".format(emissions_id)),
+            os.path.join(test_data_dir, f"{emissions_id}.csv"),
             out_dir,
             "--num-cfgs",
             600,

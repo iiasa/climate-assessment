@@ -66,27 +66,27 @@ def do_postprocess(
         )
 
     output.set_meta(
-        "aneris (version: {})".format(aneris.__version__),
+        f"aneris (version: {aneris.__version__})",
         name="harmonization",
     )
     output.set_meta(
-        "silicone (version: {})".format(silicone.__version__),
+        f"silicone (version: {silicone.__version__})",
         name="infilling",
     )
     output.set_meta(
-        "openscm_runner (version: {})".format(openscm_runner.__version__),
+        f"openscm_runner (version: {openscm_runner.__version__})",
         name="climate-models",
     )
     output.set_meta(
-        "climate-assessment (version: {})".format(climate_assessment.__version__),
+        f"climate-assessment (version: {climate_assessment.__version__})",
         name="workflow",
     )
 
-    outfile = os.path.join(outdir, "{}_alloutput.xlsx".format(key_string))
+    outfile = os.path.join(outdir, f"{key_string}_alloutput.xlsx")
     LOGGER.info("Saving all output to: %s", outfile)
     output.to_excel(outfile)
 
-    outfile = os.path.join(outdir, "{}_meta.xlsx".format(key_string))
+    outfile = os.path.join(outdir, f"{key_string}_meta.xlsx")
     LOGGER.info("Saving all meta to: %s", outfile)
     output.export_meta(outfile)
 

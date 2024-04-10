@@ -126,7 +126,7 @@ def test_convert_scenarios(test_unit_conversion_df, metric, conversions):
             res.filter(variable=var_filter).data["value"],
             test_unit_conversion_df.filter(variable=var_filter).data["value"]
             * conv_factor,
-            err_msg="{} {}".format(metric, var_filter),
+            err_msg=f"{metric} {var_filter}",
         )
 
     assert (res.data["unit"] == "Mt CO2-equiv/yr").all()
@@ -179,7 +179,7 @@ def test_convert_co2_equiv_to_kt_gas(
         npt.assert_allclose(
             res.filter(variable=vf).data["value"],
             co2_equiv.filter(variable=vf).data["value"] / conv_factor,
-            err_msg="{} {}".format(metric, vf),
+            err_msg=f"{metric} {vf}",
         )
 
 

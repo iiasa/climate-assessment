@@ -3,6 +3,7 @@
 tests/test-data/fair-1.6.2-wg3-params*.json
 tests/test-data/rcmip-emissions-annual-means-v5-1-0.csv
 magicc-files
+magicc-bits-and-pieces
 
 scripts/*cluster*
 20211003*

@@ -159,9 +159,7 @@ def convert_co2_equiv_to_kt_gas(df, var_filter, metric="AR6GWP100"):
         variable = vdf.get_unique_meta("variable", True)
         gas = variable.split("|")[-1].replace("-", "")
         converted.append(
-            vdf.convert_unit("kt {}/yr".format(gas), context=metric).drop_meta(
-                "unit_context"
-            )
+            vdf.convert_unit(f"kt {gas}/yr", context=metric).drop_meta("unit_context")
         )
 
     out = keep.append(
@@ -361,7 +359,6 @@ def split_scenarios_into_batches(iamc_file, outdir, batch_size):
         Up to how many scenarios should be in one batch?
 
     """
-
     init_logging(LOGGER)
     runs = pyam.IamDataFrame(iamc_file)
 
@@ -470,7 +467,7 @@ def _perform_operation(df, var_1, var_2, out_variable, op, raise_if_mismatch=Tru
     all_nan_rows = res.isnull().all(axis=1)
     if all_nan_rows.any():
         if raise_if_mismatch:
-            raise ValueError("Mismatched inputs: {}".format(res[all_nan_rows]))
+            raise ValueError(f"Mismatched inputs: {res[all_nan_rows]}")
 
         res = res.loc[~all_nan_rows, :].copy()
 
