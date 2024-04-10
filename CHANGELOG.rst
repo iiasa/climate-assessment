@@ -42,6 +42,7 @@ Fixed
 
 - (`#55 https://github.com/iiasa/climate-assessment/pull/55`_) Pinned requirements to make install more reproducible for users (and updated GitHub CI/CD accordingly)
 - (`#55 https://github.com/iiasa/climate-assessment/pull/55`_) Docs build
+- (`#55 https://github.com/iiasa/climate-assessment/pull/55`_) CI, with specific mention for now retrieving the infiller database using ixmp4
 - (`#49 https://github.com/iiasa/climate-assessment/pull/49`_) Fix if all emissions data starts in 2015, in :func:`add_year_historical_percentage_offset`
 
 
