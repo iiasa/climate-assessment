@@ -36,7 +36,7 @@ checks:  ## run all the linting checks of the codebase
 
 .PHONY: docs
 docs:  ## build the docs
-	poetry run sphinx-build -T -b html docs/source docs/build/html
+	poetry run sphinx-build -T -b html doc doc/build/html
 
 sr15-test-data: $(DATA_DIR) $(SR15_EMISSIONS_SCRAPER)  ## download test SR1.5 emissions data
 	mkdir -p $(SR15_EMISSIONS_DIR)

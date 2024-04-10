@@ -30,10 +30,18 @@ Added
 - (`#1 <https://github.com/iiasa/climate-assessment/pull/1>`_) Added :func:`climate_assessment.cli.run_workflow`
 
 
+Changed
+~~~~~~~
+
+- (`#55 https://github.com/iiasa/climate-assessment/pull/55`_) Switched to using poetry for environment management
+- (`#55 https://github.com/iiasa/climate-assessment/pull/55`_) Include a ``poetry.lock`` and ``requirements.txt`` in the repo for reproducible environments
+- (`#55 https://github.com/iiasa/climate-assessment/pull/55`_) Added pre-commit hook
+
 Fixed
 ~~~~~
 
-- (`#55 https://github.com/iiasa/climate-assessment/pull/55`_) Pinned requirements to make install more reproducible for users
+- (`#55 https://github.com/iiasa/climate-assessment/pull/55`_) Pinned requirements to make install more reproducible for users (and updated GitHub CI/CD accordingly)
+- (`#55 https://github.com/iiasa/climate-assessment/pull/55`_) Docs build
 - (`#49 https://github.com/iiasa/climate-assessment/pull/49`_) Fix if all emissions data starts in 2015, in :func:`add_year_historical_percentage_offset`
 
 
