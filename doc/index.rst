@@ -69,7 +69,7 @@ The page :doc:`code` provides detailed description of the command line interface
 (CLI), that can be used from e.g. an Anaconda prompt, and descriptions of specific
 functions for infilling, harmonization, climate emulator runs, and post-processing.
 
-The page :doc:`emulator` provdies more detail and instructions on how the climate
+The page :doc:`emulator` provides more detail and instructions on how the climate
 emulators FaIR, CICERO-SCM, and MAGICC are coupled to this workflow, where to
 download additional files, and how to set up emulators for running.
 
