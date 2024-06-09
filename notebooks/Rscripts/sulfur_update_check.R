@@ -2,6 +2,7 @@
 # Do:
 # - [x] visualise RCMIP (used in AR6)
 # - [x] visualise CEDS 2024 update
+# - [ ] visualise difference between RCMIP and CEDS 
 
 
 library(tidyverse)
@@ -132,3 +133,36 @@ ggsave(filename = here("notebooks", "Rscripts", "figures", "sulfur_emissions.pdf
 ggsave(filename = here("notebooks", "Rscripts", "figures", "sulfur_emissions.png"), 
        plot = p.sulfur.scens,
        width = 300, height = 200, dpi = 300, units = "mm")
+
+
+
+# Visualisation (historical emissions difference) ------------------------------
+sulfur.hist.diff <- rcmip.emssions %>% filter(grepl(Variable,pattern="Sulfur",fixed=T)) %>%
+  mutate(Variable = "Sulfur (historical, AR6, RCMIP)") %>%
+  bind_rows(ceds.emssions.sulfur) %>% 
+  select(Variable,Unit,Year,value) %>% 
+  pivot_wider(names_from = Variable, values_from = value) %>% 
+  mutate(diff = `SO2 (CEDS, Jan 2024 update)` - `Sulfur (historical, AR6, RCMIP)`) %>%
+  mutate(diff.rel.to.rcmip = diff / `Sulfur (historical, AR6, RCMIP)`)
+  
+
+p.sulfur.hist.diff <- ggplot(sulfur.hist.diff %>% filter(Year >= 1970), 
+                        aes(x=Year, y=diff.rel.to.rcmip)) +
+  geom_line() +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(
+    title = "Historical sulfur emissions (difference)",
+    x = "Year",
+    y = "% difference from AR6"
+  ) +
+  # scale y axis to percentages
+  scale_y_continuous(labels = scales::percent) +
+  theme_minimal()
+p.sulfur.hist.diff
+
+ggsave(filename = here("notebooks", "Rscripts", "figures", "sulfur_emissions_hist_diff.pdf"), 
+       plot = p.sulfur.hist.diff, device = cairo_pdf,
+       width = 200, height = 100, dpi = 300, units = "mm")
+ggsave(filename = here("notebooks", "Rscripts", "figures", "sulfur_emissions_hist_diff.png"), 
+       plot = p.sulfur.hist.diff,
+       width = 200, height = 100, dpi = 300, units = "mm")
