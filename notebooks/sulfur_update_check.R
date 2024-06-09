@@ -1,7 +1,7 @@
 # Visualising sulfur historical emissions of AR6 climate assessment workflow
 # Do:
-# - [ ] visualise RCMIP (used in AR6)
-# - [ ] visualise CEDS 2024 update
+# - [x] visualise RCMIP (used in AR6)
+# - [x] visualise CEDS 2024 update
 
 
 library(tidyverse)
@@ -61,6 +61,14 @@ ar6.inf.emssions <- read_csv(here("tests",
   mutate(Year = as.numeric(Year))
 
 
+### AR6 Metadata ---------------------------------------------------------------
+ar6.metadata <- readxl::read_excel(
+  "C:/Users/kikstra/OneDrive - IIASA/_Other/Data/Scenario data/Scenario Databases/AR6_Scenarios_Database_World_v1.1/AR6_Scenarios_Database_metadata_indicators_v1.1.xlsx",
+  sheet = "meta_Ch3vetted_withclimate"
+) %>% select(Model,Scenario,Category)
+
+
+
 # Visualisation (historical emissions) -----------------------------------------
 
 ### Sulfur ---------------------------------------------------------------------
@@ -91,11 +99,17 @@ sulfur.scens.ar6 <- ar6.inf.emssions %>% filter(grepl(Variable,pattern="Sulfur",
 
 p.sulfur.scens <- ggplot(sulfur.hist %>% filter(Year >= 1990), 
                         aes(x=Year, y=value, color=Variable)) +
-  geom_line() +
+  geom_line(linewidth=1.5) +
   geom_line(data = sulfur.scens.ar6 %>% filter(Year>=2015,Year<=2050), 
                 aes(x=Year, y=value, group=interaction(Model,Scenario)),
                 colour = "grey",
                 linetype = "solid", alpha = 0.1) +
+  geom_line(data = sulfur.scens.ar6 %>% filter(Year>=2015,Year<=2050) %>% 
+              left_join(ar6.metadata) %>% 
+              filter(Category=="C1"), 
+            aes(x=Year, y=value, group=interaction(Model,Scenario)),
+            colour = "dodgerblue",
+            linetype = "solid", alpha = 0.1) +
   geom_textline(data = sulfur.scens.cmip6 %>% filter(Year>=2015,Year<=2050), 
                 aes(x=Year, y=value, group=interaction(Model,Scenario), label = Scenario), 
                 linetype = "dashed",
@@ -105,6 +119,7 @@ p.sulfur.scens <- ggplot(sulfur.hist %>% filter(Year >= 1990),
   scale_color_manual(values = c("blue", "red")) +
   labs(
     title = "Historical sulfur emissions",
+    subtitle = "Grey: harmonized emissions AR6,\nLight blue: C1 scenarios",
     x = "Year",
     y = "Emissions (Mt SO2/yr)"
   ) +
@@ -113,4 +128,7 @@ p.sulfur.scens
 
 ggsave(filename = here("notebooks", "Rscripts", "figures", "sulfur_emissions.pdf"), 
        plot = p.sulfur.scens, device = cairo_pdf,
+       width = 300, height = 200, dpi = 300, units = "mm")
+ggsave(filename = here("notebooks", "Rscripts", "figures", "sulfur_emissions.png"), 
+       plot = p.sulfur.scens,
        width = 300, height = 200, dpi = 300, units = "mm")
