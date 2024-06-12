@@ -261,8 +261,8 @@ p.sulfur.scens.newCEDSso2 <- ggplot(sulfur.hist %>% filter(Year >= 1990),
 p.sulfur.scens.newCEDSso2
 
 ggsave(filename = here("notebooks", "Rscripts", "figures", "sulfur_emissions_newCEDSso2.pdf"),
-       plot = p.sulfur.scens, device = cairo_pdf,
+       plot = p.sulfur.scens.newCEDSso2, device = cairo_pdf,
        width = 300, height = 200, dpi = 300, units = "mm")
 ggsave(filename = here("notebooks", "Rscripts", "figures", "sulfur_emissions_newCEDSso2.png"),
-       plot = p.sulfur.scens,
+       plot = p.sulfur.scens.newCEDSso2,
        width = 300, height = 200, dpi = 300, units = "mm")
