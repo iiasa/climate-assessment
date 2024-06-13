@@ -71,6 +71,15 @@ ar6.inf.emssions <- read_csv(here("tests",
                values_to = "value") %>%
   mutate(Year = as.numeric(Year))
 
+### Future emissions (stanadrd database AR6) -----------------------------------
+ar6.emssions <- read_csv(here("tests",
+                                  "test-data",
+                                  "ar6_vetted_infillerdatabase.csv")) %>%
+  pivot_longer(cols = -c(Model,Scenario,Region,Variable,Unit),
+               names_to = "Year",
+               values_to = "value") %>%
+  mutate(Year = as.numeric(Year))
+
 
 ### AR6 Metadata ---------------------------------------------------------------
 ar6.metadata <- readxl::read_excel(
@@ -106,7 +115,7 @@ p.sulfur.hist
 sulfur.scens.cmip6 <- cmip6.emssions %>% filter(grepl(Variable,pattern="Sulfur",fixed=T)) %>%
   mutate(Variable = "Emissions|Sulfur (future, CMIP6)")
 sulfur.scens.ar6 <- ar6.inf.emssions %>% filter(grepl(Variable,pattern="Sulfur",fixed=T)) %>%
-  mutate(Variable = "Emissions|Sulfur (future, AR6 infiller database)")
+  mutate(Variable = "Emissions|Sulfur (future, AR6 default)")
 
 p.sulfur.scens <- ggplot(sulfur.hist %>% filter(Year >= 1990),
                         aes(x=Year, y=value, color=Variable)) +
@@ -219,17 +228,26 @@ write_delim(
 
 # Create new CMIP6 emissions dataset (all vetted scenarios) --------------------
 ar6.inf.emssions.newCEDSso2 <- read_csv(here("output",
+                                             "switch full sulfur timeseries to CEDS",
                                   "ar6_emissions_vettedscenarios_harmonized.csv")) %>%
   pivot_longer(cols = -c(Model,Scenario,Region,Variable,Unit),
                names_to = "Year",
                values_to = "value") %>%
   mutate(Year = as.numeric(Year))
 
-### new harmonized emissions (for infiller database) ---------------------------
+ar6.inf.emssions.newCEDSso2.method2040 <- read_csv(here("output",
+                                             "switch sulfur 2015 to CEDS and change harmonization method",
+                                             "ar6_emissions_vettedscenarios_harmonized.csv")) %>%
+  pivot_longer(cols = -c(Model,Scenario,Region,Variable,Unit),
+               names_to = "Year",
+               values_to = "value") %>%
+  mutate(Year = as.numeric(Year))
+
+### new harmonized emissions (only updated CEDS sulfur) ------------------------
 sulfur.scens.cmip6 <- cmip6.emssions %>% filter(grepl(Variable,pattern="Sulfur",fixed=T)) %>%
   mutate(Variable = "Emissions|Sulfur (future, CMIP6)")
 sulfur.scens.ar6.newCEDSso2 <- ar6.inf.emssions.newCEDSso2 %>% filter(grepl(Variable,pattern="Sulfur",fixed=T)) %>%
-  mutate(Variable = "Emissions|Sulfur (future, AR6 infiller database)")
+  mutate(Variable = "Emissions|Sulfur (future, with updated 2015 CEDS)")
 
 p.sulfur.scens.newCEDSso2 <- ggplot(sulfur.hist %>% filter(Year >= 1990),
                          aes(x=Year, y=value, color=Variable)) +
@@ -265,4 +283,257 @@ ggsave(filename = here("notebooks", "Rscripts", "figures", "sulfur_emissions_new
        width = 300, height = 200, dpi = 300, units = "mm")
 ggsave(filename = here("notebooks", "Rscripts", "figures", "sulfur_emissions_newCEDSso2.png"),
        plot = p.sulfur.scens.newCEDSso2,
+       width = 300, height = 200, dpi = 300, units = "mm")
+
+
+
+### new harmonized emissions (updated CEDS sulfur + reduce_ratio_2040) ---------
+sulfur.scens.cmip6.method2040 <- cmip6.emssions %>%
+  filter(grepl(Variable,pattern="Sulfur",fixed=T)) %>%
+  mutate(Variable = "Emissions|Sulfur (future, CMIP6)")
+sulfur.scens.ar6.newCEDSso2.method2040 <- ar6.inf.emssions.newCEDSso2.method2040 %>%
+  filter(grepl(Variable,pattern="Sulfur",fixed=T)) %>%
+  mutate(Variable = "Emissions|Sulfur (future, with updated 2015 CEDS + reduce_ratio_2040)")
+
+p.sulfur.scens.newCEDSso2.method2040 <- ggplot(sulfur.hist %>% filter(Year >= 1990),
+                                    aes(x=Year, y=value, color=Variable)) +
+  geom_line(linewidth=1.5) +
+  geom_line(data = sulfur.scens.ar6.newCEDSso2 %>% filter(Year>=2015,Year<=2050),
+            aes(x=Year, y=value, group=interaction(Model,Scenario)),
+            colour = "grey",
+            linetype = "solid", alpha = 0.1) +
+  geom_line(data = sulfur.scens.ar6.newCEDSso2 %>% filter(Year>=2015,Year<=2050) %>%
+              left_join(ar6.metadata) %>%
+              filter(Category=="C1"),
+            aes(x=Year, y=value, group=interaction(Model,Scenario)),
+            colour = "dodgerblue",
+            linetype = "solid", alpha = 0.1) +
+  geom_textline(data = sulfur.scens.cmip6 %>% filter(Year>=2015,Year<=2050),
+                aes(x=Year, y=value, group=interaction(Model,Scenario), label = Scenario),
+                linetype = "dashed",
+                colour = "black",
+                hjust=0.9) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  scale_color_manual(values = c("blue", "red")) +
+  labs(
+    title = "Historical sulfur emissions",
+    subtitle = "Grey: harmonized emissions AR6,\nLight blue: C1 scenarios",
+    x = "Year",
+    y = "Emissions (Mt SO2/yr)"
+  ) +
+  theme_minimal()
+p.sulfur.scens.newCEDSso2.method2040
+
+ggsave(filename = here("notebooks", "Rscripts", "figures", "sulfur_emissions_newCEDSso2_method2040.pdf"),
+       plot = p.sulfur.scens.newCEDSso2.method2040, device = cairo_pdf,
+       width = 300, height = 200, dpi = 300, units = "mm")
+ggsave(filename = here("notebooks", "Rscripts", "figures", "sulfur_emissions_newCEDSso2_method2040.png"),
+       plot = p.sulfur.scens.newCEDSso2.method2040,
+       width = 300, height = 200, dpi = 300, units = "mm")
+
+
+
+
+# Comparing methods ------------------------------------------------------------
+
+# input emissions:
+ar6.input.emissions.sulfur <- ar6.data.emissions %>%
+  filter(Variable=="Emissions|Sulfur") %>%
+  mutate(Variable = "Emissions|Sulfur (AR6 input)") %>%
+  iamc_wide_to_long() %>%
+  rename(Year=year)
+
+# harmonization options:
+sulfur.scens.ar6
+sulfur.scens.ar6.newCEDSso2
+sulfur.scens.ar6.newCEDSso2.method2040
+
+# only where we have the data
+scens.compare <- sulfur.scens.ar6.newCEDSso2.method2040 %>%
+  distinct(Model, Scenario) %>%
+  mutate(keep="true")
+
+sulfur.compare.methods.long <- ar6.input.emissions.sulfur %>% # AR6 input emissions
+  bind_rows(sulfur.scens.ar6 %>%
+              mutate(Variable="Harmonized: AR6 default")) %>% # default AR6 harmonized emissions
+  bind_rows(sulfur.scens.ar6.newCEDSso2 %>%
+              mutate(Variable="Harmonized: Updated CEDS 2015")) %>% # updated CEDS 2015 harmonized emissions
+  bind_rows(sulfur.scens.ar6.newCEDSso2.method2040 %>%
+              mutate(Variable="Harmonized: Updated CEDS 2015 + reduce_ratio_2040"))  # updated CEDS 2015 harmonized emissions + reduce_ratio_2040
+sulfur.compare.methods.wide <- sulfur.compare.methods.long %>%
+  left_join(scens.compare) %>% filter(keep=="true") %>% select(-keep) %>%
+  distinct() %>%
+  pivot_wider(
+    names_from = Variable,
+    values_from = value
+  )
+sulfur.compare.methods.wide %>% View()
+
+### Absolute values - emissions pathways ---------------------------------------
+##### Until 2100 ---------------------------------------------------------------
+p.sulfur.compare.methods.abs.until2100 <- ggplot(sulfur.compare.methods.long %>%
+                                         filter(grepl(x=Scenario,
+                                                      pattern="NGFS2",
+                                                      fixed=T)),
+                                   aes(x=Year,y=value, linetype = Model)) +
+  facet_grid(~Variable) +
+  geom_line(data = sulfur.compare.methods.long %>% filter(
+    Variable=="Emissions|Sulfur (AR6 input)",
+  ) %>%
+              filter(grepl(x=Scenario,
+                           pattern="NGFS2",
+                           fixed=T)) %>% drop_na() %>% select(-Variable),
+            aes(group=interaction(Model,Scenario)),
+            alpha=0.3) +
+  geom_line(aes(color=Variable,
+                group=interaction(Model,Scenario)),
+            alpha=1) +
+  scale_color_manual(values = c("black","grey","pink", "purple"),
+                     breaks = c("Emissions|Sulfur (AR6 input)",
+                                "Harmonized: AR6 default",
+                                "Harmonized: Updated CEDS 2015",
+                                "Harmonized: Updated CEDS 2015 + reduce_ratio_2040")) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(
+    title = "Comparing harmonization methods for sulfur emissions",
+    subtitle = "Using NGFS2 scenarios from AR6 database.\nThree options: until 2100",
+    x = "Year",
+    y = "Emissions (Mt SO2/yr)"
+  ) +
+  theme_minimal()
+p.sulfur.compare.methods.abs.until2100
+
+ggsave(filename = here("notebooks", "Rscripts", "figures",
+                       "sulfur_emissions_harmonize_compare_abs_2100.pdf"),
+       plot = p.sulfur.compare.methods.abs.until2100, device = cairo_pdf,
+       width = 400, height = 200, dpi = 300, units = "mm")
+ggsave(filename = here("notebooks", "Rscripts", "figures",
+                       "sulfur_emissions_harmonize_compare_abs_2100.png"),
+       plot = p.sulfur.compare.methods.abs.until2100,
+       width = 400, height = 200, dpi = 300, units = "mm")
+
+##### Until 2050 ---------------------------------------------------------------
+p.sulfur.compare.methods.abs.until2050 <- ggplot(sulfur.compare.methods.long %>%
+                                                   filter(grepl(x=Scenario,
+                                                                pattern="NGFS2",
+                                                                fixed=T),
+                                                          Year<=2050),
+                                                 aes(x=Year,y=value, linetype = Model)) +
+  facet_grid(~Variable) +
+  geom_line(data = sulfur.compare.methods.long %>% filter(
+    Variable=="Emissions|Sulfur (AR6 input)",
+  ) %>%
+    filter(grepl(x=Scenario,
+                 pattern="NGFS2",
+                 fixed=T),
+           Year<=2050) %>% drop_na() %>% select(-Variable),
+  aes(group=interaction(Model,Scenario)),
+  alpha=0.3) +
+  geom_line(aes(color=Variable,
+                group=interaction(Model,Scenario)),
+            alpha=1) +
+  scale_color_manual(values = c("black","grey","pink", "purple"),
+                     breaks = c("Emissions|Sulfur (AR6 input)",
+                                "Harmonized: AR6 default",
+                                "Harmonized: Updated CEDS 2015",
+                                "Harmonized: Updated CEDS 2015 + reduce_ratio_2040")) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(
+    title = "Comparing harmonization methods for sulfur emissions",
+    subtitle = "Using NGFS2 scenarios from AR6 database.\nThree options: until 2050",
+    x = "Year",
+    y = "Emissions (Mt SO2/yr)"
+  ) +
+  theme_minimal()
+p.sulfur.compare.methods.abs.until2050
+
+ggsave(filename = here("notebooks", "Rscripts", "figures",
+                       "sulfur_emissions_harmonize_compare_abs_2050.pdf"),
+       plot = p.sulfur.compare.methods.abs.until2050, device = cairo_pdf,
+       width = 400, height = 200, dpi = 300, units = "mm")
+ggsave(filename = here("notebooks", "Rscripts", "figures",
+                       "sulfur_emissions_harmonize_compare_abs_2050.png"),
+       plot = p.sulfur.compare.methods.abs.until2050,
+       width = 400, height = 200, dpi = 300, units = "mm")
+
+
+### Differences - effect of harmonization --------------------------------------
+sulfur.compare.methods.effect.wide <- sulfur.compare.methods.wide %>%
+  mutate(`AR6 default` = `Harmonized: AR6 default` - `Emissions|Sulfur (AR6 input)`) %>%
+  mutate(`Updated CEDS 2015` = `Harmonized: Updated CEDS 2015` - `Emissions|Sulfur (AR6 input)`) %>%
+  mutate(`Updated CEDS 2015 + reduce_ratio_2040` = `Harmonized: Updated CEDS 2015 + reduce_ratio_2040` - `Emissions|Sulfur (AR6 input)`)
+
+sulfur.compare.methods.effect.long <- sulfur.compare.methods.effect.wide %>%
+  select(-c("Emissions|Sulfur (AR6 input)",
+            "Harmonized: AR6 default",
+            "Harmonized: Updated CEDS 2015",
+            "Harmonized: Updated CEDS 2015 + reduce_ratio_2040")) %>%
+  pivot_longer(cols = `AR6 default`:`Updated CEDS 2015 + reduce_ratio_2040`,
+               names_to = "Variable", values_to = "value")
+
+##### Until 2100 ---------------------------------------------------------------
+p.sulfur.compare.methods.diff.until2100 <- ggplot(sulfur.compare.methods.effect.long %>%
+                                                   filter(grepl(x=Scenario,
+                                                                pattern="NGFS2",
+                                                                fixed=T)) %>% drop_na(),
+                                                 aes(x=Year,y=value, linetype = Model)) +
+  facet_grid(~Variable) +
+  geom_line(aes(color=Variable,
+                group=interaction(Model,Scenario)),
+            alpha=1) +
+  scale_color_manual(values = c("grey","pink", "purple"),
+                     breaks = c("AR6 default",
+                                "Updated CEDS 2015",
+                                "Updated CEDS 2015 + reduce_ratio_2040")) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(
+    title = "Comparing harmonization methods for sulfur emissions",
+    subtitle = "Using NGFS2 scenarios from AR6 database.\nThree options: until 2100",
+    x = "Year",
+    y = "Emissions (Mt SO2/yr)"
+  ) +
+  theme_minimal()
+p.sulfur.compare.methods.diff.until2100
+
+ggsave(filename = here("notebooks", "Rscripts", "figures",
+                       "sulfur_emissions_harmonize_compare_diff_2100.pdf"),
+       plot = p.sulfur.compare.methods.diff.until2100, device = cairo_pdf,
+       width = 300, height = 200, dpi = 300, units = "mm")
+ggsave(filename = here("notebooks", "Rscripts", "figures",
+                       "sulfur_emissions_harmonize_compare_diff_2100.png"),
+       plot = p.sulfur.compare.methods.diff.until2100,
+       width = 300, height = 200, dpi = 300, units = "mm")
+
+##### Until 2050 ---------------------------------------------------------------
+p.sulfur.compare.methods.diff.until2050 <- ggplot(sulfur.compare.methods.effect.long %>%
+                                                    filter(grepl(x=Scenario,
+                                                                 pattern="NGFS2",
+                                                                 fixed=T),
+                                                           Year<=2050) %>% drop_na(),
+                                                  aes(x=Year,y=value, linetype = Model)) +
+  # facet_grid(~Variable) +
+  geom_line(aes(color=Variable,
+                group=interaction(Model,Scenario,Variable)),
+            alpha=1) +
+  scale_color_manual(values = c("grey","pink", "purple"),
+                     breaks = c("AR6 default",
+                                "Updated CEDS 2015",
+                                "Updated CEDS 2015 + reduce_ratio_2040")) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(
+    title = "Comparing harmonization methods for sulfur emissions",
+    subtitle = "Using NGFS2 scenarios from AR6 database.\nThree options: until 2050",
+    x = "Year",
+    y = "Emissions (Mt SO2/yr)"
+  ) +
+  theme_minimal()
+p.sulfur.compare.methods.diff.until2050
+
+ggsave(filename = here("notebooks", "Rscripts", "figures",
+                       "sulfur_emissions_harmonize_compare_diff_2050.pdf"),
+       plot = p.sulfur.compare.methods.diff.until2050, device = cairo_pdf,
+       width = 300, height = 200, dpi = 300, units = "mm")
+ggsave(filename = here("notebooks", "Rscripts", "figures",
+                       "sulfur_emissions_harmonize_compare_diff_2050.png"),
+       plot = p.sulfur.compare.methods.diff.until2050,
        width = 300, height = 200, dpi = 300, units = "mm")
