@@ -291,10 +291,7 @@ def run_harmonization(df, instance, prefix):
                 "method": "constant_ratio",
                 "variable": "Emissions|SF6",
             },  # minor f-gas with low model reporting confidence
-            {
-                'method': 'reduce_ratio_2040', 
-                'variable': 'Emissions|Sulfur'
-            }, # changed to 2040 reduce ratio
+            #     {'method': 'default_aneris_tree', 'variable': 'Emissions|Sulfur'}, # depending on the decision tree in aneris/method.py
             {
                 "method": "reduce_ratio_2150_cov",
                 "variable": "Emissions|VOC",
