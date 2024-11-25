@@ -20,6 +20,7 @@ master
 Added
 ~~~~~
 
+- (`#64 https://github.com/iiasa/climate-assessment/pull/64`_) Allow to python 3.12
 - (`#58 https://github.com/iiasa/climate-assessment/pull/58`_) Update requirements
 - (`#50 https://github.com/iiasa/climate-assessment/pull/50`_) Update scmdata and other dependencies and rewrite a few functions
 - (`#43 https://github.com/iiasa/climate-assessment/pull/43`_) Add combined CSV output option to :func:`climate_assessment.cli.clim_cli`
