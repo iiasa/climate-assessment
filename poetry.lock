@@ -2047,14 +2047,14 @@ files = [
 
 [[package]]
 name = "pyam-iamc"
-version = "2.3.0"
+version = "3.0.0"
 description = "Analysis & visualization of integrated-assessment scenarios"
 optional = false
-python-versions = "<3.13,>=3.10"
+python-versions = "<3.14,>=3.10"
 groups = ["main"]
 files = [
-    {file = "pyam_iamc-2.3.0-py3-none-any.whl", hash = "sha256:9794958433a466c90d6e88ea3e08e334ca56772a737d6b568ec6f9788763ad1d"},
-    {file = "pyam_iamc-2.3.0.tar.gz", hash = "sha256:ea6f4d9864116d932e03036d0df9337fe7a178172907ffa49c31336dac0f8529"},
+    {file = "pyam_iamc-3.0.0-py3-none-any.whl", hash = "sha256:54f2b79b286e8c78083184c3b275bd8de7f8107bf6c0694ce4e1f1c9ad561378"},
+    {file = "pyam_iamc-3.0.0.tar.gz", hash = "sha256:ef333da4d239e66516ff31801879cac38384e8ebed70fe7705eec77af1305530"},
 ]
 
 [package.dependencies]
@@ -3344,4 +3344,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<3.12"
-content-hash = "11c0d65f61f49710fff1587f86fb0ce682ce7a0b293a7901a0ab4c5d72c7b34e"
+content-hash = "a1f1ef4d30259135f6f9e7e74481265668d7ae3a7df75d143998edee6205ff92"
