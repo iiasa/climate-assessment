@@ -90,7 +90,7 @@ def test_clim_historical_warming(
     assert (
         f"Adjusting median of {hist_eval_period[0:4]}-{hist_eval_period[5:9]} "
         f"warming (rel. to {hist_ref_period[0:4]}-{hist_ref_period[5:9]}) to {hist_warming}K"
-    ) in result.stdout
+    ) in result.output
 
     res = scmdata.ScmRun(
         os.path.join(out_dir, "ex2_harmonized_infilled_IAMC_climateassessment.xlsx"),
