@@ -45,6 +45,7 @@ pyam-iamc = ">=2.2.2"
 pymagicc = "==2.1.5"
 scmdata = "==0.17.0"
 silicone = "==1.3.0"
+xarray = "<2025.3.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.7.0"

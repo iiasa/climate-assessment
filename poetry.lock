@@ -3208,29 +3208,29 @@ numpy = ">=1.18"
 
 [[package]]
 name = "xarray"
-version = "2025.7.1"
+version = "2025.1.2"
 description = "N-D labeled arrays and datasets in Python"
 optional = false
-python-versions = ">=3.11"
+python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "xarray-2025.7.1-py3-none-any.whl", hash = "sha256:e8647b659e53bd350d7c5a91c34dd4122ad6a3ca0bc41399d424a7c0273c7635"},
-    {file = "xarray-2025.7.1.tar.gz", hash = "sha256:2884bf5672b540fcc6ff8c20a3196bda0d78fbfb4d67398d60526e97c2faceef"},
+    {file = "xarray-2025.1.2-py3-none-any.whl", hash = "sha256:a7ad6a36c6e0becd67f8aff6a7808d20e4bdcd344debb5205f0a34b1a4a7f8d6"},
+    {file = "xarray-2025.1.2.tar.gz", hash = "sha256:e7675c79ac69d274dd3b3c5450ce57176928d2792947576251ed1c7df1783224"},
 ]
 
 [package.dependencies]
-numpy = ">=1.26"
-packaging = ">=24.1"
-pandas = ">=2.2"
+numpy = ">=1.24"
+packaging = ">=23.2"
+pandas = ">=2.1"
 
 [package.extras]
-accel = ["bottleneck", "flox (>=0.9)", "numba (>=0.59)", "numbagg (>=0.8)", "opt_einsum", "scipy (>=1.13)"]
+accel = ["bottleneck", "flox", "numba (>=0.54)", "numbagg", "opt_einsum", "scipy"]
 complete = ["xarray[accel,etc,io,parallel,viz]"]
-etc = ["sparse (>=0.15)"]
-io = ["cftime", "fsspec", "h5netcdf", "netCDF4 (>=1.6.0)", "pooch", "pydap", "scipy (>=1.13)", "zarr (>=2.18)"]
+dev = ["hypothesis", "jinja2", "mypy", "pre-commit", "pytest", "pytest-cov", "pytest-env", "pytest-timeout", "pytest-xdist", "ruff (>=0.8.0)", "sphinx", "sphinx_autosummary_accessors", "xarray[complete]"]
+etc = ["sparse"]
+io = ["cftime", "fsspec", "h5netcdf", "netCDF4", "pooch", "pydap ; python_version < \"3.10\"", "scipy", "zarr"]
 parallel = ["dask[complete]"]
-types = ["pandas-stubs", "scipy-stubs", "types-PyYAML", "types-Pygments", "types-colorama", "types-decorator", "types-defusedxml", "types-docutils", "types-networkx", "types-openpyxl", "types-pexpect", "types-psutil", "types-pycurl", "types-python-dateutil", "types-pytz", "types-setuptools"]
-viz = ["cartopy (>=0.23)", "matplotlib", "nc-time-axis", "seaborn"]
+viz = ["cartopy", "matplotlib", "nc-time-axis", "seaborn"]
 
 [[package]]
 name = "xlrd"
@@ -3264,4 +3264,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<3.12"
-content-hash = "58bfa80189a9dcfa33908b067a4280c23b4b3771fd8d85aaa906d62a4965e45f"
+content-hash = "11c0d65f61f49710fff1587f86fb0ce682ce7a0b293a7901a0ab4c5d72c7b34e"
