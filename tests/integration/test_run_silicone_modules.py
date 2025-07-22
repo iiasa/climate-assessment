@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import pyam
 import pytest
+from pyam import assert_iamframe_equal
 
 from climate_assessment import utils
 
@@ -100,10 +101,13 @@ def test_units_multiple_values():
 def test_convert_units_to_MtCO2_equiv(ARoption, expected):
     converted_units = utils.convert_units_to_co2_equiv(tdownscale_df, ARoption)
     assert all(y[:6] == "Mt CO2" for y in converted_units.data["unit"].unique())
-    # Index 1 is already in CO2
-    assert converted_units.data["value"].loc[1] == tdownscale_df.data["value"].loc[1]
+    # Data from scen_b is already in CO2
+    assert_iamframe_equal(
+        converted_units.filter(scenario="scen_b"),
+        tdownscale_df.filter(scenario="scen_b"),
+    )
     # Indexes after 3 are not
     assert np.allclose(
-        converted_units.data["value"].loc[3:],
-        tdownscale_df.data["value"].loc[3:] * expected,
+        converted_units.filter(scenario="scen_c").data["value"],
+        tdownscale_df.filter(scenario="scen_c").data["value"] * expected,
     )
