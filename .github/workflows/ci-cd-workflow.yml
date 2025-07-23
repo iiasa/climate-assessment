@@ -44,6 +44,10 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python_version: ["3.11", "3.12", "3.13"]
+      fail-fast: false
 
     steps:
     - name: Checkout repository
@@ -56,11 +60,11 @@ jobs:
         which poetry
         poetry --version  # Check poetry installation
 
-    - name: Set up Python
+    - name: Set up Python ${{ matrix.python_version }}
       id: setup-python
       uses: actions/setup-python@v5
       with:
-        python-version: "3.11"
+        python-version: ${{ matrix.python_version }}
         cache: poetry
 
     - name: Set up Poetry environment
