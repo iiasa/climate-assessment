@@ -178,7 +178,10 @@ files = [
 ]
 
 [package.dependencies]
-numpy = {version = ">1.13.3", markers = "python_version < \"3.12.0.rc1\""}
+numpy = [
+    {version = ">1.13.3", markers = "python_version < \"3.12.0.rc1\""},
+    {version = ">=1.26.0b1", markers = "python_version >= \"3.12.0.rc1\""},
+]
 
 [[package]]
 name = "charset-normalizer"
@@ -1556,7 +1559,10 @@ files = [
 ]
 
 [package.dependencies]
-numpy = {version = ">=1.23.2", markers = "python_version == \"3.11\""}
+numpy = [
+    {version = ">=1.23.2", markers = "python_version == \"3.11\""},
+    {version = ">=1.26.0", markers = "python_version >= \"3.12\""},
+]
 python-dateutil = ">=2.8.2"
 pytz = ">=2020.1"
 tzdata = ">=2022.7"
@@ -3252,5 +3258,5 @@ files = [
 
 [metadata]
 lock-version = "2.1"
-python-versions = ">=3.11,<3.12"
-content-hash = "39008558d7f90c08f6ed03f1a4c50ceae80ff0cf76cbe567d2c03af388e949f2"
+python-versions = ">=3.11,<3.14"
+content-hash = "d8f885b7d756b4431c078022690be9fdd2e9e8e77eb6f2ca799ea1c2d92fe422"

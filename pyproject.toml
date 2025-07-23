@@ -33,7 +33,7 @@ classifiers = [
 homepage = "https://github.com/iiasa/climate-assessment"
 
 [tool.poetry.dependencies]
-python = ">=3.11,<3.12"
+python = ">=3.11,<3.14"
 aneris_iamc = "==0.3.1"
 fair = "==1.6.2"
 ixmp4 = "^0.9.10"
