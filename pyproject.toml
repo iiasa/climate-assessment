@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "climate-assessment"
-version = "0.1.4a0"
+version = "0.0.0"
 description = "Climate assessment of long-term emissions pathways: IPCC AR6 WGIII version"
 authors = [
     "Jarmo S. Kikstra <kikstra@iiasa.ac.at>",
@@ -59,9 +59,13 @@ pytest = "^8.1.1"
 sphinx = "^7.2.6"
 sphinx-rtd-theme = "^2.0.0"
 
+
+[tool.poetry-dynamic-versioning]
+enable = true
+
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
