@@ -13,7 +13,7 @@ authors = [
     "Laura Wienpahl <wienpahl@iiasa.ac.at>",
     "Philip Hackstock <hackstock@iiasa.ac.at>",
 ]
-readme = "README.rst"
+readme = "README.md"
 packages = [
     {include = "climate_assessment", from = "src"},
 ]
