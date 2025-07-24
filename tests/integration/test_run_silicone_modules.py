@@ -106,7 +106,7 @@ def test_convert_units_to_MtCO2_equiv(ARoption, expected):
         converted_units.filter(scenario="scen_b"),
         tdownscale_df.filter(scenario="scen_b"),
     )
-    # Indexes after 3 are not
+    # Data from scen_c is are not already ni CO2
     assert np.allclose(
         converted_units.filter(scenario="scen_c").data["value"],
         tdownscale_df.filter(scenario="scen_c").data["value"] * expected,
