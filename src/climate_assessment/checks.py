@@ -4,6 +4,7 @@ from logging import getLogger
 import numpy as np
 import pandas as pd
 import pyam
+from pyam import IamDataFrame
 
 from .climate import (
     DEFAULT_CICEROSCM_VERSION,
@@ -732,7 +733,7 @@ def require_allyears(
     return pyam.IamDataFrame(dft)
 
 
-def reclassify_waste_and_other_co2_ar6(df):
+def reclassify_waste_and_other_co2_ar6(df: IamDataFrame) -> IamDataFrame:
     """
     Reclassify waste and other CO2 into the energy and industrial processes category
 

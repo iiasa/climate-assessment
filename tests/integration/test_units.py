@@ -4,6 +4,7 @@ import numpy.testing as npt
 import pyam
 import pytest
 from openscm_units import unit_registry
+from pyam import IamDataFrame, assert_iamframe_equal
 
 from climate_assessment.checks import reclassify_waste_and_other_co2_ar6
 from climate_assessment.utils import (
@@ -188,16 +189,18 @@ def test_reclassify_co2_ar6():
     processed_input_emissions_file = os.path.join(
         TEST_DATA_DIR, "ex2_adjusted-waste-other.csv"
     )
-    # import pdb
-    # pdb.set_trace()
-    # pyam.compare(reclassify_waste_and_other_co2_ar6(pyam.IamDataFrame(input_emissions_file)), pyam.IamDataFrame(processed_input_emissions_file), )
-    assert reclassify_waste_and_other_co2_ar6(
-        pyam.IamDataFrame(input_emissions_file)
-    ).equals(pyam.IamDataFrame(processed_input_emissions_file))
+    obs = reclassify_waste_and_other_co2_ar6(IamDataFrame(input_emissions_file))
+    exp = IamDataFrame(processed_input_emissions_file)
+    # the indices are not in the same order, this compares like-for-like
+    for model, scenario in exp.index:
+        assert_iamframe_equal(
+            obs.filter(model=model, scenario=scenario),
+            exp.filter(model=model, scenario=scenario),
+        )
 
 
 def test_reclassify_co2_ar6_sum():
-    input_emissions_file = pyam.IamDataFrame(os.path.join(TEST_DATA_DIR, "ex2.csv"))
+    input_emissions_file = IamDataFrame(os.path.join(TEST_DATA_DIR, "ex2.csv"))
 
     input_emissions_file_processed = reclassify_waste_and_other_co2_ar6(
         input_emissions_file
