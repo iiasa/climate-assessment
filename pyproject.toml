@@ -1,22 +1,10 @@
-[tool.poetry]
+[project]
 name = "climate-assessment"
-version = "0.0.0"
+dynamic = ["version"]
 description = "Climate assessment of long-term emissions pathways: IPCC AR6 WGIII version"
-authors = [
-    "Jarmo S. Kikstra <kikstra@iiasa.ac.at>",
-    "Zebedee Nicholls <zebedee.nicholls@climate-energy-college.org>",
-    "Jared Lewis <jared.lewis@climate-resource.com>",
-    "Christopher J. Smith <C.J.Smith1@leeds.ac.uk>",
-    "Robin D. Lamboll <r.lamboll@imperial.ac.uk>",
-    "Edward Byers <byers@iiasa.ac.at>",
-    "Marit Sandstad <marit.sandstad@cicero.oslo.no>",
-    "Laura Wienpahl <wienpahl@iiasa.ac.at>",
-    "Philip Hackstock <hackstock@iiasa.ac.at>",
-]
+
 readme = "README.md"
-packages = [
-    {include = "climate_assessment", from = "src"},
-]
+
 keywords = ["climate", "integrated assessment", "emissions", "temperature", "IPCC"]
 license = "MIT License"
 classifiers = [
@@ -31,6 +19,23 @@ classifiers = [
     "Intended Audience :: Science/Research",
 ]
 homepage = "https://github.com/iiasa/climate-assessment"
+
+[tool.poetry]
+authors = [
+    "Jarmo S. Kikstra <kikstra@iiasa.ac.at>",
+    "Zebedee Nicholls <zebedee.nicholls@climate-energy-college.org>",
+    "Jared Lewis <jared.lewis@climate-resource.com>",
+    "Christopher J. Smith <C.J.Smith1@leeds.ac.uk>",
+    "Robin D. Lamboll <r.lamboll@imperial.ac.uk>",
+    "Edward Byers <byers@iiasa.ac.at>",
+    "Marit Sandstad <marit.sandstad@cicero.oslo.no>",
+    "Laura Wienpahl <wienpahl@iiasa.ac.at>",
+    "Philip Hackstock <hackstock@iiasa.ac.at>",
+]
+packages = [
+    {include = "climate_assessment", from = "src"},
+]
+version = "0.0.0"
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.14"
