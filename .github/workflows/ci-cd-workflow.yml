@@ -12,12 +12,7 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    - name: Set up Python
-      id: setup-python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.11"
-        cache: poetry
+
     - name: Install and configure Poetry
       uses: snok/install-poetry@v1
       with:
@@ -25,8 +20,17 @@ jobs:
         virtualenvs-create: true
         virtualenvs-in-project: true
         installer-parallel: true
+
+    - name: Set up Python
+      id: setup-python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.13"
+        cache: poetry
+
     - name: Install poetry dynamic versioning plugin
       run: poetry self add "poetry-dynamic-versioning[plugin]"
+
     - name: Install dev dependencies
       shell: bash
       run: |
