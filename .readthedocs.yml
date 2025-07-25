@@ -9,9 +9,10 @@ build:
 python:
   install:
     - method: poetry
+      path: .
 
 sphinx:
-  configuration: docs/conf.py  # Adjust if your conf.py is elsewhere
+  configuration: doc/conf.py  # Adjust if your conf.py is elsewhere
 
 # Optional but useful:
 formats:
