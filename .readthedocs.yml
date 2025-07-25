@@ -1,19 +1,25 @@
-# .readthedocs.yaml
 version: 2
 
 build:
-  os: ubuntu-22.04
+  os: "ubuntu-22.04"
   tools:
-    python: "3.13"  # or the Python version you use
-
-python:
-  install:
-    - method: poetry
-      path: .
+    python: "3.13"
+  jobs:
+    post_create_environment:
+      # Install poetry
+      # https://python-poetry.org/docs/#installing-manually
+      - pip install poetry
+      - poetry self add "poetry-dynamic-versioning[plugin]"
+    post_install:
+      # Install dependencies with 'docs' dependency group
+      # https://python-poetry.org/docs/managing-dependencies/#dependency-groups
+      # VIRTUAL_ENV needs to be set manually for now.
+      # See https://github.com/readthedocs/readthedocs.org/pull/11152/
+      - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH poetry install --with docs
 
 sphinx:
-  configuration: doc/conf.py  # Adjust if your conf.py is elsewhere
+  builder: html
+  configuration: docs/conf.py
 
-# Optional but useful:
 formats:
   - pdf
