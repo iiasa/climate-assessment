@@ -7,7 +7,7 @@ Installation
 .. contents::
    :local:
 
-This package is tested using python 3.9, and has also been used with python 3.7, though continuous integration tests are not run for 3.7.
+This package is tested using python 3.11, 3.12 and 3.13.
 
 
 .. attention:: Due to the better dependency resolution installing with ``pip>=22`` is recommended.
@@ -40,17 +40,18 @@ From source
     # or:
     $ git clone git@github.com:USER/climate-assessment.git
 
+3. Make sure that you have a working python installation with versions 3.11, 3.12 or 3.13. Install poetry (`<https://python-poetry.org/docs/#installation>`_) and the poetry dynamic versioning plugin (`<https://pypi.org/project/poetry-dynamic-versioning/>`_).
+
 3. Open a command prompt in the :mod:`climate-assessment` directory and type::
 
-    $ pip install --editable .[docs,tests,deploy,linter,notebooks]
+    $ poetry install --with dev --with tests --with docs
 
-   The ``--editable`` flag ensures that changes to the source code are picked up every time :code:`import climate-assessment` is used in Python code.
-   The ``[docs,tests,deploy,linter,notebooks]`` extra requirements ensure additional dependencies are installed.
+   The ``--with dev --with tests --with docs`` extra requirements ensure additional dependencies are installed.
 
 
 4. (Optional) If installed from source, run the built-in test suite to check that :mod:`climate-assessment` functions correctly on your system::
 
-    $ pytest tests/integration -m "not nightly and not wg3"
+    $ poetry run pytest tests/integration -m "not nightly and not wg3"
 
 
 .. admonition:: Credits
