@@ -40,7 +40,10 @@ From source
     # or:
     $ git clone git@github.com:USER/climate-assessment.git
 
-3. Make sure that you have a working python installation with versions 3.11, 3.12 or 3.13. Install poetry (`<https://python-poetry.org/docs/#installation>`_) and the poetry dynamic versioning plugin (`<https://pypi.org/project/poetry-dynamic-versioning/>`_).
+3. Make sure that you have a working python installation with versions 3.11, 3.12 or
+   3.13. Install poetry (`<https://python-poetry.org/docs/#installation>`_), minimum
+   poetry version 2.x, and the poetry dynamic versioning plugin
+   (`<https://pypi.org/project/poetry-dynamic-versioning/>`_).
 
 3. Open a command prompt in the :mod:`climate-assessment` directory and type::
 
