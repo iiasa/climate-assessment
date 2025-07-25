@@ -87,25 +87,11 @@ addopts = [
 [tool.ruff]
 src = ["src"]
 target-version = "py39"
-select = [
-    "E",  # pycodestyle error
-    "W",  # pycodestyle warning
-    "F",  # pyflakes
-    "I",  # isort
-    "D",  # pydocstyle
-    "PL",  # pylint
-    "TRY",  # tryceratops
-    "NPY",  # numpy rules
-    "RUF",  # ruff specifics
-    "UP",  # pyupgrade
-    "S",  # flake8-bandit
-    # pandas support via pandas-vet. In some cases we will want to disable
-    # this because it can lead to too many false positives.
-    "PD",
-]
-unfixable = [
-    "PD002",  # Disable autofix for inplace as this often introduces bugs
-]
+# Provide some leeway for long docstring, this is otherwise handled by black
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
 ignore = [
     "D200",  # One-line docstring should fit on one line with quotes
     "D400",  # First line should end with a period
@@ -143,13 +129,29 @@ ignore = [
     "D101",
     "D102",
 ]
-# Provide some leeway for long docstring, this is otherwise handled by black
-line-length = 88
+select = [
+    "E",  # pycodestyle error
+    "W",  # pycodestyle warning
+    "F",  # pyflakes
+    "I",  # isort
+    "D",  # pydocstyle
+    "PL",  # pylint
+    "TRY",  # tryceratops
+    "NPY",  # numpy rules
+    "RUF",  # ruff specifics
+    "UP",  # pyupgrade
+    "S",  # flake8-bandit
+    # pandas support via pandas-vet. In some cases we will want to disable
+    # this because it can lead to too many false positives.
+    "PD",
+]
+unfixable = [
+    "PD002",  # Disable autofix for inplace as this often introduces bugs
+]
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
 
-[tool.ruff.format]
-docstring-code-format = true
-
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "test*.py" = [
     "D",  # Documentation not needed in tests
     "S101",  # S101 Use of `assert` detected
@@ -164,8 +166,8 @@ docstring-code-format = true
     "S101",  # S101 Use of `assert` detected
 ]
 
-[tool.ruff.isort]
-known-first-party = ["src"]
-
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "numpy"
+
+[tool.ruff.format]
+docstring-code-format = true
