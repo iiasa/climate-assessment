@@ -76,8 +76,8 @@ def test_postprocess(tmpdir, test_data_dir, update_expected_files):
         ],
     )
 
-    assert result.exit_code == 0, "{}\n\n{}".format(
-        traceback.print_exception(*result.exc_info), result.stdout
+    assert result.exit_code == 0, (
+        f"{traceback.print_exception(*result.exc_info)}\n\n{result.stdout}"
     )
 
     # expected output is stored in same directory as climate output, similar

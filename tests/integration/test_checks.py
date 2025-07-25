@@ -509,23 +509,22 @@ def test_sanity_check_hierarchy():
         ],
     )
     harm_inf = []
-    for item in prefix:
-        for val in prefix[item]:
-            _out_afolu = f"AR6 climate diagnostics|{item}|{out_afolu}"
-            _out_fossil = f"AR6 climate diagnostics|{item}|{out_fossil}"
-            start = _get_start(
-                np.array(
-                    [
-                        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                        [2 * val, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-                    ]
-                ).T,
+    for item, val in prefix.items():
+        _out_afolu = f"AR6 climate diagnostics|{item}|{out_afolu}"
+        _out_fossil = f"AR6 climate diagnostics|{item}|{out_fossil}"
+        start = _get_start(
+            np.array(
                 [
-                    _out_afolu,
-                    _out_fossil,
-                ],
-            )
-            harm_inf.append(start)
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [2 * val, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+                ]
+            ).T,
+            [
+                _out_afolu,
+                _out_fossil,
+            ],
+        )
+        harm_inf.append(start)
 
     match = (
         r"The sum of AFOLU and Energy and Industrial "

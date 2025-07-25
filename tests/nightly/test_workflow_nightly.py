@@ -97,8 +97,8 @@ def test_workflow_fair(
         ],
     )
 
-    assert result.exit_code == 0, "{}\n\n{}".format(
-        traceback.print_exception(*result.exc_info), result.stdout
+    assert result.exit_code == 0, (
+        f"{traceback.print_exception(*result.exc_info)}\n\n{result.stdout}"
     )
     _check_ssp245_hack_missing_emissions_gone(result.stdout)
 
@@ -143,8 +143,8 @@ def test_workflow_magicc(
         ],
     )
 
-    assert result.exit_code == 0, "{}\n\n{}".format(
-        traceback.print_exception(*result.exc_info), result.stdout
+    assert result.exit_code == 0, (
+        f"{traceback.print_exception(*result.exc_info)}\n\n{result.stdout}"
     )
 
     check_workflow_output(

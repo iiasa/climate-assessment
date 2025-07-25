@@ -25,8 +25,8 @@ def test_example_small_infillerdatabase(tmpdir, test_data_dir):
         ],
     )
 
-    assert result.exit_code == 0, "{}\n\n{}".format(
-        traceback.print_exception(*result.exc_info), result.stdout
+    assert result.exit_code == 0, (
+        f"{traceback.print_exception(*result.exc_info)}\n\n{result.stdout}"
     )
 
     df_infiller_database = pyam.IamDataFrame(

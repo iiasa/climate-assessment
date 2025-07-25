@@ -51,8 +51,8 @@ def test_infilling(tmpdir, test_data_dir, update_expected_files):
         ],
     )
 
-    assert result.exit_code == 0, "{}\n\n{}".format(
-        traceback.print_exception(*result.exc_info), result.stdout
+    assert result.exit_code == 0, (
+        f"{traceback.print_exception(*result.exc_info)}\n\n{result.stdout}"
     )
 
     check_output(
@@ -85,8 +85,8 @@ def test_workflow_infilling(tmpdir, test_data_dir, update_expected_files):
         ],
     )
 
-    assert result.exit_code == 0, "{}\n\n{}".format(
-        traceback.print_exception(*result.exc_info), result.stdout
+    assert result.exit_code == 0, (
+        f"{traceback.print_exception(*result.exc_info)}\n\n{result.stdout}"
     )
 
     check_output(

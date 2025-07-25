@@ -101,9 +101,7 @@ def harmonization_and_infilling(
         # add meta string to record aneris and silicone versions
         infilled.set_meta(
             meta=(
-                "aneris (version: {}), silicone (version: {})".format(
-                    aneris.__version__, silicone.__version__
-                )
+                f"aneris (version: {aneris.__version__}), silicone (version: {silicone.__version__})"
             ),
             name="assessment-tools",
         )

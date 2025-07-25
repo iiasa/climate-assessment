@@ -146,9 +146,7 @@ def climate_assessment(
         df = scmdf.timeseries()
         if set(df.index.names) != set(pyam.IAMC_IDX):
             raise AssertionError(
-                "Only meta cols should be `{}` in order to keep everyone sane".format(
-                    pyam.IAMC_IDX
-                )
+                f"Only meta cols should be `{pyam.IAMC_IDX}` in order to keep everyone sane"
             )
 
         # convert columns to years
@@ -177,12 +175,12 @@ def climate_assessment(
 
     LOGGER.info(f"\n\n\nTotal mod_scens: {total_mod_scens}\n\n\n")
 
-    for j, (_, df) in tqdman.tqdm(
+    for j, (_, model_scenario_df) in tqdman.tqdm(
         enumerate(clean_scenarios.groupby(["model", "scenario"])),
         desc=f"{total_mod_scens} model-scenario pairs (running in batches of {scenario_batch_size})",
         total=total_mod_scens,
     ):
-        batch_dfs.append(df)
+        batch_dfs.append(model_scenario_df)
         if np.equal((j + 1) % scenario_batch_size, 0) or np.equal(
             (j + 1), total_mod_scens
         ):

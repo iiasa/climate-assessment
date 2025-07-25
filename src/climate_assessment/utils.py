@@ -221,7 +221,7 @@ def add_gwp100_kyoto(
 
     diff = list(set(df.data["variable"]) - set(dfp.data["variable"]))
     LOGGER.info(
-        f"The variables { ', '.join(sorted([s for s in diff]))} "
+        f"The variables {', '.join(sorted([s for s in diff]))} "
         f"are being ignored for the calculation of the GWP100."
     )
 

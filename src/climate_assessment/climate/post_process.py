@@ -163,7 +163,7 @@ def calculate_exceedance_probability_timeseries(
 
     if not np.isclose(shifts, shifts[0], atol=5 * 1e-3).all():
         LOGGER.exception(
-            "Careful of scenarios which break match with history! " "`shifts`: %s",
+            "Careful of scenarios which break match with history! `shifts`: %s",
             shifts,
         )
     else:
@@ -181,9 +181,9 @@ def calculate_exceedance_probability_timeseries(
         except AssertionError:
             LOGGER.exception("Careful of scenarios which break match with history!")
 
-    exceedance_probability_timeseries[
-        "variable"
-    ] = exceedance_probability_calculation_var
+    exceedance_probability_timeseries["variable"] = (
+        exceedance_probability_calculation_var
+    )
     return exceedance_probability_timeseries
 
 
