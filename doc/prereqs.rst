@@ -22,7 +22,7 @@ take up to one hour on a personal computer. For running scenario sets bigger tha
 about 10-20 scenarios, you require more computing power. While MAGICC7 and CICERO-SCM
 mostly benefit from more cores, FaIR especially requires more RAM.
 
-Tuning parallellisation settings for your specific setup currently requires
+Tuning parallelisation settings for your specific setup currently requires
 delving into the code, editing ``joblib`` settings, and re-installing (e.g. with
 ``pip install -e .``).
 
