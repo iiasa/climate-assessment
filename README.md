@@ -42,9 +42,8 @@ is installed directly, *without* using Anaconda.
 
 ### From source
 
-(Optional) If you intend to contribute changes to `climate-assessment`,
-installing directly from
-[source](https://github.com/iiasa/climate-assessment) is the way to go.
+(Optional) If you intend to contribute changes to `climate-assessment`, installing
+directly from [source](https://github.com/iiasa/climate-assessment) is the way to go.
 
 Detailed instructions on how to do this can be found in the
 documentation under
