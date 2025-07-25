@@ -1,10 +1,18 @@
+# .readthedocs.yaml
 version: 2
 
-formats:
-- pdf
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.13"  # or the Python version you use
 
 python:
   install:
-  - method: pip
-    path: .
-    extra_requirements: [docs]
+    - method: poetry
+
+sphinx:
+  configuration: docs/conf.py  # Adjust if your conf.py is elsewhere
+
+# Optional but useful:
+formats:
+  - pdf
