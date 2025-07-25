@@ -1,22 +1,20 @@
-[tool.poetry]
+[project]
 name = "climate-assessment"
-version = "0.1.4a0"
+dynamic = ["version"]
 description = "Climate assessment of long-term emissions pathways: IPCC AR6 WGIII version"
 authors = [
-    "Jarmo S. Kikstra <kikstra@iiasa.ac.at>",
-    "Zebedee Nicholls <zebedee.nicholls@climate-energy-college.org>",
-    "Jared Lewis <jared.lewis@climate-resource.com>",
-    "Christopher J. Smith <C.J.Smith1@leeds.ac.uk>",
-    "Robin D. Lamboll <r.lamboll@imperial.ac.uk>",
-    "Edward Byers <byers@iiasa.ac.at>",
-    "Marit Sandstad <marit.sandstad@cicero.oslo.no>",
-    "Laura Wienpahl <wienpahl@iiasa.ac.at>",
-    "Philip Hackstock <hackstock@iiasa.ac.at>",
+    {name = "Jarmo S. Kikstra", email = "kikstra@iiasa.ac.at"},
+    {name = "Zebedee Nicholls", email = "zebedee.nicholls@climate-energy-college.org"},
+    {name = "Jared Lewis", email = " jared.lewis@climate-resource.com"},
+    {name = "Christopher J. Smith", email = " C.J.Smith1@leeds.ac.uk"},
+    {name = "Robin D. Lamboll", email = " r.lamboll@imperial.ac.uk"},
+    {name = "Edward Byers", email = " byers@iiasa.ac.at"},
+    {name = "Marit Sandstad", email = " marit.sandstad@cicero.oslo.no"},
+    {name = "Laura Wienpahl", email = " wienpahl@iiasa.ac.at"},
+    {name = "Philip Hackstock", email = " hackstock@iiasa.ac.at"}
 ]
-readme = "README.rst"
-packages = [
-    {include = "climate_assessment", from = "src"},
-]
+readme = "README.md"
+
 keywords = ["climate", "integrated assessment", "emissions", "temperature", "IPCC"]
 license = "MIT License"
 classifiers = [
@@ -31,6 +29,12 @@ classifiers = [
     "Intended Audience :: Science/Research",
 ]
 homepage = "https://github.com/iiasa/climate-assessment"
+
+[tool.poetry]
+packages = [
+    {include = "climate_assessment", from = "src"},
+]
+version = "0.0.0"
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.14"
@@ -59,9 +63,13 @@ pytest = "^8.1.1"
 sphinx = "^7.2.6"
 sphinx-rtd-theme = "^2.0.0"
 
+
+[tool.poetry-dynamic-versioning]
+enable = true
+
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -79,25 +87,11 @@ addopts = [
 [tool.ruff]
 src = ["src"]
 target-version = "py39"
-select = [
-    "E",  # pycodestyle error
-    "W",  # pycodestyle warning
-    "F",  # pyflakes
-    "I",  # isort
-    "D",  # pydocstyle
-    "PL",  # pylint
-    "TRY",  # tryceratops
-    "NPY",  # numpy rules
-    "RUF",  # ruff specifics
-    "UP",  # pyupgrade
-    "S",  # flake8-bandit
-    # pandas support via pandas-vet. In some cases we will want to disable
-    # this because it can lead to too many false positives.
-    "PD",
-]
-unfixable = [
-    "PD002",  # Disable autofix for inplace as this often introduces bugs
-]
+# Provide some leeway for long docstring, this is otherwise handled by black
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
 ignore = [
     "D200",  # One-line docstring should fit on one line with quotes
     "D400",  # First line should end with a period
@@ -135,13 +129,29 @@ ignore = [
     "D101",
     "D102",
 ]
-# Provide some leeway for long docstring, this is otherwise handled by black
-line-length = 88
+select = [
+    "E",  # pycodestyle error
+    "W",  # pycodestyle warning
+    "F",  # pyflakes
+    "I",  # isort
+    "D",  # pydocstyle
+    "PL",  # pylint
+    "TRY",  # tryceratops
+    "NPY",  # numpy rules
+    "RUF",  # ruff specifics
+    "UP",  # pyupgrade
+    "S",  # flake8-bandit
+    # pandas support via pandas-vet. In some cases we will want to disable
+    # this because it can lead to too many false positives.
+    "PD",
+]
+unfixable = [
+    "PD002",  # Disable autofix for inplace as this often introduces bugs
+]
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
 
-[tool.ruff.format]
-docstring-code-format = true
-
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "test*.py" = [
     "D",  # Documentation not needed in tests
     "S101",  # S101 Use of `assert` detected
@@ -156,8 +166,8 @@ docstring-code-format = true
     "S101",  # S101 Use of `assert` detected
 ]
 
-[tool.ruff.isort]
-known-first-party = ["src"]
-
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "numpy"
+
+[tool.ruff.format]
+docstring-code-format = true

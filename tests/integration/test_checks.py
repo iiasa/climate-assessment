@@ -509,10 +509,10 @@ def test_sanity_check_hierarchy():
         ],
     )
     harm_inf = []
-    for item in prefix:
-        for val in prefix[item]:
-            _out_afolu = f"AR6 climate diagnostics|{item}|{out_afolu}"
-            _out_fossil = f"AR6 climate diagnostics|{item}|{out_fossil}"
+    for key, value in prefix.items():
+        for val in value:
+            _out_afolu = f"AR6 climate diagnostics|{key}|{out_afolu}"
+            _out_fossil = f"AR6 climate diagnostics|{key}|{out_fossil}"
             start = _get_start(
                 np.array(
                     [

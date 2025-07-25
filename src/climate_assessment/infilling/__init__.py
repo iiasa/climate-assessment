@@ -169,9 +169,7 @@ def run_infilling(
     to_fill_orig = harmonised_df.copy()
     if len(to_fill_orig.region) > 1:
         raise AssertionError(
-            "Different regions should be infilled separately. You are infilling {}".format(
-                to_fill_orig.regions()
-            )
+            f"Different regions should be infilled separately. You are infilling {to_fill_orig.regions()}"
         )
 
     if to_fill_orig["region"][0] != database["region"][0]:
@@ -193,8 +191,7 @@ def run_infilling(
         early_finish = max(db["year"]) < max(output_timesteps)
         if late_start or early_finish:
             raise AssertionError(
-                f"Database {name} does not extend far enough to be used for "
-                "infilling"
+                f"Database {name} does not extend far enough to be used for infilling"
             )
 
     database = pyam.IamDataFrame(database.timeseries(time_axis="year")).interpolate(

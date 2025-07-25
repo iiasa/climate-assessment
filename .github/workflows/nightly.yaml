@@ -35,6 +35,9 @@ jobs:
         python-version: ${{ matrix.python_version }}
         cache: poetry
 
+    - name: Install poetry dynamic versioning plugin
+      run: poetry self add "poetry-dynamic-versioning[plugin]"
+
     - name: Install test dependencies and package
       shell: bash
       run: |

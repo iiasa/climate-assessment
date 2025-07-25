@@ -70,10 +70,8 @@ def add_categorization(
         p_name = "median" if p == 50 else f"p{p:.0f}"
         name = f"{p_name} warming in 2100 ({model_str})"
         dfar6.set_meta(p_temperature[2100], name)
-        meta_docs[
-            name
-        ] = "{} warming above in 2100 above pre-industrial temperature as computed by {}".format(
-            p_name, model_str
+        meta_docs[name] = (
+            f"{p_name} warming above in 2100 above pre-industrial temperature as computed by {model_str}"
         )
 
     # select columns used for categorization
@@ -317,9 +315,7 @@ def _check_difference(df_scen, co2_total, co2_other, scenario, model):
 
     if (difference.timeseries() == 0).all().all():
         message = (
-            "%s is the same as %s "
-            "for scenario "
-            "`%s` produced by `%s` hence is removed"
+            "%s is the same as %s for scenario `%s` produced by `%s` hence is removed"
         )
         LOGGER.info(message, co2_total, co2_other, scenario, model)
         df_scen = df_scen.filter(variable=co2_total, keep=False)

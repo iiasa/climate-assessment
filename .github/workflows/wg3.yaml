@@ -17,7 +17,7 @@ jobs:
       strategy:
         matrix:
           python_version: ["3.11", "3.12", "3.13"]
-          fail-fast: false
+        fail-fast: false
       steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -36,6 +36,9 @@ jobs:
         with:
           python-version: ${{ matrix.python_version }}
           cache: poetry
+
+      - name: Install poetry dynamic versioning plugin
+        run: poetry self add "poetry-dynamic-versioning[plugin]"
 
       - name: Install test dependencies and package
         shell: bash
@@ -84,6 +87,9 @@ jobs:
         with:
           python-version: ${{ matrix.python_version }}
           cache: poetry
+
+      - name: Install poetry dynamic versioning plugin
+        run: poetry self add "poetry-dynamic-versioning[plugin]"
 
       - name: Install test dependencies and package
         shell: bash

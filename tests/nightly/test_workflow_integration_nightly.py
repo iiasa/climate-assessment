@@ -30,8 +30,8 @@ def test_workflow_no_valid(
         ],
     )
 
-    assert result.exit_code == 0, "{}\n\n{}".format(
-        traceback.print_exception(*result.exc_info), result.stdout
+    assert result.exit_code == 0, (
+        f"{traceback.print_exception(*result.exc_info)}\n\n{result.stdout}"
     )
 
     assert (
@@ -101,7 +101,7 @@ def test_workflow_historical_warming(
     assert (
         f"Adjusting median of {hist_eval_period[0:4]}-{hist_eval_period[5:9]} "
         f"warming (rel. to {hist_ref_period[0:4]}-{hist_ref_period[5:9]}) to {hist_warming}K"
-    ) in result.stdout
+    ) in result.output
 
     res = scmdata.ScmRun(
         os.path.join(out_dir, "ex2_IAMC_climateassessment.xlsx"), lowercase_cols=True

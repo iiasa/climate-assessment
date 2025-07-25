@@ -282,9 +282,9 @@ def check_workflow_output():
                 else:
                     cols_to_drop = list(set(idf.columns) - set(cols_to_keep))
 
-                assert set(cols_to_drop) == set(
-                    expected_meta_cols_to_drop
-                ), f"{set(cols_to_drop)} not equal to {set(expected_meta_cols_to_drop)}"
+                assert set(cols_to_drop) == set(expected_meta_cols_to_drop), (
+                    f"{set(cols_to_drop)} not equal to {set(expected_meta_cols_to_drop)}"
+                )
 
                 if pyam_df:
                     idf.meta = idf.meta[cols_to_keep]

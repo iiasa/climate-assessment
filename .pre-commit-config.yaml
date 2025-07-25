@@ -31,12 +31,12 @@ repos:
         language: fail
         files: "\\.rej$"
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: 'v0.1.8'
+    rev: 'v0.12.5'
     hooks:
       - id: ruff
         args: [ --fix, --exit-non-zero-on-fix ]
       - id: ruff-format
   - repo: https://github.com/python-poetry/poetry
-    rev: '1.7.0'
+    rev: '2.1.3'
     hooks:
       - id: poetry-check
