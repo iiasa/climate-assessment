@@ -1,7 +1,7 @@
 # Releasing
 
 1. Before releasing, check
-   <https://github.com/iiasa/climate-assessment/actions/workflows/ci-cd-workflow.yml> to
+   <https://github.com/iiasa/climate-assessment/actions/workflows/ci-cd-workflow.yaml> to
    ensure that the push and scheduled builds are passing. Address any failures before
    releasing.
 
