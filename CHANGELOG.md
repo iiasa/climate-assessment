@@ -18,7 +18,6 @@ The changes listed in this file are categorised as follows:
 
 ### Added
 
-* ([#74](https://github.com/iiasa/climate-assessment/pull/74)) Fix various issues
 * ([#68](https://github.com/iiasa/climate-assessment/pull/68)) Update supported
   dependencies and python versions
 * ([#58](https://github.com/iiasa/climate-assessment/pull/58)) Update requirements
@@ -49,6 +48,7 @@ The changes listed in this file are categorised as follows:
 
 ### Fixed
 
+* ([#74](https://github.com/iiasa/climate-assessment/pull/74)) Fix various issues
 * ([#55](https://github.com/iiasa/climate-assessment/pull/55])) Pinned requirements to
     make install more reproducible for users (and updated GitHub CI/CD accordingly)
 * ([#55](https://github.com/iiasa/climate-assessment/pull/55])) Docs build
