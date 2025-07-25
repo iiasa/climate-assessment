@@ -24,7 +24,7 @@ git push upstream v0.1.5rc1
     commit and go back to step (2), incrementing the rc number.
 
 4. On GitHub:
-   1. Create a new release with a new tag, e.g. v0.1.5.
+   1. Create a new release with a new tag, e.g. `v0.1.5`.
    2. Publish the release.
 
 5. Check at <https://github.com/iiasa/climate-assessment/actions/workflows/publish.yaml>
