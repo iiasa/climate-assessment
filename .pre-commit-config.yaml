@@ -31,7 +31,7 @@ repos:
         language: fail
         files: "\\.rej$"
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: 'v0.1.8'
+    rev: 'v0.12.5'
     hooks:
       - id: ruff
         args: [ --fix, --exit-non-zero-on-fix ]
