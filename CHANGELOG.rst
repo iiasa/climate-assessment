@@ -19,6 +19,7 @@ master
 
 Added
 ~~~~~
+- (`#74 https://github.com/iiasa/climate-assessment/pull/74`_) Fix various issues
 - (`#68 https://github.com/iiasa/climate-assessment/pull/68`_) Update supported dependencies and python versions
 - (`#58 https://github.com/iiasa/climate-assessment/pull/58`_) Update requirements
 - (`#50 https://github.com/iiasa/climate-assessment/pull/50`_) Update scmdata and other dependencies and rewrite a few functions
