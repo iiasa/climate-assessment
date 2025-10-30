@@ -213,6 +213,7 @@ def post_process(
     outdir,
     test_run=False,
     save_raw_output=False,
+    return_all_runs=False,
     co2_and_non_co2_warming=False,
     # for exceedance probability calculations
     temp_thresholds=(1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0),
@@ -399,6 +400,35 @@ def post_process(
             ) from exc
 
     res = res.groupby("variable").map(_convert_to_standard_name_and_unit)
+
+    if return_all_runs:
+        LOGGER.info("Returning all individual runs (skipping percentile aggregation)")
+        res_df = res.timeseries().reset_index()
+
+        LOGGER.info("Encoding run_id in model name and adding climate model to variable")
+        res_df["model"] = (
+            res_df["model"].astype(str)
+            + "|run_"
+            + res_df["run_id"].astype(str)
+        )
+        res_df["variable"] = (
+            res_df["variable"].astype(str)
+            + "|"
+            + res_df["climate_model"].astype(str)
+        )
+        res_all_runs = scmdata.ScmRun(
+            res_df.drop(["climate_model", "run_id"], axis="columns")
+        )
+
+        # Create empty meta table with correct structure (model, scenario columns)
+        unique_combos = res_df[["model", "scenario"]].drop_duplicates()
+        meta_table = pd.DataFrame({
+            "model": unique_combos["model"],
+            "scenario": unique_combos["scenario"]
+        })
+
+        LOGGER.info("Exiting post-processing (all runs mode)")
+        return res, res_all_runs, meta_table
 
     LOGGER.info("Calculating percentiles")
     res_percentiles = res.quantiles_over(

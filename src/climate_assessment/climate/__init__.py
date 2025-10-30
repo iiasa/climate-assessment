@@ -38,6 +38,7 @@ def climate_assessment(
     test_run=False,
     scenario_batch_size=20,
     save_raw_output=False,
+    return_all_runs=False,
     probabilistic_file=DEFAULT_MAGICC_DRAWNSET,
     magicc_extra_config=None,
     fair_extra_config=None,
@@ -197,6 +198,7 @@ def climate_assessment(
                 historical_warming_reference_period=historical_warming_reference_period,
                 historical_warming_evaluation_period=historical_warming_evaluation_period,
                 save_raw_output=save_raw_output,
+                return_all_runs=return_all_runs,
                 outdir=outdir,
                 test_run=test_run,
                 co2_and_non_co2_warming=co2_and_non_co2_warming,
@@ -280,6 +282,7 @@ def run_and_post_process(
     outdir,
     test_run,
     save_raw_output,
+    return_all_runs,
     co2_and_non_co2_warming,
 ):
     """
@@ -405,6 +408,7 @@ def run_and_post_process(
         outdir,
         test_run=test_run,
         save_raw_output=save_raw_output,
+        return_all_runs=return_all_runs,
         co2_and_non_co2_warming=co2_and_non_co2_warming,
         historical_warming=historical_warming,
         historical_warming_reference_period=historical_warming_reference_period,

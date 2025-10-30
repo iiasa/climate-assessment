@@ -479,6 +479,7 @@ def run_workflow(
         )
     ),
     save_raw_climate_output=False,
+    return_all_runs=False,
     postprocess=True,
     categorisation=True,
     reporting_completeness_categorisation=False,
@@ -618,6 +619,7 @@ def run_workflow(
         test_run=test_run,
         scenario_batch_size=scenario_batch_size,
         save_raw_output=save_raw_climate_output,
+        return_all_runs=return_all_runs,
         co2_and_non_co2_warming=co2_and_non_co2_warming,
         prefix=prefix,
     )
@@ -950,6 +952,7 @@ def clim_cli(
         test_run=test_run,
         scenario_batch_size=scenario_batch_size,
         save_raw_output=save_raw_climate_output,
+        return_all_runs=return_all_runs,
         co2_and_non_co2_warming=co2_and_non_co2_warming,
         prefix=prefix,
     )
