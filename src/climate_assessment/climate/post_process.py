@@ -457,16 +457,14 @@ def post_process(
         LOGGER.info("Returning all individual runs (skipping percentile aggregation)")
         res_df = res.timeseries().reset_index()
 
-        LOGGER.info("Encoding run_id in model name and adding climate model to variable")
+        LOGGER.info(
+            "Encoding run_id in model name and adding climate model to variable"
+        )
         res_df["model"] = (
-            res_df["model"].astype(str)
-            + "|run_"
-            + res_df["run_id"].astype(str)
+            res_df["model"].astype(str) + "|run_" + res_df["run_id"].astype(str)
         )
         res_df["variable"] = (
-            res_df["variable"].astype(str)
-            + "|"
-            + res_df["climate_model"].astype(str)
+            res_df["variable"].astype(str) + "|" + res_df["climate_model"].astype(str)
         )
         res_all_runs = scmdata.ScmRun(
             res_df.drop(["climate_model", "run_id"], axis="columns")
@@ -474,10 +472,9 @@ def post_process(
 
         # Create empty meta table with correct structure (model, scenario columns)
         unique_combos = res_df[["model", "scenario"]].drop_duplicates()
-        meta_table = pd.DataFrame({
-            "model": unique_combos["model"],
-            "scenario": unique_combos["scenario"]
-        })
+        meta_table = pd.DataFrame(
+            {"model": unique_combos["model"], "scenario": unique_combos["scenario"]}
+        )
 
         LOGGER.info("Exiting post-processing (all runs mode)")
         return res, res_all_runs, meta_table

@@ -6,7 +6,10 @@ import pandas as pd
 import pytest
 import scmdata
 
-from climate_assessment.climate.post_process import check_hist_warming_period, post_process
+from climate_assessment.climate.post_process import (
+    check_hist_warming_period,
+    post_process,
+)
 
 
 @pytest.mark.parametrize(
