@@ -238,6 +238,58 @@ def post_process(
     historical_warming_reference_period="1850-1900",
     historical_warming_evaluation_period="1995-2014",
 ):
+    """
+    Post-process climate model output into assessment variables.
+
+    Parameters
+    ----------
+    res : :obj:`scmdata.ScmRun`
+        Raw climate model output from ``openscm-runner``
+
+    outdir : str
+        Directory for saving output files
+
+    test_run : bool
+        If True, skip strict historical temperature matching checks
+
+    save_raw_output : bool
+        If True, save raw climate model output (every ensemble member) to disk
+
+    return_all_runs : bool
+        If True, return individual climate model runs with run IDs encoded in
+        the model name (``model|run_N``) and climate model in the variable name
+        (``variable|climate_model``), instead of percentile-aggregated results.
+        Returns a 3-tuple of ``(res, res_all_runs, meta_table)`` where
+        ``res_all_runs`` is an :obj:`scmdata.ScmRun` with per-run timeseries and
+        ``meta_table`` is a :class:`pandas.DataFrame` with model/scenario pairs.
+
+    co2_and_non_co2_warming : bool
+        Include assessment of CO2 and non-CO2 warming
+
+    temp_thresholds : tuple of float
+        Temperature thresholds for exceedance probability calculation
+
+    peak_percentiles : tuple of float
+        Percentiles for peak warming statistics
+
+    percentiles : tuple of float
+        Percentiles for timeseries aggregation
+
+    historical_warming : float
+        Historical warming to match climate model output to
+
+    historical_warming_reference_period : str
+        Reference period for historical warming (e.g. "1850-1900")
+
+    historical_warming_evaluation_period : str
+        Evaluation period for historical warming (e.g. "1995-2014")
+
+    Returns
+    -------
+    tuple
+        If ``return_all_runs`` is False (default): ``(res, res_percentiles, meta_table)``
+        If ``return_all_runs`` is True: ``(res, res_all_runs, meta_table)``
+    """
     LOGGER.info("Beginning climate post-processing")
     LOGGER.info("Removing unknown units and keeping only World data")
     res = res.filter(unit="unknown", keep=False).filter(region="World")
@@ -326,7 +378,7 @@ def post_process(
     )
     res = res.append(exceedance_probability_timeseries)
 
-    year_filter = range(1995, 2101)
+    year_filter = range(1950, 2101)
     LOGGER.info("Keeping only data from %s", year_filter)
     res = res.filter(year=year_filter)
 

@@ -320,6 +320,10 @@ def run_and_post_process(
     save_raw_output: bool
         If True, save all the raw climate model output for later analysis.
 
+    return_all_runs : bool
+        If True, return individual climate model runs instead of
+        percentile-aggregated results. See :func:`post_process` for details.
+
     co2_and_non_co2_warming : bool
         Include assessment of CO2 and non-CO2 warming?
 
