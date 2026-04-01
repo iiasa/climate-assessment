@@ -254,7 +254,7 @@ def post_process(
         climate_model = res_cm.get_unique_meta("climate_model", no_duplicates=True)
         LOGGER.info("Processing %s data", climate_model)
 
-        if climate_model.startswith("MAGICCv7"):
+        if climate_model.startswith("MAGICCv7") or climate_model.startswith("MAGICCv8"):
             res_cm = magicc7_post_process(res_cm)
 
         if climate_model.startswith("FaIRv1.6"):
