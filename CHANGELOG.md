@@ -18,6 +18,9 @@ The changes listed in this file are categorised as follows:
 
 ### Added
 
+* ([#87](https://github.com/iiasa/climate-assessment/issues/87)) Add `return_all_runs`
+  option to `post_process` to return individual climate model runs instead of
+  percentile aggregation
 * ([#68](https://github.com/iiasa/climate-assessment/pull/68)) Update supported
   dependencies and python versions
 * ([#58](https://github.com/iiasa/climate-assessment/pull/58)) Update requirements

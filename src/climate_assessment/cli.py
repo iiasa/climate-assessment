@@ -178,6 +178,14 @@ save_raw_climate_output_option = click.option(
     type=bool,
     show_default=True,
 )
+return_all_runs_option = click.option(
+    "--return-all-runs/--no-return-all-runs",
+    help="Return individual climate model runs instead of percentile aggregation",
+    required=False,
+    default=False,
+    type=bool,
+    show_default=True,
+)
 categorisation_option = click.option(
     "--categorisation/--no-categorisation",
     help="Add temperature category to meta data",
@@ -381,6 +389,7 @@ def _harmonize_and_infill(
 @scenario_batch_size_option
 @infilling_database_option
 @save_raw_climate_output_option
+@return_all_runs_option
 @postprocess_option
 @categorisation_option
 @report_completeness_option
@@ -406,6 +415,7 @@ def workflow(
     scenario_batch_size,
     infilling_database,
     save_raw_climate_output,
+    return_all_runs,
     postprocess,
     categorisation,
     reporting_completeness_categorisation,
@@ -444,6 +454,7 @@ def workflow(
         scenario_batch_size=scenario_batch_size,
         infilling_database=infilling_database,
         save_raw_climate_output=save_raw_climate_output,
+        return_all_runs=return_all_runs,
         postprocess=postprocess,
         categorisation=categorisation,
         reporting_completeness_categorisation=reporting_completeness_categorisation,
@@ -479,6 +490,7 @@ def run_workflow(
         )
     ),
     save_raw_climate_output=False,
+    return_all_runs=False,
     postprocess=True,
     categorisation=True,
     reporting_completeness_categorisation=False,
@@ -618,6 +630,7 @@ def run_workflow(
         test_run=test_run,
         scenario_batch_size=scenario_batch_size,
         save_raw_output=save_raw_climate_output,
+        return_all_runs=return_all_runs,
         co2_and_non_co2_warming=co2_and_non_co2_warming,
         prefix=prefix,
     )
@@ -886,6 +899,7 @@ def infill(
 @gwp_def_false_option
 @nonco2_warming_option
 @save_raw_climate_output_option
+@return_all_runs_option
 @save_csv_combined_output_option
 def clim_cli(
     harmonizedinfilledemissions,
@@ -905,6 +919,7 @@ def clim_cli(
     gwp,
     co2_and_non_co2_warming,
     save_raw_climate_output,
+    return_all_runs,
     save_csv_combined_output,
 ):
     """
@@ -950,6 +965,7 @@ def clim_cli(
         test_run=test_run,
         scenario_batch_size=scenario_batch_size,
         save_raw_output=save_raw_climate_output,
+        return_all_runs=return_all_runs,
         co2_and_non_co2_warming=co2_and_non_co2_warming,
         prefix=prefix,
     )
