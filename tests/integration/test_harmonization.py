@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 import scmdata
+import scmdata.testing
 
 from climate_assessment.harmonization_and_infilling import run_harmonization
 from climate_assessment.utils import columns_to_basic
@@ -86,3 +87,11 @@ def test_harmonization_sr15(sr15_harmonized, rcmip_emissions, variable):
     ).convert_unit(res_v.get_unique_meta("unit", True), context="NOx_conversions")
 
     np.testing.assert_allclose(rcmip_v.values, res_v.values, rtol=1e-3)
+
+
+def test_harmonization_ar6_no_2010(ar6_emissions, ar6_harmonized):
+    # Test harmonisation works even if 2010 isn't in the inputs
+    emissions = columns_to_basic(ar6_emissions.filter(year=2010, keep=False))
+    res = run_harmonization(emissions, instance="ar6", prefix="AR6 climate diagnostics")
+
+    scmdata.testing.assert_scmdf_almost_equal(res, ar6_harmonized, allow_unordered=True, check_ts_names=False)
